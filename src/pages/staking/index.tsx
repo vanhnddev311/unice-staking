@@ -13,7 +13,7 @@ import { getPriceOfToken, getVipLevels } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
 import { formatNumber } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Config, waitForTransactionReceipt, writeContract } from '@wagmi/core';
+import { Config, waitForTransaction, waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
@@ -211,23 +211,22 @@ const Staking: React.FunctionComponent = () => {
     }
     return isSuccess;
   };
+  console.log('11111111', allowanceAmt);
 
   const stakeAction = async (pool: any) => {
+    console.log('allowanceAmt', amountStake, allowanceAmt, Number(amountStake) > Number(allowanceAmt));
     if (Number(amountStake) > Number(allowanceAmt)) {
-      const hash = await writeContractAsync({
+      const hash = await writeContract(config as Config, {
         address: tokenAddress,
         abi: tokenABI,
         functionName: 'approve',
         args: [contractAddress, MAX_INT],
       });
-      const transactionReceipt = await waitForTransactionReceipt(config as Config, {
+      const data = await waitForTransactionReceipt(config as Config, {
         hash: hash,
+        confirmations: 3,
       });
       await refetchAllowance();
-
-      setTimeout(() => {
-        stakeAction(pool);
-      }, 1000);
     }
     const res = await writeContractAsync({
       address: contractAddress,
@@ -238,7 +237,6 @@ const Staking: React.FunctionComponent = () => {
     const transactionReceipt = await waitForTransactionReceipt(config as Config, {
       hash: res,
     });
-    console.log('res', res, transactionReceipt);
   };
 
   const handleStake = async (pool: any) => {
@@ -248,7 +246,7 @@ const Staking: React.FunctionComponent = () => {
     setShowStake(true);
 
     try {
-      const res = await stakeAction(pool);
+      await stakeAction(pool);
       setStakeStatus(STATUS.SUCCESS);
     } catch (e: any) {
       setStakeStatus(STATUS.FAIL);
