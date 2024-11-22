@@ -5,7 +5,7 @@ export const enum envNane {
 }
 
 // export const ENV = process.env.CURRENT_NETWORK;
-// export const ENV: envNane = envNane.MAINNET;
+// export const ENV: any = envNane.MAINNET;
 export const ENV: envNane = envNane.TESTNET;
 
 export const config = {
@@ -21,9 +21,9 @@ export const pool182Address = process.env.POOL_182_ADDRESS;
 
 //Testnet
 export const tokenAddress =
-  ENV == envNane.TESTNET ? '0xb84c75479bb9e7cf635ebb216e13c159c2647444' : '0xA0CF89eE581313D84d28409Eb6BB1D1F9B55d410';
+  ENV === envNane.TESTNET ? '0xb84c75479bb9e7cf635ebb216e13c159c2647444' : '0xA0CF89eE581313D84d28409Eb6BB1D1F9B55d410';
 export const contractAddress =
-  ENV == envNane.TESTNET ? '0xDe86488e46ACBe88D9e352296419d6EC7E800C1F' : '0x0a06EF3CB550eea678C2b1D329e685a902324Fe5';
+  ENV === envNane.TESTNET ? '0xDe86488e46ACBe88D9e352296419d6EC7E800C1F' : '0x0a06EF3CB550eea678C2b1D329e685a902324Fe5';
 
 //Mainnet
 // export const tokenAddress = '0xA0CF89eE581313D84d28409Eb6BB1D1F9B55d410';
