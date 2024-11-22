@@ -3,7 +3,7 @@ import ModalStakingPools from '@/common/components/Views/Staking/ModalStakingPoo
 import ModalUnStaking from '@/common/components/Views/Staking/ModalUnStaking';
 import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolTabContent';
 import { config } from '@/common/configs/config';
-import { coinAddress, contractAddress, DEFAULT_DECIMALS, MAX_INT, pool91Address, tokenAddress } from '@/common/consts';
+import { contractAddress, ENV, MAX_INT, tokenAddress } from '@/common/consts';
 import abi from '@/common/contracts/abis/contract.json';
 import tokenABI from '@/common/contracts/abis/token.json';
 import useEnv from '@/common/hooks/useEnv';
@@ -12,7 +12,6 @@ import useStaking from '@/common/hooks/useStaking';
 import { getPriceOfToken, getVipLevels } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
 import { formatNumber } from '@/utils';
-import { useAccountModal, useChainModal } from '@rainbow-me/rainbowkit';
 import { useQuery } from '@tanstack/react-query';
 import { Config, waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -112,21 +111,21 @@ const Staking: React.FunctionComponent = () => {
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [2, address],
+    args: [ENV == 'testnet' ? 6 : 2, address],
   });
 
   const { data: infoPool2 } = useReadContract({
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [3, address],
+    args: [ENV == 'testnet' ? 7 : 3, address],
   });
 
   const { data: infoPool3 } = useReadContract({
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [4, address],
+    args: [ENV == 'testnet' ? 8 : 4, address],
   });
 
   const { data: pendingReward } = useReadContract({
@@ -152,13 +151,21 @@ const Staking: React.FunctionComponent = () => {
   useEffect(() => {
     if (!address) setStakedAmount(0);
     if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
-      setCurrentStakedAmount(
-        selectedPool?.id == '2'
-          ? Number((infoPool1 as number[])[0] ?? 0)
-          : selectedPool?.id == '3'
-            ? Number((infoPool2 as number[])[0] ?? 0)
-            : Number((infoPool3 as number[])[0] ?? 0),
-      );
+      ENV == 'testnet'
+        ? setCurrentStakedAmount(
+            selectedPool?.id == '6'
+              ? Number((infoPool1 as number[])[0] ?? 0)
+              : selectedPool?.id == '7'
+                ? Number((infoPool2 as number[])[0] ?? 0)
+                : Number((infoPool3 as number[])[0] ?? 0),
+          )
+        : setCurrentStakedAmount(
+            selectedPool?.id == '2'
+              ? Number((infoPool1 as number[])[0] ?? 0)
+              : selectedPool?.id == '3'
+                ? Number((infoPool2 as number[])[0] ?? 0)
+                : Number((infoPool3 as number[])[0] ?? 0),
+          );
     }
   }, [infoPool1, infoPool2, infoPool3, selectedPool, address]);
 
