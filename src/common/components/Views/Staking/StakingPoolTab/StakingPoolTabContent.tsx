@@ -1,5 +1,5 @@
 import StatusColumn from '@/common/components/Views/Staking/StakingCommonComponent/StatusColumn';
-import { DEFAULT_DECIMALS, ENV } from '@/common/consts';
+import { DEFAULT_DECIMALS, ENV, envNane } from '@/common/consts';
 import { showConnect } from '@/common/stores/actions/appAction';
 import { formatNumber, formatPercentNumber } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -60,7 +60,7 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
               <div className={'flex justify-between'}>
                 <div className={'text-[#717681]'}>Staked amount</div>
                 <div className={'text-[#fff] font-bold'}>
-                  {ENV == 'testnet'
+                  {ENV == envNane.TESTNET
                     ? formatNumber(
                         item?.id == '6'
                           ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
@@ -158,7 +158,7 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
           </Col>
           <Col sm={5}>
             <div className={'text-base text-title font-medium'}>
-              {ENV == 'testnet'
+              {ENV == envNane.TESTNET
                 ? formatNumber(
                     item?.id == '6'
                       ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)

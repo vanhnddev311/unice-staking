@@ -5,24 +5,13 @@ export const enum envNane {
 }
 
 // export const ENV = process.env.CURRENT_NETWORK;
-export const ENV = 'testnet';
+// export const ENV: envNane = envNane.MAINNET;
+export const ENV: envNane = envNane.TESTNET;
 
 export const config = {
   API_ENDPOINT_URL: process.env.API_ENDPOINT_URL,
   API_IDO_ENDPOINT_URL: process.env.API_IDO_ENDPOINT_URL,
   APTOS_SCAN_URL: process.env.APTOS_SCAN_URL,
-  DAPP_URL:
-    ENV === envNane.TESTNET
-      ? 'https://dev-launchpad.movegpt.io'
-      : ENV === envNane.STG
-        ? 'https://stg-launchpad.movegpt.io'
-        : 'https://launchpad.movegpt.io',
-  LAUNCHPAD_URL:
-    ENV === envNane.TESTNET
-      ? 'https://dev-launchpad.movegpt.io/launchpad'
-      : ENV === envNane.STG
-        ? 'https://stg-launchpad.movegpt.io/launchpad'
-        : 'https://launchpad.movegpt.io/launchpad',
 };
 
 export const campaignId = process.env.CAMPAIGN_ID;

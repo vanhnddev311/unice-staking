@@ -3,7 +3,7 @@ import ModalStakingPools from '@/common/components/Views/Staking/ModalStakingPoo
 import ModalUnStaking from '@/common/components/Views/Staking/ModalUnStaking';
 import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolTabContent';
 import { config } from '@/common/configs/config';
-import { contractAddress, ENV, MAX_INT, tokenAddress } from '@/common/consts';
+import { contractAddress, ENV, envNane, MAX_INT, tokenAddress } from '@/common/consts';
 import abi from '@/common/contracts/abis/contract.json';
 import tokenABI from '@/common/contracts/abis/token.json';
 import useEnv from '@/common/hooks/useEnv';
@@ -111,21 +111,21 @@ const Staking: React.FunctionComponent = () => {
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [ENV == 'testnet' ? 6 : 2, address],
+    args: [ENV == envNane.TESTNET ? 6 : 2, address],
   });
 
   const { data: infoPool2 } = useReadContract({
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [ENV == 'testnet' ? 7 : 3, address],
+    args: [ENV == envNane.TESTNET ? 7 : 3, address],
   });
 
   const { data: infoPool3 } = useReadContract({
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [ENV == 'testnet' ? 8 : 4, address],
+    args: [ENV == envNane.TESTNET ? 8 : 4, address],
   });
 
   const { data: pendingReward } = useReadContract({
@@ -151,7 +151,7 @@ const Staking: React.FunctionComponent = () => {
   useEffect(() => {
     if (!address) setStakedAmount(0);
     if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
-      ENV == 'testnet'
+      ENV == envNane.TESTNET
         ? setCurrentStakedAmount(
             selectedPool?.id == '6'
               ? Number((infoPool1 as number[])[0] ?? 0)
@@ -211,10 +211,8 @@ const Staking: React.FunctionComponent = () => {
     }
     return isSuccess;
   };
-  console.log('11111111', allowanceAmt);
 
   const stakeAction = async (pool: any) => {
-    console.log('allowanceAmt', amountStake, allowanceAmt, Number(amountStake) > Number(allowanceAmt));
     if (Number(amountStake) > Number(allowanceAmt)) {
       const hash = await writeContract(config as Config, {
         address: tokenAddress,
