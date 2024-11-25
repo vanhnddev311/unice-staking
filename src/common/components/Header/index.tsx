@@ -1,11 +1,11 @@
 import { routes } from '@/common/components/Header/routers';
 import { ArrowDownIcon, DarkIcon, HeaderStar, HotIcon, LightIcon, WalletIcon } from '@/common/components/icon/common';
 import ModalConnectWallet from '@/common/components/Modal/ModalConnectWallet';
-import { removeData, setData } from '@/common/hooks/useLocalStoragre';
+import { setData } from '@/common/hooks/useLocalStoragre';
 import { useModal } from '@/common/hooks/useModal';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
 import { ellipseAddress } from '@/utils';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton, useChainModal } from '@rainbow-me/rainbowkit';
 import { Button, Drawer, Dropdown, Layout, Menu, MenuProps, notification, Space, Switch } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useChainId, useClient, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 const { Header } = Layout;
 
 export enum THEME {
@@ -28,22 +28,45 @@ const PageHeader: React.FunctionComponent = () => {
   const [mode, setMode] = useState(true);
   const [currentTheme, setCurrentTheme] = useState<THEME>(THEME.DARK);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const { show, setShow, toggle } = useModal();
-  const { show: showWrongNetwork, setShow: setShowWrongNetwork } = useModal();
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const { connectors, connect } = useConnect();
+  const { chains, switchChain, switchChainAsync } = useSwitchChain();
   const { disconnect } = useDisconnect();
+  const { openChainModal } = useChainModal();
+  const { connector, chainId } = useAccount();
+  const client = useClient();
+
+  const checkAndSwitchNetwork = async () => {
+    const targetChainId = client?.chain.id ?? 1;
+    if (connector) {
+      try {
+        if (chainId !== targetChainId) {
+          try {
+            await switchChainAsync({ chainId: targetChainId });
+            console.log('switched network');
+          } catch (error) {
+            console.error('Failed to switch network:', error);
+          }
+        } else {
+          alert('You are already on the correct network.');
+        }
+      } catch (error) {
+        console.error('Failed to get network:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (connector) {
+      checkAndSwitchNetwork();
+    }
+  }, [chainId, connector]);
 
   useEffect(() => {
     document.body.dataset.theme = app.theme;
     setCurrentTheme(app?.theme == 'light' ? THEME.DARK : THEME.DARK);
     setMode(app.theme === 'dark');
   }, [app]);
-
-  // useEffect(() => {
-  //   setPageName(router.pathname.replace('/', ''));
-  // }, [router]);
 
   function openNewTab(url: string) {
     window.open(url, '_blank');
@@ -96,22 +119,6 @@ const PageHeader: React.FunctionComponent = () => {
           {/*  items={items}*/}
           {/*/>*/}
         </div>
-        {/*<div className={'px-[14px] py-7'}>*/}
-        {/*  <div className={'w-full flex items-center rounded-[12px] bg-[#E7E7E8] dark:bg-[#2B2B2D] p-[2px]'}>*/}
-        {/*    <div*/}
-        {/*      onClick={() => handleSwitchTheme('light')}*/}
-        {/*      className={`switch-theme w-full ${currentTheme == THEME.LIGHT ? 'bg-[#fff] dark:bg-[#131316] switch-theme-active' : 'dark:bg-[#2B2B2D]'}`}*/}
-        {/*    >*/}
-        {/*      <LightIcon fill={currentTheme == THEME.LIGHT ? '#14161A' : '#89898B'} />*/}
-        {/*    </div>*/}
-        {/*    <div*/}
-        {/*      onClick={() => handleSwitchTheme('dark')}*/}
-        {/*      className={`switch-theme w-full ${currentTheme == THEME.DARK ? 'bg-[#fff] dark:bg-[#131316] switch-theme-active' : 'dark:bg-[#2B2B2D]'}`}*/}
-        {/*    >*/}
-        {/*      <DarkIcon fill={currentTheme == THEME.DARK ? '#E7E7E8' : '#89898B'} />*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
       </div>
     );
   };
@@ -182,6 +189,7 @@ const PageHeader: React.FunctionComponent = () => {
     >
       <div className="mx-auto container max-w-[1440px] h-full w-full top-0 left-0 flex justify-between items-center relative">
         <div className={'left-0 top-0 flex items-center relative'}>
+          <div onClick={openChainModal}>abc</div>
           <Link
             href={'/'}
             className={'flex gap-[10px] items-center relative'}
@@ -189,8 +197,8 @@ const PageHeader: React.FunctionComponent = () => {
             aria-label={'Go to home'}
           >
             <Image
-              className="block sm:hidden logo w-auto h-[30px]"
-              src={require('@/common/assets/images/logo.png')}
+              className="block sm:hidden logo w-auto h-[24px]"
+              src={require('@/common/assets/images/logo-mb.png')}
               alt=""
             />
             <Image
@@ -217,7 +225,7 @@ const PageHeader: React.FunctionComponent = () => {
             className={'flex items-center rounded-full border border-[#33343E] bg-[#1C1D25] gap-2 p-2 cursor-pointer'}
           >
             <WalletIcon />
-            <div className={'text-[#fff] font-medium uppercase'}>{ellipseAddress(address, 5)}</div>
+            <div className={'text-sm sm:text-base text-[#fff] font-medium uppercase'}>{ellipseAddress(address, 5)}</div>
             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
               <path d="M1 0.499023L5 3.50098L9 0.499023" stroke="white" strokeOpacity="0.4" />
             </svg>

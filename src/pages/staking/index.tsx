@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useClient, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
 const Staking: React.FunctionComponent = () => {
   const [amountStake, setAmountStake] = useState<string>('');
@@ -60,6 +60,7 @@ const Staking: React.FunctionComponent = () => {
   const { dataEnv } = useEnv();
   const { claimContractAddress, stakingContractAddress } = dataEnv;
   const { stakeInfo, poolInfo, balance } = useStaking();
+  const client = useClient();
 
   useEffect(() => {
     if (!showModalStaking) {
@@ -230,6 +231,7 @@ const Staking: React.FunctionComponent = () => {
         abi: tokenABI,
         functionName: 'approve',
         args: [contractAddress, MAX_INT],
+        chainId: client?.chain?.id ?? 1,
       });
 
       const data = await waitForTransactionReceipt(config as Config, {
@@ -244,6 +246,7 @@ const Staking: React.FunctionComponent = () => {
       abi,
       functionName: 'stake',
       args: [pool?.id ?? 2, BigNumber(Number(amountStake) * 10 ** 18).toFixed()],
+      chainId: client?.chain?.id ?? 1,
     });
 
     const transactionReceipt = await waitForTransactionReceipt(config as Config, {
@@ -280,6 +283,7 @@ const Staking: React.FunctionComponent = () => {
         abi,
         functionName: 'unStake',
         args: [parentPool?.id ?? 2, BigNumber(amountUnStake).times(BigNumber(10).pow(18)).toString()],
+        chainId: client?.chain?.id ?? 1,
       });
 
       // const { hash, result } = await run(unstakePayload);
