@@ -5,6 +5,7 @@ import { getPoolInfo } from '@/common/services/staking';
 import { useQuery } from '@tanstack/react-query';
 import { Config, getBalance } from '@wagmi/core';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 
 let page = 1;
 
@@ -153,6 +154,7 @@ const useStaking = () => {
   const router = useRouter();
   const { dataEnv } = useEnv();
   const { claimContractAddress, stakingContractAddress, collectionId } = dataEnv;
+  const { address } = useAccount();
 
   if (router?.pathname != '/staking' && router?.pathname != '/redeem') {
     page = 1;
@@ -183,11 +185,12 @@ const useStaking = () => {
     },
   );
 
-  const { data: balance = 0 } = useQuery(
+  const { data: balance } = useQuery(
     ['totalToken', tokenAddress],
     async () => {
       return getBalance(config as Config, {
-        address: tokenAddress,
+        address: address || '0x',
+        token: tokenAddress,
       });
     },
     {
@@ -334,7 +337,7 @@ const useStaking = () => {
   return {
     stakeInfo,
     poolInfo,
-    balance,
+    balance: balance?.formatted,
     isFetchingPoolInfo,
     // nfts: nftsData?.pages.flat() || [],
     // nftsPage: nftsData?.pageParams,

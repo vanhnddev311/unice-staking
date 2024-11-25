@@ -201,6 +201,7 @@ const Staking: React.FunctionComponent = () => {
 
   const validateAmountStake = () => {
     let isSuccess = false;
+    console.log('balance', balance);
     if (!amountStake || Number(amountStake) === 0) {
       setValidate('Amount is required!');
       isSuccess = false;
@@ -253,7 +254,7 @@ const Staking: React.FunctionComponent = () => {
       address: contractAddress,
       abi,
       functionName: 'stake',
-      args: [pool?.id ?? 2, BigNumber(Number(amountStake) * 10 ** 18).toFixed()],
+      args: [pool?.id ?? 2, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
       chainId: client?.chain?.id ?? 1,
     });
 
