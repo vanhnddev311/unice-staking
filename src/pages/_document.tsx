@@ -13,6 +13,8 @@ export default function Document() {
 
         <meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />
         <meta property="og:image" content="https://staking.unicelab.io/thumbnail.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="og:url" content="" />
 
         <meta name="twitter:image" content="/logo.png" />
