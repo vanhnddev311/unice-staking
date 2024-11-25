@@ -1,6 +1,7 @@
-import { connectorsForWallets, getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { ENV, envNane } from '@/common/consts';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { bitgetWallet, injectedWallet, rainbowWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
-import { createConfig, http } from 'wagmi';
+import { createConfig, CreateConfigParameters, http } from 'wagmi';
 import { bsc, bscTestnet, mainnet } from 'wagmi/chains';
 
 const connectors = connectorsForWallets(
@@ -16,12 +17,20 @@ const connectors = connectorsForWallets(
   },
 );
 
-export const config = createConfig({
+const testnetConf: CreateConfigParameters = {
   connectors,
-  chains: [bsc, bscTestnet],
+  chains: [bscTestnet],
   transports: {
     [bscTestnet.id]: http(),
-    // [mainnet.id]: http(),
+  },
+};
+
+const mainnetConf: CreateConfigParameters = {
+  connectors,
+  chains: [bsc],
+  transports: {
     [bsc.id]: http(),
   },
-});
+};
+
+export const config = createConfig(ENV == envNane.TESTNET ? testnetConf : mainnetConf);

@@ -119,6 +119,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
         </Link>
       </div>
       <Button
+        disabled={!amount}
         onClick={() => handleStake(poolInfo)}
         size="small"
         className="min-w-[156px] h-[52px] hover:bg-[#4A7DFF] disabled:bg-[#ccc] text-[#000] dark:text-[#fff] bg-[#4A7DFF] border-none rounded-[4px] font-medium

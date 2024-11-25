@@ -2,6 +2,7 @@ import InputCurrency from '@/common/components/common-components/InputCureency';
 import { DEFAULT_DECIMALS, lockCooldownFormat, pool182Address, pool91Address } from '@/common/consts';
 import { formatNumber } from '@/utils';
 import { Button, Steps } from 'antd';
+import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
 import moment from 'moment/moment';
 import Image from 'next/image';
@@ -12,6 +13,7 @@ interface Props {
   stakeInfo: StakeInfo;
   listPool: any[];
   poolInfo: PollInfo;
+  userPoolInfo: any;
   poolAddress: string;
   setPoolAddress: (address: string) => void;
   amount: string;
@@ -34,6 +36,7 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
   stakeInfo,
   listPool,
   poolInfo,
+  userPoolInfo,
   poolAddress,
   setPoolAddress,
   amount,
@@ -54,9 +57,8 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
   }, [stakeInfo]);
 
   const unstakeTime = useMemo(() => {
-    // return moment(poolInfo?.close_at).add(Number(poolInfo?.est_apr[0].time), 'days').endOf('days');
-    return moment(poolInfo?.close_at).add(Number(poolInfo?.est_apr[0].time), 'days').endOf('days');
-  }, [poolInfo]);
+    return moment.unix(BigNumber(userPoolInfo[3]).toNumber());
+  }, [userPoolInfo]);
 
   const lockTimeFormat = useMemo(() => {
     return unstakeTime.format(lockCooldownFormat);
@@ -156,7 +158,7 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
       <Button
         // disabled={Number(stakeInfo?.stake_amount) === 0}
         // loading={loading}
-        disabled={!isExpired}
+        disabled={!isExpired || !amount}
         onClick={() => handleUnStake(Number(amount), poolInfo)}
         size="small"
         className="min-w-[156px] h-[52px] hover:bg-[#4A7DFF] disabled:bg-[#ccc] text-[#000] dark:text-[#fff] bg-[#4A7DFF] border-none rounded-[4px] font-medium

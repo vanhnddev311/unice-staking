@@ -1,6 +1,7 @@
 import StakingTab from '@/common/components/Views/Staking/StakingTab';
 import UnStakingTab from '@/common/components/Views/Staking/UnStakingTab';
 import { CloseIcon } from '@/common/components/icon/common';
+import { ENV, envNane } from '@/common/consts';
 import { Col, Modal, Row, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 
@@ -9,6 +10,7 @@ interface Props {
   loading: boolean;
   stakeInfo: any;
   poolInfo: any;
+  userPoolInfo: any;
   amountStake: string;
   amountUnStake: string;
   validate: string;
@@ -37,6 +39,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   loading,
   stakeInfo,
   poolInfo,
+  userPoolInfo,
   amountStake,
   amountUnStake,
   validate,
@@ -61,6 +64,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   const [tabStaking, setTabStaking] = useState<string>('1');
   const [poolAddress, setPoolAdress] = useState<string>('');
   const [poolSelectedInfo, setPoolSelectedInfo] = useState<PollInfo>(poolInfo[0]);
+  const [userPoolSelectedInfo, setUserPoolSelectedInfo] = useState<any>(userPoolInfo[0]);
   const [stakeInfoOfPoolSelected, setStakeInfoOfPoolSelected] = useState<StakeInfo>();
 
   useEffect(() => {
@@ -91,6 +95,25 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool182Info);
     }
   }, [poolInfo, poolAddress]);
+
+  useEffect(() => {
+    if (
+      (ENV == envNane.TESTNET && poolSelectedInfo?.id == '6') ||
+      (ENV == envNane.MAINNET && poolSelectedInfo?.id == '2')
+    ) {
+      setUserPoolSelectedInfo(userPoolInfo[0]);
+    } else if (
+      (ENV == envNane.TESTNET && poolSelectedInfo?.id == '7') ||
+      (ENV == envNane.MAINNET && poolSelectedInfo?.id == '3')
+    ) {
+      setUserPoolSelectedInfo(userPoolInfo[1]);
+    } else if (
+      (ENV == envNane.TESTNET && poolSelectedInfo?.id == '8') ||
+      (ENV == envNane.MAINNET && poolSelectedInfo?.id == '4')
+    ) {
+      setUserPoolSelectedInfo(userPoolInfo[2]);
+    }
+  }, [userPoolInfo, poolSelectedInfo]);
 
   return (
     <Modal
@@ -126,13 +149,13 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
           <div className={'flex items-center bg-[#101119] rounded-[12px] gap-1 p-1 mb-6'}>
             <div
               onClick={() => setTabStaking('1')}
-              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] ${tabStaking == '1' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
+              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '1' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
             >
               Stake
             </div>
             <div
               onClick={() => setTabStaking('2')}
-              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
+              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
             >
               Unstake
             </div>
@@ -161,6 +184,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               stakeInfo={stakeInfoOfPoolSelected!}
               listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
+              userPoolInfo={userPoolSelectedInfo}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}
               amount={amountUnStake}

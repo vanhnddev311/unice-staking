@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
 const Staking: React.FunctionComponent = () => {
   const [amountStake, setAmountStake] = useState<string>('');
@@ -91,22 +91,6 @@ const Staking: React.FunctionComponent = () => {
     args: [address, contractAddress],
   });
 
-  // const { data } = useReadContracts({
-  //   contracts: [
-  //     {
-  //       abi,
-  //       address: contractAddress,
-  //       functionName: 'userInfo',
-  //       args: [0, address],
-  //     },
-  //     {
-  //       abi,
-  //       address: contractAddress,
-  //       functionName: 'userInfo',
-  //       args: [1, address],
-  //     },
-  //   ],
-  // });
   const { data: infoPool1 } = useReadContract({
     abi,
     address: contractAddress,
@@ -135,7 +119,34 @@ const Staking: React.FunctionComponent = () => {
     args: [selectedPool?.id, address],
   });
 
-  // const [infoPool1, infoPool2] = data || [];
+  const { data } = useReadContracts({
+    contracts: [
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 6 : 2, address],
+      },
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 7 : 3, address],
+      },
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 8 : 4, address],
+      },
+    ],
+  });
+
+  const [reward1, reward2, reward3] = data || [];
+
+  const totalReward = useMemo(() => {
+    return Number(reward1?.result ?? 0) + Number(reward2?.result ?? 0) + Number(reward3?.result ?? 0);
+  }, [reward1, reward2, reward3]);
 
   useEffect(() => {
     if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
@@ -214,31 +225,34 @@ const Staking: React.FunctionComponent = () => {
 
   const stakeAction = async (pool: any) => {
     if (Number(amountStake) > Number(allowanceAmt)) {
-      const hash = await writeContract(config as Config, {
+      const hash = await writeContractAsync({
         address: tokenAddress,
         abi: tokenABI,
         functionName: 'approve',
         args: [contractAddress, MAX_INT],
       });
+
       const data = await waitForTransactionReceipt(config as Config, {
         hash: hash,
         confirmations: 3,
       });
       await refetchAllowance();
     }
+
     const res = await writeContractAsync({
       address: contractAddress,
       abi,
       functionName: 'stake',
-      args: [pool?.id ?? 2, BigNumber(amountStake).times(BigNumber(10).pow(18)).toString()],
+      args: [pool?.id ?? 2, BigNumber(Number(amountStake) * 10 ** 18).toFixed()],
     });
+
     const transactionReceipt = await waitForTransactionReceipt(config as Config, {
       hash: res,
     });
   };
 
   const handleStake = async (pool: any) => {
-    // if (!validateAmountStake()) return;
+    if (!validateAmountStake()) return;
     setLoadingStaking(true);
     setStakeStatus(STATUS.PENDING);
     setShowStake(true);
@@ -411,7 +425,7 @@ const Staking: React.FunctionComponent = () => {
                   </div>
                   <div className={'mt-2'}>
                     Interest:{' '}
-                    <span className={'text-[#10DE4A]'}>+{formatNumber(reward / Math.pow(10, 18), 4)} UNICE</span>
+                    <span className={'text-[#10DE4A]'}>+{formatNumber(totalReward / Math.pow(10, 18), 4)} UNICE</span>
                   </div>
                 </div>
               </div>
@@ -447,6 +461,7 @@ const Staking: React.FunctionComponent = () => {
           loading={loadingStaking}
           stakeInfo={stakeInfo as any}
           poolInfo={filterPoolInfo as any}
+          userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}
           validate={validate}
           amountStake={amountStake}
           amountUnStake={amountUnStake}
