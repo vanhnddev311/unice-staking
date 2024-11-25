@@ -115,6 +115,11 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
     }
   }, [userPoolInfo, poolSelectedInfo]);
 
+  const handleExit = () => {
+    handleClose();
+    setTabStaking('1');
+  };
+
   return (
     <Modal
       className={'modal-customize'}
@@ -123,10 +128,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       footer={false}
       title={''}
       width={480}
-      onCancel={() => {
-        handleClose();
-        setTabStaking('1');
-      }}
+      onCancel={handleExit}
       closable={false}
     >
       <Row gutter={[40, 0]}>
@@ -142,7 +144,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
         <Col xs={24} className={'w-full'}>
           <div className={'flex justify-between items-center mb-6'}>
             <div className={'text-3xl font-semibold'}>Staking pools</div>
-            <div onClick={handleClose} className={'bg-[#14141A] rounded-full p-2 cursor-pointer'}>
+            <div onClick={handleExit} className={'bg-[#14141A] rounded-full p-2 cursor-pointer'}>
               <CloseIcon />
             </div>
           </div>

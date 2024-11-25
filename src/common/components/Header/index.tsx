@@ -1,12 +1,11 @@
 import { routes } from '@/common/components/Header/routers';
-import { ArrowDownIcon, DarkIcon, HeaderStar, HotIcon, LightIcon, WalletIcon } from '@/common/components/icon/common';
+import { HotIcon, WalletIcon } from '@/common/components/icon/common';
 import ModalConnectWallet from '@/common/components/Modal/ModalConnectWallet';
 import { setData } from '@/common/hooks/useLocalStoragre';
-import { useModal } from '@/common/hooks/useModal';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
 import { ellipseAddress } from '@/utils';
 import { ConnectButton, useChainModal } from '@rainbow-me/rainbowkit';
-import { Button, Drawer, Dropdown, Layout, Menu, MenuProps, notification, Space, Switch } from 'antd';
+import { Drawer, Layout, Menu, MenuProps, notification, Space, Switch } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +13,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAccount, useChainId, useClient, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
+
 const { Header } = Layout;
 
 export enum THEME {
@@ -47,8 +47,6 @@ const PageHeader: React.FunctionComponent = () => {
           } catch (error) {
             console.error('Failed to switch network:', error);
           }
-        } else {
-          alert('You are already on the correct network.');
         }
       } catch (error) {
         console.error('Failed to get network:', error);
@@ -189,7 +187,6 @@ const PageHeader: React.FunctionComponent = () => {
     >
       <div className="mx-auto container max-w-[1440px] h-full w-full top-0 left-0 flex justify-between items-center relative">
         <div className={'left-0 top-0 flex items-center relative'}>
-          <div onClick={openChainModal}>abc</div>
           <Link
             href={'/'}
             className={'flex gap-[10px] items-center relative'}

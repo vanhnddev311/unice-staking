@@ -90,6 +90,7 @@ const Staking: React.FunctionComponent = () => {
     address: tokenAddress,
     functionName: 'allowance',
     args: [address, contractAddress],
+    chainId: client?.chain?.id ?? 1,
   });
 
   const { data: infoPool1 } = useReadContract({
@@ -97,6 +98,7 @@ const Staking: React.FunctionComponent = () => {
     address: contractAddress,
     functionName: 'userInfo',
     args: [ENV == envNane.TESTNET ? 6 : 2, address],
+    chainId: client?.chain?.id ?? 1,
   });
 
   const { data: infoPool2 } = useReadContract({
@@ -104,6 +106,7 @@ const Staking: React.FunctionComponent = () => {
     address: contractAddress,
     functionName: 'userInfo',
     args: [ENV == envNane.TESTNET ? 7 : 3, address],
+    chainId: client?.chain?.id ?? 1,
   });
 
   const { data: infoPool3 } = useReadContract({
@@ -111,6 +114,7 @@ const Staking: React.FunctionComponent = () => {
     address: contractAddress,
     functionName: 'userInfo',
     args: [ENV == envNane.TESTNET ? 8 : 4, address],
+    chainId: client?.chain?.id ?? 1,
   });
 
   const { data: pendingReward } = useReadContract({
@@ -118,6 +122,7 @@ const Staking: React.FunctionComponent = () => {
     address: contractAddress,
     functionName: 'pendingReward',
     args: [selectedPool?.id, address],
+    chainId: client?.chain?.id ?? 1,
   });
 
   const { data } = useReadContracts({
@@ -127,18 +132,21 @@ const Staking: React.FunctionComponent = () => {
         address: contractAddress,
         functionName: 'pendingReward',
         args: [ENV == envNane.TESTNET ? 6 : 2, address],
+        chainId: client?.chain?.id ?? 1,
       },
       {
         abi,
         address: contractAddress,
         functionName: 'pendingReward',
         args: [ENV == envNane.TESTNET ? 7 : 3, address],
+        chainId: client?.chain?.id ?? 1,
       },
       {
         abi,
         address: contractAddress,
         functionName: 'pendingReward',
         args: [ENV == envNane.TESTNET ? 8 : 4, address],
+        chainId: client?.chain?.id ?? 1,
       },
     ],
   });

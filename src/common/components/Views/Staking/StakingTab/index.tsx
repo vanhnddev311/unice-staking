@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { useAccount, useClient, useReadContract, useWriteContract } from 'wagmi';
 
 interface Props {
   loading: boolean;
@@ -52,12 +52,14 @@ const StakingTab: React.FunctionComponent<Props> = ({
   setSelectedPool,
 }) => {
   const { address } = useAccount();
+  const client = useClient();
 
   const { data: balanceToken = 0 } = useReadContract({
     abi: tokenABI,
     address: tokenAddress,
     functionName: 'balanceOf',
     args: [address],
+    chainId: client?.chain?.id ?? 1,
   });
 
   return (
