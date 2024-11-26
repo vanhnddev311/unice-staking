@@ -1,6 +1,6 @@
-import { AdjustIcon, DotIcon } from '@/common/components/icon/common';
+import { DotIcon } from '@/common/components/icon/common';
 import { Button } from 'antd';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 const StatusColumn: React.FunctionComponent<{ record: any; isMobile: boolean }> = ({ record, isMobile }) => {
   return (

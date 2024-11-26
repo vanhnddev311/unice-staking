@@ -1,60 +1,66 @@
 import StatusColumn from '@/common/components/Views/Staking/StakingCommonComponent/StatusColumn';
 import StakingPoolDuration from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolDuration';
-import { DEFAULT_DECIMALS } from '@/common/consts';
+import { ENV, envNane } from '@/common/consts';
 import { formatNumber } from '@/utils';
 import { Button, Col, Row } from 'antd';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 
 const StakingPoolItem: React.FunctionComponent<{
   pools: any;
   token: any;
+  info1: any;
+  info2: any;
+  info3: any;
+  selectedPool: any;
+  setSelectedPool: (val: any) => void;
   setShowModalStaking: (value: any) => void;
-}> = ({ pools, token, setShowModalStaking }) => {
-  const [poolSelected, setPoolSelected] = useState<any>();
-
-  const isClosed = moment(poolSelected?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
-
+}> = ({ pools, token, selectedPool, info1, info2, info3, setShowModalStaking, setSelectedPool }) => {
+  const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
   return (
     <section>
-      <div className={'flex flex-col sm:hidden gap-3 font-medium'}>
+      <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>
         <div className={'flex justify-between items-center mb-2'}>
           <div>
-            <div className={'text-[#fff] text-base font-bold'}>{pools?.pool_name}</div>
-            {/*<div className={'text-[#717681]'}>*/}
-            {/*  Open for {Math.ceil(moment(item?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24))} days*/}
-            {/*</div>*/}
+            <div className={'text-[#fff] text-base font-bold'}>{pools?.name}</div>
           </div>
-          <div className={'text-[#C7E153] text-base font-bold'}>{poolSelected?.est_apr[0].value}% APR</div>
+          <div className={'apr-text text-base font-bold'}>{selectedPool?.est_apr[0].value}% APR</div>
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Staked amount</div>
-          <div className={'text-[#fff] font-bold'}>
-            {poolSelected?.stakedInfo?.stake_amount && poolSelected?.stakedInfo?.stake_amount != 0
+          <div className={'text-[#fff] font-medium'}>
+            {ENV == envNane.TESTNET
               ? formatNumber(
-                  (Number(poolSelected?.stakedInfo?.stake_amount) - Number(poolSelected?.stakedInfo?.claimed_amount)) /
-                    Math.pow(10, DEFAULT_DECIMALS),
+                  selectedPool?.id == '6'
+                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    : selectedPool?.id == '7'
+                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
+                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
                 )
-              : 0}{' '}
-            {token?.symbol}
+              : formatNumber(
+                  selectedPool?.id == '2'
+                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    : selectedPool?.id == '3'
+                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
+                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                )}{' '}
+            UNICE
           </div>
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Staking cap</div>
-          <div className={'text-[#fff] font-bold'}>
-            {formatNumber(poolSelected?.staking_cap)} {token?.symbol}
-          </div>
+          <div className={'text-[#fff] font-medium'}>Unlimited</div>
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Duration</div>
-          <StakingPoolDuration pools={pools} setPoolSelected={setPoolSelected} />
+          <StakingPoolDuration pools={pools} setPoolSelected={setSelectedPool} />
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Status</div>
-          <StatusColumn record={poolSelected} isMobile={true} />
+          <StatusColumn record={selectedPool} isMobile={true} />
         </div>
         <Button
-          className={`${isClosed && 'hidden'} h-[36px] hover:bg-[#fff800] disabled:bg-[#ccc] text-[#000] dark:text-[#000] bg-[#C2E23D] border-none rounded-[4px] font-semibold text-base mt-2`}
+          className={`h-[36px] hover:bg-[#4A7DFF] disabled:bg-[#ccc] text-[#fff] bg-[#4A7DFF] border-none rounded-[4px] font-semibold text-base mt-2`}
           type="primary"
           onClick={() => setShowModalStaking(true)}
         >
@@ -62,35 +68,44 @@ const StakingPoolItem: React.FunctionComponent<{
         </Button>
       </div>
 
-      <Row className={'staking-pool-item hidden sm:flex h-[96px] bg-[#2A2B36] text-base text-[#fff]'}>
-        <Col sm={4} className={'flex items-center font-bold px-4 py-6'}>
-          <div>{pools?.pool_name}</div>
+      <Row className={'table-item hidden sm:flex h-[96px] bg-[#2A2B36] text-base text-[#fff]'}>
+        <Col sm={4} className={'flex items-center font-bold p-6'}>
+          <div>{pools?.name}</div>
         </Col>
-        <Col sm={2} className={'flex items-center text-center text-[#C7E153] text-xl font-bold px-4 py-6'}>
-          <div>{poolSelected?.est_apr[0].value}%</div>
+        <Col sm={2} className={'flex items-center text-center text-xl font-medium p-6'}>
+          <div className={'apr-text'}>{selectedPool?.est_apr[0].value}%</div>
         </Col>
-        <Col sm={5} className={'flex items-center px-4 py-6'}>
+        <Col sm={5} className={'flex items-center p-6'}>
           <div>
-            <StakingPoolDuration pools={pools} setPoolSelected={setPoolSelected} />
+            <StakingPoolDuration pools={pools} setPoolSelected={setSelectedPool} />
           </div>
         </Col>
-        <Col sm={5} className={'flex items-center font-bold px-4 py-6'}>
+        <Col sm={4} className={'flex items-center font-medium p-6'}>
+          Unlimited
+        </Col>
+        <Col sm={5} className={'flex items-center font-medium p-6'}>
           <div>
-            {formatNumber(poolSelected?.staking_cap)} {token?.symbol}
+            {ENV == envNane.TESTNET
+              ? formatNumber(
+                  selectedPool?.id == '6'
+                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    : selectedPool?.id == '7'
+                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
+                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                )
+              : formatNumber(
+                  selectedPool?.id == '2'
+                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    : selectedPool?.id == '3'
+                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
+                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                )}{' '}
+            UNICE
           </div>
         </Col>
-        <Col sm={4} className={'flex items-center font-bold px-4 py-6'}>
+        <Col sm={4} className={'flex items-center p-6'}>
           <div>
-            {poolSelected?.stakedInfo?.stake_amount && poolSelected?.stakedInfo?.stake_amount != 0
-              ? (Number(poolSelected?.stakedInfo?.stake_amount) - Number(poolSelected?.stakedInfo?.claimed_amount)) /
-                Math.pow(10, DEFAULT_DECIMALS)
-              : 0}{' '}
-            {token?.symbol}
-          </div>
-        </Col>
-        <Col sm={4} className={'flex items-center px-4 py-6'}>
-          <div>
-            <StatusColumn record={poolSelected} isMobile={false} />
+            <StatusColumn record={selectedPool} isMobile={false} />
           </div>
         </Col>
       </Row>

@@ -2,18 +2,19 @@ import ModalStaking from '@/common/components/Views/Staking/ModalStaking';
 import ModalStakingPools from '@/common/components/Views/Staking/ModalStakingPools';
 import ModalUnStaking from '@/common/components/Views/Staking/ModalUnStaking';
 import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolTabContent';
+import StakingReward from '@/common/components/Views/Staking/StakingReward';
 import { config } from '@/common/configs/config';
 import { contractAddress, ENV, envNane, MAX_INT, tokenAddress } from '@/common/consts';
 import abi from '@/common/contracts/abis/contract.json';
 import tokenABI from '@/common/contracts/abis/token.json';
-import useEnv from '@/common/hooks/useEnv';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
-import { getPriceOfToken, getVipLevels } from '@/common/services/staking';
+import { getPriceOfToken } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
 import { formatNumber } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Config, waitForTransaction, waitForTransactionReceipt, writeContract } from '@wagmi/core';
+import { Config, waitForTransactionReceipt } from '@wagmi/core';
+import { Popover } from 'antd';
 import BigNumber from 'bignumber.js';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
@@ -52,13 +53,7 @@ const Staking: React.FunctionComponent = () => {
   const { show: showUnStake, setShow: setShowUnStake, toggle: toggleShowUnStake } = useModal();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { address } = useAccount();
-  // const { data: hash, writeContract } = useWriteContract();
-  // const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-  //   hash,
-  // });
 
-  const { dataEnv } = useEnv();
-  const { claimContractAddress, stakingContractAddress } = dataEnv;
   const { stakeInfo, poolInfo, balance } = useStaking();
   const client = useClient();
 
@@ -328,30 +323,30 @@ const Staking: React.FunctionComponent = () => {
     }
   };
 
-  const { data: filterPoolInfo = [] } = useQuery(
-    ['filterPoolInfo', poolInfo, stakingContractAddress],
-    async () => {
-      if (!poolInfo) return;
-      const listChildPool = poolInfo?.items;
-      const updatedPoolInfo: any = [];
-      for (const pool of listChildPool) {
-        try {
-          // if (!!infoPool1 && !!infoPool2) {
-          updatedPoolInfo.push({ ...pool });
-          // const stakedAmount =
-          //   pool?.id == '0' ? Number((infoPool1 as number[])[0]) : Number((infoPool2 as number[])[0]);
-          // }
-        } catch (error) {
-          console.error('Error fetching staked amount for pool:', error);
-        }
-      }
-
-      return updatedPoolInfo;
-    },
-    {
-      // enabled: !!stakingContractAddress && !!poolInfo && !!infoPool1 && !!infoPool2,
-    },
-  );
+  // const { data: filterPoolInfo = [] } = useQuery(
+  //   ['filterPoolInfo', poolInfo],
+  //   async () => {
+  //     if (!poolInfo) return;
+  //     const listChildPool = poolInfo?.items;
+  //     const updatedPoolInfo: any = [];
+  //     for (const pool of listChildPool) {
+  //       try {
+  //         // if (!!infoPool1 && !!infoPool2) {
+  //         updatedPoolInfo.push({ ...pool });
+  //         // const stakedAmount =
+  //         //   pool?.id == '0' ? Number((infoPool1 as number[])[0]) : Number((infoPool2 as number[])[0]);
+  //         // }
+  //       } catch (error) {
+  //         console.error('Error fetching staked amount for pool:', error);
+  //       }
+  //     }
+  //
+  //     return updatedPoolInfo;
+  //   },
+  //   {
+  //     // enabled: !!poolInfo && !!infoPool1 && !!infoPool2,
+  //   },
+  // );
 
   const { data: tokenPrice } = useQuery(['tokenPrice'], async () => {
     const res = await getPriceOfToken();
@@ -385,7 +380,7 @@ const Staking: React.FunctionComponent = () => {
           <div className={'flex flex-col md:flex-row md:items-center gap-6'}>
             <div
               className={
-                'relative bg-staking-1 w-full h-[160px] rounded-[16px] flex items-center gap-4 p-6 sm:px-10 sm:py-6 overflow-hidden'
+                'relative bg-staking-1 w-full h-[140px] rounded-[16px] flex items-center gap-4 p-6 sm:px-10 sm:py-6 overflow-hidden'
               }
             >
               <Image
@@ -428,39 +423,53 @@ const Staking: React.FunctionComponent = () => {
               </div>
             </div>
             <div
-              className={'w-full sm:h-[160px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25]'}
+              className={
+                'w-full sm:h-[140px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] p-4 sm:p-8'
+              }
             >
-              <div className={'w-full flex flex-col text-[#717681] gap-4 p-4 sm:p-8'}>
-                <div>Staked Amount</div>
-                <div>
-                  <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
-                    {formatNumber(stakedAmount / Math.pow(10, 18), 4)} UNICE
-                  </div>
-                  <div className={'mt-2'}>
-                    Interest:{' '}
-                    <span className={'text-[#10DE4A]'}>+{formatNumber(totalReward / Math.pow(10, 18), 4)} UNICE</span>
+              <div className={'w-full flex justify-center'}>
+                <div className={'flex flex-col text-[#717681] gap-4'}>
+                  <div>UNICE Staked</div>
+                  <div className={'flex items-center gap-2'}>
+                    <Image
+                      src={require('@/common/assets/images/unice-logo-icon.png')}
+                      alt={''}
+                      className={'w-[24px]'}
+                    />
+                    <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
+                      {formatNumber(stakedAmount / Math.pow(10, 18), 4)} UNICE
+                    </div>
+                    {/*<div className={'mt-2'}>*/}
+                    {/*  Interest:{' '}*/}
+                    {/*  <span className={'text-[#10DE4A]'}>+{formatNumber(totalReward / Math.pow(10, 18), 4)} UNICE</span>*/}
+                    {/*</div>*/}
                   </div>
                 </div>
               </div>
-              <div className={'px-4 sm:px-0'}>
-                <div className={'w-full sm:w-[1px] h-[1px] sm:h-[40px] bg-[#33343E]'}></div>
+              <div className={'px-4 sm:px-8'}>
+                <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
               </div>
-              <div className={'w-full flex flex-col text-[#717681] gap-4 p-4 sm:p-8'}>
-                <div>Total</div>
-                <div>
-                  <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
-                    {formatNumber((stakedAmount + reward) / Math.pow(10, 18), 4)} UNICE
-                  </div>
-                  <div className={'text-[#4A7DFF] mt-2'}>
-                    ≈ ${formatNumber(((stakedAmount + reward) * Number(tokenPrice?.open ?? 0)) / Math.pow(10, 18), 4)}
-                  </div>
+              <div className={'w-full flex justify-center'}>
+                <div className={'flex flex-col text-[#717681] gap-4'}>
+                  <div>Staking Rewards</div>
+                  <Popover content={<StakingReward />} title="Staking reward">
+                    <div className={'relative w-fit apr-text text-2xl font-medium leading-[125%] cursor-pointer'}>
+                      {formatNumber(stakedAmount / Math.pow(10, 18), 4)} USDT
+                      <Image
+                        src={require('@/common/assets/images/staking/Line 32.png')}
+                        alt={''}
+                        className={'absolute w-full'}
+                      />
+                    </div>
+                  </Popover>
                 </div>
               </div>
             </div>
           </div>
           <StakingPoolTabContent
             token={stakeToken1}
-            dataSource={filterPoolInfo}
+            dataSource={poolInfo}
+            selectedPool={selectedPool}
             setShowModalStaking={setShowModalStaking}
             setSelectedPool={setSelectedPool}
             info1={infoPool1}
@@ -469,34 +478,34 @@ const Staking: React.FunctionComponent = () => {
           />
         </div>
 
-        <ModalStakingPools
-          isModalOpen={!!showModalStaking}
-          loading={loadingStaking}
-          stakeInfo={stakeInfo as any}
-          poolInfo={filterPoolInfo as any}
-          userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}
-          validate={validate}
-          amountStake={amountStake}
-          amountUnStake={amountUnStake}
-          handleStake={handleStake}
-          handleUnStake={handleUnStake}
-          handleClose={toggleShowModalStaking}
-          stakeToken={stakeToken1!}
-          stakedAmount={stakedAmount}
-          balance={balance}
-          balanceStaked={currentStakedAmount}
-          setBalanceStaked={setBalanceStaked}
-          timeExpired={timeExpired}
-          isExpired={isExpired}
-          setIsExpired={setIsExpired}
-          setTimeExpired={setTimeExpired}
-          setValidate={setValidate}
-          setPoolSelected={setSelectedPoolInfo}
-          onChangeAmountStake={onChangeAmountStake}
-          onChangeAmountUnStake={onChangeAmountUnStake}
-          selectedPool={selectedPool}
-          setSelectedPool={setSelectedPool}
-        />
+        {/*<ModalStakingPools*/}
+        {/*  isModalOpen={!!showModalStaking}*/}
+        {/*  loading={loadingStaking}*/}
+        {/*  stakeInfo={stakeInfo as any}*/}
+        {/*  poolInfo={filterPoolInfo as any}*/}
+        {/*  userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}*/}
+        {/*  validate={validate}*/}
+        {/*  amountStake={amountStake}*/}
+        {/*  amountUnStake={amountUnStake}*/}
+        {/*  handleStake={handleStake}*/}
+        {/*  handleUnStake={handleUnStake}*/}
+        {/*  handleClose={toggleShowModalStaking}*/}
+        {/*  stakeToken={stakeToken1!}*/}
+        {/*  stakedAmount={stakedAmount}*/}
+        {/*  balance={balance}*/}
+        {/*  balanceStaked={currentStakedAmount}*/}
+        {/*  setBalanceStaked={setBalanceStaked}*/}
+        {/*  timeExpired={timeExpired}*/}
+        {/*  isExpired={isExpired}*/}
+        {/*  setIsExpired={setIsExpired}*/}
+        {/*  setTimeExpired={setTimeExpired}*/}
+        {/*  setValidate={setValidate}*/}
+        {/*  setPoolSelected={setSelectedPoolInfo}*/}
+        {/*  onChangeAmountStake={onChangeAmountStake}*/}
+        {/*  onChangeAmountUnStake={onChangeAmountUnStake}*/}
+        {/*  selectedPool={selectedPool}*/}
+        {/*  setSelectedPool={setSelectedPool}*/}
+        {/*/>*/}
         <ModalStaking
           amount={Number(amountStake)}
           status={stakeStatus}

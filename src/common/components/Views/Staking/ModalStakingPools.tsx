@@ -82,7 +82,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       setPoolAdress(poolInfo[0]?.contract_address);
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool91Info);
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, poolInfo]);
 
   useEffect(() => {
     if (poolAddress === poolInfo[0]?.contract_address) {

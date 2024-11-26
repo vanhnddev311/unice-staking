@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 interface Props {
@@ -9,11 +8,12 @@ interface Props {
 
 const StakingPoolDuration: React.FunctionComponent<Props> = ({ pools, setPoolSelected }) => {
   const childPools: any[] = pools?.items;
-  const [poolAddress, setPoolAddress] = useState<string>(childPools[0]?.contract_address);
+  const [poolAddress, setPoolAddress] = useState<string>();
 
   useEffect(() => {
+    if (!poolAddress) setPoolAddress(childPools[0]?.contract_address);
     setPoolSelected(childPools?.find((pool) => pool.contract_address == poolAddress));
-  }, [poolAddress]);
+  }, [poolAddress, childPools]);
 
   return (
     <div className={'flex items-center gap-2'}>
@@ -26,23 +26,22 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({ pools, setPoolSel
               e.stopPropagation();
             }}
             className={classNames(
-              'relative flex justify-center items-center w-[54px] h-[36px] bg-[#393C46] border border-[#393C46] rounded-[4px] text-[#fff] text-base font-semibold cursor-pointer',
+              'relative flex justify-center items-center w-[32px] h-[32px] bg-[#393C46] border-[2px] border-[#393C46] rounded-[4px] text-[#fff] text-sm font-semibold cursor-pointer',
               {
-                'border border-[#C2E23D]': poolAddress === pool?.contract_address,
+                'border-[2px] border-[#4A7DFF]': poolAddress === pool?.contract_address,
               },
             )}
           >
             {pool?.est_apr[0]?.time}
-            <Image
-              src={require('@/common/assets/images/staking/selected-pool-icon.png')}
-              alt={''}
-              className={`${poolAddress == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
-            />
+            {/*<Image*/}
+            {/*  src={require('@/common/assets/images/staking/selected-pool-icon.png')}*/}
+            {/*  alt={''}*/}
+            {/*  className={`${poolAddress == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}*/}
+            {/*/>*/}
           </div>
         );
       })}
     </div>
-    // <div className={'text-base text-[#fff] font-semibold'}>{record?.est_apr[0]?.time} days</div>
   );
 };
 

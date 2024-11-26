@@ -3,10 +3,11 @@ import { ENV, envNane } from '@/common/consts';
 import { ellipseAddress, formatNumber } from '@/utils';
 import { Button, Modal } from 'antd';
 import Link from 'next/link';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface Props {
   type: string;
+  iconTitle?: ReactNode;
   title: string;
   desc: any;
   unstakeInfo?: any;
@@ -26,6 +27,7 @@ export enum TYPE {
 
 const ModalNotification: React.FunctionComponent<Props> = ({
   type,
+  iconTitle,
   title,
   desc,
   unstakeInfo,
@@ -52,9 +54,10 @@ const ModalNotification: React.FunctionComponent<Props> = ({
         {type === 'SUCCESS' && <SuccessIcon />}
         {type === 'FAILED' && <FailedIcon />}
         {type === 'WARNING' && <StakingWarningIcon />}
+        {type === 'CUSTOM' && iconTitle}
         <div className={'text-center'}>
           <div className={'text-default text-2xl font-semibold leading-[130%]'}>{title}</div>
-          <div className={'text-[#89898B] dark:text-white text-base text-center mt-6'}>{desc}</div>
+          <div className={'text-[#89898B] dark:text-white text-center mt-6'}>{desc}</div>
         </div>
         {unstakeInfo && (
           <div className={'w-full flex flex-col gap-2 border border-[#393C46] text-base p-4'}>

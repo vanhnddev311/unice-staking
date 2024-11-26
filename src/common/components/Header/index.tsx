@@ -1,18 +1,21 @@
 import { routes } from '@/common/components/Header/routers';
-import { HotIcon, WalletIcon } from '@/common/components/icon/common';
+import { GasIcon, HotIcon, WalletIcon } from '@/common/components/icon/common';
 import ModalConnectWallet from '@/common/components/Modal/ModalConnectWallet';
+import ModalNotification from '@/common/components/Modal/ModalNotification';
+import { config } from '@/common/configs/config';
 import { setData } from '@/common/hooks/useLocalStoragre';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
 import { ellipseAddress } from '@/utils';
-import { ConnectButton, useChainModal } from '@rainbow-me/rainbowkit';
-import { Drawer, Layout, Menu, MenuProps, notification, Space, Switch } from 'antd';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { getAccount, signMessage } from '@wagmi/core';
+import { Drawer, Layout, Menu, notification } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAccount, useChainId, useClient, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
+import { useAccount, useClient, useDisconnect, useSwitchChain } from 'wagmi';
 
 const { Header } = Layout;
 
@@ -30,9 +33,8 @@ const PageHeader: React.FunctionComponent = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const { chains, switchChain, switchChainAsync } = useSwitchChain();
+  const { switchChainAsync } = useSwitchChain();
   const { disconnect } = useDisconnect();
-  const { openChainModal } = useChainModal();
   const { connector, chainId } = useAccount();
   const client = useClient();
 
@@ -54,11 +56,32 @@ const PageHeader: React.FunctionComponent = () => {
     }
   };
 
+  const { connector: connector2 } = getAccount(config);
+  const handleSignMessage = async () => {
+    return await signMessage(config, {
+      connector,
+      message: 'UNICE Staking',
+    });
+  };
+
   useEffect(() => {
     if (connector) {
       checkAndSwitchNetwork();
     }
   }, [chainId, connector]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (address) {
+  //       const hash = await handleSignMessage();
+  //       console.log({
+  //         add: address,
+  //         nessage: 'UNICE Staking',
+  //         signature: hash,
+  //       });
+  //     }
+  //   })();
+  // }, [address]);
 
   useEffect(() => {
     document.body.dataset.theme = app.theme;
@@ -268,27 +291,21 @@ const PageHeader: React.FunctionComponent = () => {
         </svg>
       </div>
 
-      <Drawer
-        open={isSideMenuOpen}
-        placement="right"
-        // title={
-        //   <Link className={'flex gap-2 items-center justify-center relative'} href={'/'} aria-label={'Go to home'}>
-        //     <div>
-        //       <Image
-        //         className="logo w-[220px] h-auto"
-        //         src={require('@/common/assets/images/moveGPT-logo.png')}
-        //         alt=""
-        //       />
-        //     </div>
-        //   </Link>
-        // }
-        closable={false}
-        onClose={() => setIsSideMenuOpen(false)}
-      >
+      <Drawer open={isSideMenuOpen} placement="right" closable={false} onClose={() => setIsSideMenuOpen(false)}>
         <SideMenu currentPageName={router.asPath} onRouteSelected={() => setIsSideMenuOpen(false)} />
       </Drawer>
 
       <ModalConnectWallet isModalOpen={app.showConnect} handleClose={toggleModalConnect} />
+      <ModalNotification
+        type={'CUSTOM'}
+        width={384}
+        iconTitle={<GasIcon />}
+        title={'Oops!!!'}
+        desc={"Your BNB balance is too low, but don't worry; UNICE Lab will send BNB to cover the gas fee."}
+        isModalOpen={false}
+        buttonTitle={'I understand'}
+        handleClose={() => {}}
+      />
     </Header>
   );
 };
