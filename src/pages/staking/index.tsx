@@ -24,13 +24,11 @@ import { useAccount, useClient, useReadContract, useReadContracts, useWriteContr
 const Staking: React.FunctionComponent = () => {
   const [amountStake, setAmountStake] = useState<string>('');
   const [amountUnStake, setAmountUnStake] = useState<string>('');
-  const [currentVotingPower, setCurrentVotingPower] = useState<number>(0);
   const [balanceStaked, setBalanceStaked] = useState();
   const [loadingStaking, setLoadingStaking] = useState(false);
 
   const [stakedAmount, setStakedAmount] = useState(0);
   const [currentStakedAmount, setCurrentStakedAmount] = useState(0);
-  const [reward, setReward] = useState(0);
   const [currentTab, setCurrentTab] = useState(1);
   const [validate, setValidate] = useState('');
   const [isExpired, setIsExpired] = useState(false);
@@ -39,23 +37,18 @@ const Staking: React.FunctionComponent = () => {
   const [unStakeStatus, setUnStakeStatus] = useState<STATUS>(STATUS.PENDING);
   const [unstakeInfo, setUnstakeInfo] = useState<any>({});
   const [errorStake, setErrorStake] = useState('');
-  const [veNftMessage, setVeNftMessage] = useState<any>(null);
-  const [veNftStatus, setVeNftStatus] = useState<STATUS>(STATUS.PENDING);
   const [errorUnStake, setErrorUnStake] = useState('');
-  const [isConfirmUnstake, setIsConfirmUnstake] = useState(false);
   const [parentPool, setParentPool] = useState<any>();
   const [parentAmount, setParentAmount] = useState('' as string);
   const [selectedPool, setSelectedPool] = useState<any>(null);
+  const [selectedParentPool, setSelectedParentPool] = useState<any>(null);
   const [selectedDurations, setSelectedDurations] = useState({});
-  const [selectedPoolInfo, setSelectedPoolInfo] = useState<any>();
-  console.log('selected', selectedPool, selectedDurations);
 
   const { show: showModalStaking, setShow: setShowModalStaking, toggle: toggleShowModalStaking } = useModal();
   const { show: showStake, setShow: setShowStake, toggle: toggleShowStake } = useModal();
   const { show: showUnStake, setShow: setShowUnStake, toggle: toggleShowUnStake } = useModal();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { address } = useAccount();
-
   const { stakeInfo, poolInfo, balance } = useStaking();
   const client = useClient();
 
@@ -78,9 +71,7 @@ const Staking: React.FunctionComponent = () => {
     type: 'COIN',
   };
 
-  const { data: vipLevels } = useQuery(['vipLevel'], async () => {
-    return [];
-  });
+  const poolIds = ENV === envNane.TESTNET ? [6, 7, 8] : [2, 3, 4];
 
   const { data: allowanceAmt, refetch: refetchAllowance } = useReadContract({
     abi: tokenABI,
@@ -90,28 +81,30 @@ const Staking: React.FunctionComponent = () => {
     chainId: client?.chain?.id ?? 1,
   });
 
-  const { data: infoPool1 } = useReadContract({
-    abi,
-    address: contractAddress,
-    functionName: 'userInfo',
-    args: [ENV == envNane.TESTNET ? 6 : 2, address],
-    chainId: client?.chain?.id ?? 1,
-  });
-
-  const { data: infoPool2 } = useReadContract({
-    abi,
-    address: contractAddress,
-    functionName: 'userInfo',
-    args: [ENV == envNane.TESTNET ? 7 : 3, address],
-    chainId: client?.chain?.id ?? 1,
-  });
-
-  const { data: infoPool3 } = useReadContract({
-    abi,
-    address: contractAddress,
-    functionName: 'userInfo',
-    args: [ENV == envNane.TESTNET ? 8 : 4, address],
-    chainId: client?.chain?.id ?? 1,
+  const { data: infoPool } = useReadContracts({
+    contracts: [
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 6 : 2, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 7 : 3, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi,
+        address: contractAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 8 : 4, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+    ],
   });
 
   const { data: pendingReward } = useReadContract({
@@ -155,36 +148,35 @@ const Staking: React.FunctionComponent = () => {
   }, [reward1, reward2, reward3]);
 
   useEffect(() => {
-    if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
+    if (infoPool) {
       setStakedAmount(
-        Number((infoPool1 as number[])[0]) + Number((infoPool2 as number[])[0]) + Number((infoPool3 as number[])[0]),
-      );
-      setReward(
-        Number((infoPool1 as number[])[1]) + Number((infoPool2 as number[])[1]) + Number((infoPool3 as number[])[1]),
+        Number((infoPool[0]?.result as number[])[0]) +
+          Number((infoPool[1]?.result as number[])[0]) +
+          Number((infoPool[2]?.result as number[])[0]),
       );
     }
-  }, [infoPool1, infoPool2, infoPool3]);
+  }, [infoPool]);
 
   useEffect(() => {
     if (!address) setStakedAmount(0);
-    if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
+    if (infoPool) {
       ENV == envNane.TESTNET
         ? setCurrentStakedAmount(
             selectedPool?.id == '6'
-              ? Number((infoPool1 as number[])[0] ?? 0)
+              ? Number((infoPool[0]?.result as number[])[0] ?? 0)
               : selectedPool?.id == '7'
-                ? Number((infoPool2 as number[])[0] ?? 0)
-                : Number((infoPool3 as number[])[0] ?? 0),
+                ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                : Number((infoPool[2]?.result as number[])[0] ?? 0),
           )
         : setCurrentStakedAmount(
             selectedPool?.id == '2'
-              ? Number((infoPool1 as number[])[0] ?? 0)
+              ? Number((infoPool[0]?.result as number[])[0] ?? 0)
               : selectedPool?.id == '3'
-                ? Number((infoPool2 as number[])[0] ?? 0)
-                : Number((infoPool3 as number[])[0] ?? 0),
+                ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                : Number((infoPool[2]?.result as number[])[0] ?? 0),
           );
     }
-  }, [infoPool1, infoPool2, infoPool3, selectedPool, address]);
+  }, [infoPool, selectedPool, address]);
 
   const handleSelectDuration = (poolIndex: number, duration: any) => {
     setSelectedDurations((prev) => ({ ...prev, [poolIndex]: duration }));
@@ -305,9 +297,6 @@ const Staking: React.FunctionComponent = () => {
       setUnStakeStatus(STATUS.SUCCESS);
       setShowUnStake(true);
     } catch (e: any) {
-      setVeNftMessage('Something went wrong');
-      setVeNftStatus(STATUS.FAIL);
-      setIsConfirmUnstake(false);
       setShowUnStake(false);
       console.log(e);
     } finally {
@@ -477,12 +466,11 @@ const Staking: React.FunctionComponent = () => {
             dataSource={poolInfo}
             selectedPool={selectedPool}
             selectedDurations={selectedDurations}
+            setSelectedParentPool={setSelectedParentPool}
             setShowModalStaking={setShowModalStaking}
             handleSelectDuration={handleSelectDuration}
             setSelectedPool={setSelectedPool}
-            info1={infoPool1}
-            info2={infoPool2}
-            info3={infoPool3}
+            infoPool={infoPool}
           />
         </div>
 
@@ -490,8 +478,8 @@ const Staking: React.FunctionComponent = () => {
           isModalOpen={!!showModalStaking}
           loading={loadingStaking}
           stakeInfo={stakeInfo as any}
-          poolInfo={filterPoolInfo as any}
-          userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}
+          poolInfo={selectedParentPool}
+          userPoolInfo={infoPool ?? []}
           validate={validate}
           amountStake={amountStake}
           amountUnStake={amountUnStake}
@@ -508,7 +496,6 @@ const Staking: React.FunctionComponent = () => {
           setIsExpired={setIsExpired}
           setTimeExpired={setTimeExpired}
           setValidate={setValidate}
-          setPoolSelected={setSelectedPoolInfo}
           onChangeAmountStake={onChangeAmountStake}
           onChangeAmountUnStake={onChangeAmountUnStake}
           selectedPool={selectedPool}
@@ -530,7 +517,6 @@ const Staking: React.FunctionComponent = () => {
           show={showUnStake}
           error={errorUnStake}
           toggle={toggleShowUnStake}
-          setIsConfirmUnstake={setIsConfirmUnstake}
           setShow={setShowUnStake}
           confirmUnstake={handleUnStakeConfirm}
         />

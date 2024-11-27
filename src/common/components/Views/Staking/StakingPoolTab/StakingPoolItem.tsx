@@ -11,9 +11,7 @@ const StakingPoolItem: React.FunctionComponent<{
   index: number;
   pools: any;
   token: any;
-  info1: any;
-  info2: any;
-  info3: any;
+  infoPool: any;
   selectedPool: any;
   selectedDurations: any;
   setSelectedPool: (val: any) => void;
@@ -25,9 +23,7 @@ const StakingPoolItem: React.FunctionComponent<{
   token,
   selectedPool,
   selectedDurations,
-  info1,
-  info2,
-  info3,
+  infoPool,
   setShowModalStaking,
   setSelectedPool,
   handleSelectDuration,
@@ -37,6 +33,8 @@ const StakingPoolItem: React.FunctionComponent<{
   }, [pools]);
 
   const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
+
+  console.log('infoPool', infoPool);
 
   return (
     <section>
@@ -53,17 +51,17 @@ const StakingPoolItem: React.FunctionComponent<{
             {ENV == envNane.TESTNET
               ? formatNumber(
                   selectedPool?.id == '6'
-                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
                     : selectedPool?.id == '7'
-                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
-                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
                 )
               : formatNumber(
                   selectedPool?.id == '2'
-                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
                     : selectedPool?.id == '3'
-                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
-                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
                 )}{' '}
             UNICE
           </div>
@@ -129,17 +127,17 @@ const StakingPoolItem: React.FunctionComponent<{
             {ENV == envNane.TESTNET
               ? formatNumber(
                   selectedPool?.id == '6'
-                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
                     : selectedPool?.id == '7'
-                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
-                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
                 )
               : formatNumber(
                   selectedPool?.id == '2'
-                    ? Number(info1 ? (info1 as number[])[0] : 0) / Math.pow(10, 18)
+                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
                     : selectedPool?.id == '3'
-                      ? Number(info2 ? (info2 as number[])[0] : 0) / Math.pow(10, 18)
-                      : Number(info3 ? (info3 as number[])[0] : 0) / Math.pow(10, 18),
+                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
+                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
                 )}{' '}
             UNICE
           </div>

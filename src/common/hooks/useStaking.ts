@@ -1,9 +1,9 @@
 import { config } from '@/common/configs/config';
 import { ENV, tokenAddress } from '@/common/consts';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { Config, getBalance } from '@wagmi/core';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 
 let page = 1;
 
@@ -63,7 +63,7 @@ const listPoolsFrens = [
     close_at: '2024-06-25T14:00:00.000Z',
     est_apr: [
       {
-        time: 3,
+        time: 1,
         value: 20,
       },
     ],
@@ -78,7 +78,7 @@ const listPoolsFrens = [
     close_at: '2024-06-25T14:00:00.000Z',
     est_apr: [
       {
-        time: 6,
+        time: 4,
         value: 40,
       },
     ],
@@ -93,7 +93,7 @@ const listPoolsFrens = [
     close_at: '2024-06-25T14:00:00.000Z',
     est_apr: [
       {
-        time: 12,
+        time: 9,
         value: 80,
       },
     ],
