@@ -4,19 +4,40 @@ import { ENV, envNane } from '@/common/consts';
 import { formatNumber } from '@/utils';
 import { Button, Col, Row } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import Image from 'next/image';
+import React, { useEffect } from 'react';
 
 const StakingPoolItem: React.FunctionComponent<{
+  index: number;
   pools: any;
   token: any;
   info1: any;
   info2: any;
   info3: any;
   selectedPool: any;
+  selectedDurations: any;
   setSelectedPool: (val: any) => void;
+  handleSelectDuration: (poolId: number, duration: any) => void;
   setShowModalStaking: (value: any) => void;
-}> = ({ pools, token, selectedPool, info1, info2, info3, setShowModalStaking, setSelectedPool }) => {
+}> = ({
+  index,
+  pools,
+  token,
+  selectedPool,
+  selectedDurations,
+  info1,
+  info2,
+  info3,
+  setShowModalStaking,
+  setSelectedPool,
+  handleSelectDuration,
+}) => {
+  useEffect(() => {
+    handleSelectDuration(index, pools?.items[0]?.est_apr[0]?.time);
+  }, [pools]);
+
   const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
+
   return (
     <section>
       <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>
@@ -53,7 +74,12 @@ const StakingPoolItem: React.FunctionComponent<{
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Duration</div>
-          <StakingPoolDuration pools={pools} setPoolSelected={setSelectedPool} />
+          <StakingPoolDuration
+            poolIndex={index}
+            pools={pools}
+            setPoolSelected={setSelectedPool}
+            handleSelectDuration={handleSelectDuration}
+          />
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Status</div>
@@ -69,15 +95,30 @@ const StakingPoolItem: React.FunctionComponent<{
       </div>
 
       <Row className={'table-item hidden sm:flex h-[96px] bg-[#2A2B36] text-base text-[#fff]'}>
-        <Col sm={4} className={'flex items-center font-bold p-6'}>
-          <div>{pools?.name}</div>
+        <Col sm={4} className={'flex items-center p-6'}>
+          <div className={'flex items-center gap-3'}>
+            <Image src={require('@/common/assets/images/unice-logo-icon.png')} alt={''} className={'w-[40px]'} />
+            <div>
+              <div className={'font-bold'}>{pools?.name}</div>
+              <div className={'text-sm text-[#FFFFFF80]'}>UNICE</div>
+            </div>
+          </div>
         </Col>
         <Col sm={2} className={'flex items-center text-center text-xl font-medium p-6'}>
-          <div className={'apr-text'}>{selectedPool?.est_apr[0].value}%</div>
+          <div className={'apr-text'}>
+            {pools?.items.flatMap((item: any) => item.est_apr).find((apr: any) => apr.time === selectedDurations[index])
+              ?.value || 0}
+            %
+          </div>
         </Col>
         <Col sm={5} className={'flex items-center p-6'}>
           <div>
-            <StakingPoolDuration pools={pools} setPoolSelected={setSelectedPool} />
+            <StakingPoolDuration
+              poolIndex={index}
+              pools={pools}
+              setPoolSelected={setSelectedPool}
+              handleSelectDuration={handleSelectDuration}
+            />
           </div>
         </Col>
         <Col sm={4} className={'flex items-center font-medium p-6'}>

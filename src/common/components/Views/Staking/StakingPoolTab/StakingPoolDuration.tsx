@@ -2,11 +2,18 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
 interface Props {
+  poolIndex: number;
   pools: any;
   setPoolSelected: (value: any) => void;
+  handleSelectDuration: (poolId: number, duration: any) => void;
 }
 
-const StakingPoolDuration: React.FunctionComponent<Props> = ({ pools, setPoolSelected }) => {
+const StakingPoolDuration: React.FunctionComponent<Props> = ({
+  poolIndex,
+  pools,
+  setPoolSelected,
+  handleSelectDuration,
+}) => {
   const childPools: any[] = pools?.items;
   const [poolAddress, setPoolAddress] = useState<string>();
 
@@ -22,6 +29,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({ pools, setPoolSel
           <div
             key={pool?.id}
             onClick={(e) => {
+              handleSelectDuration(poolIndex, pool?.est_apr[0]?.time);
               setPoolAddress(pool?.contract_address);
               e.stopPropagation();
             }}

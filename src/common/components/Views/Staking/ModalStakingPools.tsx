@@ -132,15 +132,6 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       closable={false}
     >
       <Row gutter={[40, 0]}>
-        {/*<Col xs={24} sm={11}>*/}
-        {/*  <StakingDetails*/}
-        {/*    loading={loading}*/}
-        {/*    vipLevel={currentVipTier}*/}
-        {/*    balanceStaked={balanceStaked}*/}
-        {/*    stakeInfo={stakeInfo as StakeInfo}*/}
-        {/*    poolInfo={poolInfo as PollInfo}*/}
-        {/*  />*/}
-        {/*</Col>*/}
         <Col xs={24} className={'w-full'}>
           <div className={'flex justify-between items-center mb-6'}>
             <div className={'text-3xl font-semibold'}>Staking pools</div>
@@ -169,7 +160,6 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               amount={amountStake}
               listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
-              // setPoolSelected={setPoolSelected}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}
               validate={validate}

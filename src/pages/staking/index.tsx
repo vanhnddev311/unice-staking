@@ -46,7 +46,9 @@ const Staking: React.FunctionComponent = () => {
   const [parentPool, setParentPool] = useState<any>();
   const [parentAmount, setParentAmount] = useState('' as string);
   const [selectedPool, setSelectedPool] = useState<any>(null);
+  const [selectedDurations, setSelectedDurations] = useState({});
   const [selectedPoolInfo, setSelectedPoolInfo] = useState<any>();
+  console.log('selected', selectedPool, selectedDurations);
 
   const { show: showModalStaking, setShow: setShowModalStaking, toggle: toggleShowModalStaking } = useModal();
   const { show: showStake, setShow: setShowStake, toggle: toggleShowStake } = useModal();
@@ -183,6 +185,10 @@ const Staking: React.FunctionComponent = () => {
           );
     }
   }, [infoPool1, infoPool2, infoPool3, selectedPool, address]);
+
+  const handleSelectDuration = (poolIndex: number, duration: any) => {
+    setSelectedDurations((prev) => ({ ...prev, [poolIndex]: duration }));
+  };
 
   const onChangeAmountStake = (value: string) => {
     setValidate('');
@@ -323,30 +329,30 @@ const Staking: React.FunctionComponent = () => {
     }
   };
 
-  // const { data: filterPoolInfo = [] } = useQuery(
-  //   ['filterPoolInfo', poolInfo],
-  //   async () => {
-  //     if (!poolInfo) return;
-  //     const listChildPool = poolInfo?.items;
-  //     const updatedPoolInfo: any = [];
-  //     for (const pool of listChildPool) {
-  //       try {
-  //         // if (!!infoPool1 && !!infoPool2) {
-  //         updatedPoolInfo.push({ ...pool });
-  //         // const stakedAmount =
-  //         //   pool?.id == '0' ? Number((infoPool1 as number[])[0]) : Number((infoPool2 as number[])[0]);
-  //         // }
-  //       } catch (error) {
-  //         console.error('Error fetching staked amount for pool:', error);
-  //       }
-  //     }
-  //
-  //     return updatedPoolInfo;
-  //   },
-  //   {
-  //     // enabled: !!poolInfo && !!infoPool1 && !!infoPool2,
-  //   },
-  // );
+  const { data: filterPoolInfo = [] } = useQuery(
+    ['filterPoolInfo', poolInfo],
+    async () => {
+      if (!poolInfo) return;
+      const listChildPool = poolInfo;
+      const updatedPoolInfo: any = [];
+      for (const pool of listChildPool) {
+        try {
+          // if (!!infoPool1 && !!infoPool2) {
+          updatedPoolInfo.push({ ...pool });
+          // const stakedAmount =
+          //   pool?.id == '0' ? Number((infoPool1 as number[])[0]) : Number((infoPool2 as number[])[0]);
+          // }
+        } catch (error) {
+          console.error('Error fetching staked amount for pool:', error);
+        }
+      }
+
+      return updatedPoolInfo;
+    },
+    {
+      // enabled: !!poolInfo && !!infoPool1 && !!infoPool2,
+    },
+  );
 
   const { data: tokenPrice } = useQuery(['tokenPrice'], async () => {
     const res = await getPriceOfToken();
@@ -470,7 +476,9 @@ const Staking: React.FunctionComponent = () => {
             token={stakeToken1}
             dataSource={poolInfo}
             selectedPool={selectedPool}
+            selectedDurations={selectedDurations}
             setShowModalStaking={setShowModalStaking}
+            handleSelectDuration={handleSelectDuration}
             setSelectedPool={setSelectedPool}
             info1={infoPool1}
             info2={infoPool2}
@@ -478,34 +486,34 @@ const Staking: React.FunctionComponent = () => {
           />
         </div>
 
-        {/*<ModalStakingPools*/}
-        {/*  isModalOpen={!!showModalStaking}*/}
-        {/*  loading={loadingStaking}*/}
-        {/*  stakeInfo={stakeInfo as any}*/}
-        {/*  poolInfo={filterPoolInfo as any}*/}
-        {/*  userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}*/}
-        {/*  validate={validate}*/}
-        {/*  amountStake={amountStake}*/}
-        {/*  amountUnStake={amountUnStake}*/}
-        {/*  handleStake={handleStake}*/}
-        {/*  handleUnStake={handleUnStake}*/}
-        {/*  handleClose={toggleShowModalStaking}*/}
-        {/*  stakeToken={stakeToken1!}*/}
-        {/*  stakedAmount={stakedAmount}*/}
-        {/*  balance={balance}*/}
-        {/*  balanceStaked={currentStakedAmount}*/}
-        {/*  setBalanceStaked={setBalanceStaked}*/}
-        {/*  timeExpired={timeExpired}*/}
-        {/*  isExpired={isExpired}*/}
-        {/*  setIsExpired={setIsExpired}*/}
-        {/*  setTimeExpired={setTimeExpired}*/}
-        {/*  setValidate={setValidate}*/}
-        {/*  setPoolSelected={setSelectedPoolInfo}*/}
-        {/*  onChangeAmountStake={onChangeAmountStake}*/}
-        {/*  onChangeAmountUnStake={onChangeAmountUnStake}*/}
-        {/*  selectedPool={selectedPool}*/}
-        {/*  setSelectedPool={setSelectedPool}*/}
-        {/*/>*/}
+        <ModalStakingPools
+          isModalOpen={!!showModalStaking}
+          loading={loadingStaking}
+          stakeInfo={stakeInfo as any}
+          poolInfo={filterPoolInfo as any}
+          userPoolInfo={[infoPool1, infoPool2, infoPool3] as any}
+          validate={validate}
+          amountStake={amountStake}
+          amountUnStake={amountUnStake}
+          handleStake={handleStake}
+          handleUnStake={handleUnStake}
+          handleClose={toggleShowModalStaking}
+          stakeToken={stakeToken1!}
+          stakedAmount={stakedAmount}
+          balance={balance}
+          balanceStaked={currentStakedAmount}
+          setBalanceStaked={setBalanceStaked}
+          timeExpired={timeExpired}
+          isExpired={isExpired}
+          setIsExpired={setIsExpired}
+          setTimeExpired={setTimeExpired}
+          setValidate={setValidate}
+          setPoolSelected={setSelectedPoolInfo}
+          onChangeAmountStake={onChangeAmountStake}
+          onChangeAmountUnStake={onChangeAmountUnStake}
+          selectedPool={selectedPool}
+          setSelectedPool={setSelectedPool}
+        />
         <ModalStaking
           amount={Number(amountStake)}
           status={stakeStatus}
