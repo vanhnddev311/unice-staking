@@ -1,14 +1,15 @@
+import animationData from '@/common/assets/animations/UNICE-loading.json';
 import { FailedIcon, PendingIcon, StakingWarningIcon, SuccessIcon } from '@/common/components/icon/common';
-import { ENV, envNane } from '@/common/consts';
 import { ellipseAddress, formatNumber } from '@/utils';
 import { Button, Modal } from 'antd';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
+// import Lottie from 'react-lottie';
 
 interface Props {
   type: string;
   iconTitle?: ReactNode;
-  title: string;
+  title?: string;
   desc: any;
   unstakeInfo?: any;
   isModalOpen: boolean;
@@ -16,6 +17,7 @@ interface Props {
   handleClose?: () => void;
   setIsConfirmUnstake?: (val: boolean) => void;
   buttonTitle?: string;
+  confirmAction?: () => void;
   confirmCallback?: () => void;
 }
 
@@ -36,8 +38,15 @@ const ModalNotification: React.FunctionComponent<Props> = ({
   handleClose,
   setIsConfirmUnstake,
   buttonTitle,
+  confirmAction,
   confirmCallback,
 }) => {
+  // const defaultOptions = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: animationData,
+  //   renderer: 'svg',
+  // };
   return (
     <Modal
       className={'modal-customize'}
@@ -56,7 +65,7 @@ const ModalNotification: React.FunctionComponent<Props> = ({
         {type === 'WARNING' && <StakingWarningIcon />}
         {type === 'CUSTOM' && iconTitle}
         <div className={'text-center'}>
-          <div className={'text-default text-2xl font-semibold leading-[130%]'}>{title}</div>
+          {title && <div className={'text-default text-2xl font-semibold leading-[130%]'}>{title}</div>}
           <div className={'text-[#89898B] dark:text-white text-center mt-6'}>{desc}</div>
         </div>
         {unstakeInfo && (
@@ -79,7 +88,7 @@ const ModalNotification: React.FunctionComponent<Props> = ({
         )}
         {type !== 'PENDING' && type !== 'WARNING' && (
           <Button
-            onClick={handleClose}
+            onClick={confirmAction ? confirmAction : handleClose}
             size="small"
             className={`${type == 'SUCCESS' ? 'default-button2 text-[#fff]' : 'default-button text-[#000]'} mb-2 min-w-[156px] h-[52px] disabled:bg-[#ccc] font-semibold w-full text-lg`}
           >

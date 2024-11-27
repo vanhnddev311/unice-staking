@@ -2,11 +2,16 @@ import { routes } from '@/common/components/Header/routers';
 import { GasIcon, HotIcon, WalletIcon } from '@/common/components/icon/common';
 import ModalConnectWallet from '@/common/components/Modal/ModalConnectWallet';
 import ModalNotification from '@/common/components/Modal/ModalNotification';
-import { envNane } from '@/common/consts';
+import ModalReceiveBnb from '@/common/components/Views/Staking/ModalReceiveBnb';
+import { config } from '@/common/configs/config';
 import { setData } from '@/common/hooks/useLocalStoragre';
+import { useModal } from '@/common/hooks/useModal';
+import { login } from '@/common/services/login';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
+import { STATUS } from '@/common/types/comon';
 import { ellipseAddress } from '@/utils';
-import { ConnectButton, useChainModal } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { signMessage } from '@wagmi/core';
 import { Drawer, Layout, Menu, notification } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -30,20 +35,18 @@ const PageHeader: React.FunctionComponent = () => {
   const [mode, setMode] = useState(true);
   const [currentTheme, setCurrentTheme] = useState<THEME>(THEME.DARK);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [receiveBnbStatus, setReceiveBnbStatus] = useState<STATUS>(STATUS.PENDING);
+
+  const { show, setShow, toggle } = useModal();
+  const { show: showReceiveBnb, setShow: setShowReceiveBnb, toggle: toggleShowReceiveBnb } = useModal();
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const { chains, switchChain, switchChainAsync } = useSwitchChain();
+  const { switchChainAsync } = useSwitchChain();
   const { disconnect } = useDisconnect();
-  const { openChainModal } = useChainModal();
   const { connector, chainId } = useAccount();
   const client = useClient();
 
-  const {
-    data: balanceBnb,
-    isError,
-    isLoading,
-    refetch,
-  } = useBalance({
+  const { data: balanceBnb, refetch } = useBalance({
     address,
     chainId: client?.chain?.id,
   });
@@ -67,19 +70,38 @@ const PageHeader: React.FunctionComponent = () => {
     }
   };
 
+  const handleSignMessage = async () => {
+    const hash = await signMessage(config, {
+      connector,
+      message: 'UNICE Staking',
+    });
+
+    await login({
+      addr: address,
+      message: 'UNICE Staking',
+      signature: hash,
+    });
+  };
+
+  const handleRecieveBnb = async () => {
+    setShow(false);
+    setShowReceiveBnb(true);
+    setReceiveBnbStatus(STATUS.PENDING);
+    await handleSignMessage();
+    setReceiveBnbStatus(STATUS.SUCCESS);
+  };
+
   useEffect(() => {
     if (connector) {
       checkAndSwitchNetwork();
     }
   }, [chainId, connector]);
 
-  useEffect(() => {
-    if (balanceBnb && Number(balanceBnb) < 0.01) {
-      notification.warning({
-        message: 'Your BNB balance is too low, but don’t worry; UNICE Lab will send BNB to cover the gas fee.',
-      });
-    }
-  }, [balanceBnb]);
+  // useEffect(() => {
+  //   if (balanceBnb && Number(balanceBnb?.value) < 0.01) {
+  //     setShow(true);
+  //   }
+  // }, [balanceBnb]);
 
   useEffect(() => {
     document.body.dataset.theme = app.theme;
@@ -129,14 +151,6 @@ const PageHeader: React.FunctionComponent = () => {
                 </Link>
               );
             })}
-          {/*<Menu*/}
-          {/*  onClick={onClick}*/}
-          {/*  style={{ width: 256 }}*/}
-          {/*  defaultSelectedKeys={['1']}*/}
-          {/*  defaultOpenKeys={['sub1']}*/}
-          {/*  mode="inline"*/}
-          {/*  items={items}*/}
-          {/*/>*/}
         </div>
       </div>
     );
@@ -186,18 +200,6 @@ const PageHeader: React.FunctionComponent = () => {
 
   const toggleModalConnect = () => {
     dispatch(showConnect(!app.showConnect));
-  };
-
-  const handleSwitchTheme = (theme: string) => {
-    setCurrentTheme(theme == 'light' ? THEME.LIGHT : THEME.DARK);
-    dispatch(setTheme(theme));
-    setData('theme', theme);
-  };
-
-  const onChangeTheme = (checked: boolean) => {
-    setCurrentTheme(checked ? THEME.DARK : THEME.LIGHT);
-    dispatch(setTheme(checked ? 'dark' : 'light'));
-    setData('theme', checked ? 'dark' : 'light');
   };
 
   const isBlockVPN = router.pathname.includes('/error');
@@ -289,23 +291,7 @@ const PageHeader: React.FunctionComponent = () => {
         </svg>
       </div>
 
-      <Drawer
-        open={isSideMenuOpen}
-        placement="right"
-        // title={
-        //   <Link className={'flex gap-2 items-center justify-center relative'} href={'/'} aria-label={'Go to home'}>
-        //     <div>
-        //       <Image
-        //         className="logo w-[220px] h-auto"
-        //         src={require('@/common/assets/images/moveGPT-logo.png')}
-        //         alt=""
-        //       />
-        //     </div>
-        //   </Link>
-        // }
-        closable={false}
-        onClose={() => setIsSideMenuOpen(false)}
-      >
+      <Drawer open={isSideMenuOpen} placement="right" closable={false} onClose={() => setIsSideMenuOpen(false)}>
         <SideMenu currentPageName={router.asPath} onRouteSelected={() => setIsSideMenuOpen(false)} />
       </Drawer>
 
@@ -316,9 +302,17 @@ const PageHeader: React.FunctionComponent = () => {
         iconTitle={<GasIcon />}
         title={'Oops!!!'}
         desc={"Your BNB balance is too low, but don't worry; UNICE Lab will send BNB to cover the gas fee."}
-        isModalOpen={false}
+        isModalOpen={!!show}
         buttonTitle={'I understand'}
-        handleClose={() => {}}
+        handleClose={toggle}
+        confirmAction={handleRecieveBnb}
+      />
+      <ModalReceiveBnb
+        status={receiveBnbStatus}
+        show={showReceiveBnb}
+        message={'hehe'}
+        toggle={toggleShowReceiveBnb}
+        setShow={setShowReceiveBnb}
       />
     </Header>
   );

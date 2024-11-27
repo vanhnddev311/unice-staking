@@ -7,3 +7,5 @@ export const addReferral = async (data: { code: string }): Promise<any> =>
   (await instance.post(`/api/user/referral`, data)).data;
 
 export const getFEEnvConfig = async (): Promise<any> => await instance.get('/api/system-config/feEnvConfig');
+
+export const login = async (data: any): Promise<any> => await instance.post('/auth/user', data);

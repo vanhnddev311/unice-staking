@@ -11,25 +11,9 @@ type Token = {
   type: string;
 };
 
-type PAYMENT_TOKEN = {
-  name: string;
-  price: number;
-  symbol: string;
-  address: string;
-  peg: number;
-  decimals?: number;
-  wrapAddress?: string;
-  type: string;
-};
-
 type AppContextState = {
   // userQuota: UserQuota | null;
   feEnv: any;
-};
-
-type SocialLink = {
-  url?: string;
-  type?: string;
 };
 
 type Round = {
@@ -37,16 +21,6 @@ type Round = {
   startTime: string;
   endTime: string;
   vip_access_only: boolean;
-};
-
-type Section2Desc = {
-  tabs: Tabs[];
-  socialLinks: SocialLink[];
-};
-
-type Tabs = {
-  name: string;
-  content: string;
 };
 
 type Section1 = {
@@ -132,44 +106,6 @@ type Campaign = {
   section4: Section4;
 };
 
-type UserWalletAddress = {
-  aptos: string;
-};
-
-type OrderHistoryItem = {
-  id: string;
-  order_receiver_addr: string;
-  order_status: number;
-  order_quantity: number;
-  order_total_amount: number;
-  order_tx_hash?: string | null;
-  order_tx_version?: string | null;
-  order_createdAt?: string;
-  payment_token_name?: string;
-  payment_token_peg: number;
-  item_name?: string;
-  user_id?: string;
-  user_name?: string;
-  user_address?: UserWalletAddress;
-  admin_address?: string | null;
-  item_sale_id: string;
-  item_sale_name: string;
-  campaign_id: string;
-};
-
-type OrderHistoryMeta = {
-  totalItems?: number;
-  itemCount: number;
-  itemsPerPage: 10;
-  totalPages?: number | null;
-  currentPage?: number;
-};
-
-type OrderHistory = {
-  items: OrderHistoryItem[];
-  meta: OrderHistoryMeta;
-};
-
 type RegistrationInfo = {
   id: string;
   vip_level_id: any;
@@ -185,15 +121,6 @@ type RegistrationInfo = {
   allocate: number;
   created_at: string;
   updated_at: string;
-};
-
-type UserQuota = {
-  vipLevel: string;
-  vipAllocate: {
-    vip_level_id: string;
-    allocate: number;
-  };
-  usedQuota: number;
 };
 
 type StakeInfo = {
@@ -227,25 +154,6 @@ type PollInfo = {
   deletedAt: any;
   lock_duration: number;
   apr: number;
-};
-
-type LevelsInfo = {
-  data: LevelInfo[];
-};
-
-type LevelInfo = {
-  id: string;
-  name: string;
-  pid: string;
-  img: string;
-  imgXl: string;
-  amount: number;
-  multiplier_allocation: string;
-  pool_weight_min: string;
-  method: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: null;
 };
 
 type VipLevel = {

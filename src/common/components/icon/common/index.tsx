@@ -92,6 +92,44 @@ export const CopyIcon: React.FunctionComponent<{ width?: number; height?: number
   </svg>
 );
 
+// export const PendingIcon = () => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     xmlnsXlink="http://www.w3.org/1999/xlink"
+//     style={{
+//       margin: 'auto',
+//       background: 'none',
+//       display: 'block',
+//       shapeRendering: 'auto',
+//       width: '52px',
+//       height: '52px',
+//       // borderRadius: '12px',
+//     }}
+//     viewBox="0 0 100 100"
+//     preserveAspectRatio="xMidYMid"
+//   >
+//     <circle
+//       cx="50"
+//       cy="50"
+//       fill="none"
+//       stroke="#4A7DFF"
+//       strokeWidth="10"
+//       strokeLinecap="round"
+//       r="32"
+//       strokeDasharray="150.79644737231007 52.26548245743669"
+//     >
+//       <animateTransform
+//         attributeName="transform"
+//         type="rotate"
+//         repeatCount="indefinite"
+//         dur="1s"
+//         values="0 50 50;360 50 50"
+//         keyTimes="0;1"
+//       ></animateTransform>
+//     </circle>
+//   </svg>
+// );
+
 export const PendingIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -346,7 +384,7 @@ export const DiscordIcon = () => (
   </svg>
 );
 
-export const DocsIcon = () => (
+export const DocsIcon1 = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
       d="M8.00061 13H16.0006V11H8.00061V13ZM8.00061 16H16.0006V14H8.00061V16ZM8.00061 19H13.0006V17H8.00061V19ZM6.00061 22C5.45061 22 4.97994 21.8043 4.58861 21.413C4.19728 21.0217 4.00128 20.5507 4.00061 20V4C4.00061 3.45 4.19661 2.97933 4.58861 2.588C4.98061 2.19667 5.45128 2.00067 6.00061 2H14.0006L20.0006 8V20C20.0006 20.55 19.8049 21.021 19.4136 21.413C19.0223 21.805 18.5513 22.0007 18.0006 22H6.00061ZM13.0006 9V4H6.00061V20H18.0006V9H13.0006Z"

@@ -1,4 +1,5 @@
 import { STATUS } from '@/common/types/comon';
+import React from 'react';
 import ModalNotification from '../../Modal/ModalNotification';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
   message?: string;
 }
 
-const ModalVeNftNotication: React.FunctionComponent<Props> = ({ status, show, message, toggle, setShow }) => {
+const ModalReceiveBnb: React.FunctionComponent<Props> = ({ status, show, message, toggle, setShow }) => {
   if (status === STATUS.FAIL) {
     return (
       <ModalNotification
@@ -39,11 +40,15 @@ const ModalVeNftNotication: React.FunctionComponent<Props> = ({ status, show, me
   return (
     <ModalNotification
       type={'PENDING'}
-      title={'Stake $MGPT'}
-      desc={'Please confirm this transaction in your wallet to stake $MGPT'}
+      width={224}
+      desc={
+        <div className={'text-center text-[#BFBFC1] mt-2'}>
+          <div>Processing...</div>
+          <div className={'mt-1'}>Please wait ~5 minutes</div>
+        </div>
+      }
       isModalOpen={!!show}
-      width={400}
     />
   );
 };
-export default ModalVeNftNotication;
+export default ModalReceiveBnb;
