@@ -2,11 +2,12 @@ import { routes } from '@/common/components/Header/routers';
 import { GasIcon, HotIcon, WalletIcon } from '@/common/components/icon/common';
 import ModalConnectWallet from '@/common/components/Modal/ModalConnectWallet';
 import ModalNotification from '@/common/components/Modal/ModalNotification';
+import { envNane } from '@/common/consts';
 import { config } from '@/common/configs/config';
 import { setData } from '@/common/hooks/useLocalStoragre';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
 import { ellipseAddress } from '@/utils';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton, useChainModal } from '@rainbow-me/rainbowkit';
 import { getAccount, signMessage } from '@wagmi/core';
 import { Drawer, Layout, Menu, notification } from 'antd';
 import classNames from 'classnames';
@@ -15,7 +16,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAccount, useClient, useDisconnect, useSwitchChain } from 'wagmi';
+import { useAccount, useBalance, useClient, useDisconnect, useSwitchChain } from 'wagmi';
 
 const { Header } = Layout;
 
@@ -38,6 +39,16 @@ const PageHeader: React.FunctionComponent = () => {
   const { connector, chainId } = useAccount();
   const client = useClient();
 
+  const {
+    data: balanceBnb,
+    isError,
+    isLoading,
+    refetch,
+  } = useBalance({
+    address,
+    chainId: client?.chain?.id,
+  });
+
   const checkAndSwitchNetwork = async () => {
     const targetChainId = client?.chain.id ?? 1;
     if (connector) {
@@ -45,6 +56,7 @@ const PageHeader: React.FunctionComponent = () => {
         if (chainId !== targetChainId) {
           try {
             await switchChainAsync({ chainId: targetChainId });
+            await refetch();
             console.log('switched network');
           } catch (error) {
             console.error('Failed to switch network:', error);
@@ -70,18 +82,13 @@ const PageHeader: React.FunctionComponent = () => {
     }
   }, [chainId, connector]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (address) {
-  //       const hash = await handleSignMessage();
-  //       console.log({
-  //         add: address,
-  //         nessage: 'UNICE Staking',
-  //         signature: hash,
-  //       });
-  //     }
-  //   })();
-  // }, [address]);
+  useEffect(() => {
+    if (balanceBnb && Number(balanceBnb) < 0.01) {
+      notification.warning({
+        message: 'Your BNB balance is too low, but don’t worry; UNICE Lab will send BNB to cover the gas fee.',
+      });
+    }
+  }, [balanceBnb]);
 
   useEffect(() => {
     document.body.dataset.theme = app.theme;
