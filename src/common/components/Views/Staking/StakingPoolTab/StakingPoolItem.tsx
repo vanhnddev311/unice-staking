@@ -38,8 +38,6 @@ const StakingPoolItem: React.FunctionComponent<{
 
   const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
 
-  console.log('selectedPool', selectedPool);
-
   return (
     <section>
       <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>

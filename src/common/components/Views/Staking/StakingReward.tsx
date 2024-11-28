@@ -1,3 +1,4 @@
+import { APTIcon } from '@/common/components/icon/common';
 import Image from 'next/image';
 import React from 'react';
 
@@ -16,7 +17,7 @@ const StakingReward = () => {
       </div>
       <div className={'w-full flex justify-between mt-1'}>
         <div className={'flex items-center h-fit gap-2'}>
-          <Image src={require('@/common/assets/images/staking/apt.png')} alt={''} className={'w-[16px]'} />
+          <APTIcon />
           <div>FRENS</div>
         </div>
         <div>
