@@ -3,7 +3,7 @@ import UnStakingTab from '@/common/components/Views/Staking/UnStakingTab';
 import { CloseIcon } from '@/common/components/icon/common';
 import { ENV, envNane } from '@/common/consts';
 import { Col, Modal, Row, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface Props {
   isModalOpen: boolean;
@@ -24,7 +24,6 @@ interface Props {
   setIsExpired: (value: boolean) => void;
   setTimeExpired: (value: string) => void;
   setValidate: (value: string) => void;
-  setPoolSelected: (value: any) => void;
   onChangeAmountStake: (value: string) => void;
   onChangeAmountUnStake: (value: string) => void;
   handleStake: (pool: any) => void;
@@ -52,7 +51,6 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   setIsExpired,
   setTimeExpired,
   setValidate,
-  setPoolSelected,
   onChangeAmountStake,
   onChangeAmountUnStake,
   handleStake,
@@ -63,38 +61,43 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
 }) => {
   const [tabStaking, setTabStaking] = useState<string>('1');
   const [poolAddress, setPoolAdress] = useState<string>('');
-  const [poolSelectedInfo, setPoolSelectedInfo] = useState<PollInfo>(poolInfo[0]);
-  const [userPoolSelectedInfo, setUserPoolSelectedInfo] = useState<any>(userPoolInfo[0]);
+  const [poolSelectedInfo, setPoolSelectedInfo] = useState<PollInfo>();
+  const [userPoolSelectedInfo, setUserPoolSelectedInfo] = useState<any>();
   const [stakeInfoOfPoolSelected, setStakeInfoOfPoolSelected] = useState<StakeInfo>();
 
+  const listPoolSelected = useMemo(() => {
+    return poolInfo?.items;
+  }, [poolInfo]);
+
   useEffect(() => {
-    if (poolInfo) {
+    if (listPoolSelected) {
       if (!selectedPool) {
-        setPoolAdress(poolInfo[0]?.contract_address);
+        setPoolAdress(listPoolSelected[0]?.contract_address);
       } else {
         setPoolAdress(selectedPool.contract_address);
       }
     }
-  }, [poolInfo, selectedPool]);
+  }, [listPoolSelected, selectedPool]);
+
+  // useEffect(() => {
+  //   if (!isModalOpen) {
+  //     setPoolAdress('');
+  //   }
+  // }, [isModalOpen, listPoolSelected]);
 
   useEffect(() => {
-    if (!isModalOpen) {
-      setPoolAdress(poolInfo[0]?.contract_address);
-      setStakeInfoOfPoolSelected(stakeInfo?.stakePool91Info);
-    }
-  }, [isModalOpen]);
-
-  useEffect(() => {
-    if (poolAddress === poolInfo[0]?.contract_address) {
-      setPoolSelectedInfo(poolInfo?.find((pool: any) => pool.contract_address === poolInfo[0]?.contract_address));
-      setPoolSelected(poolInfo?.find((pool: any) => pool.contract_address === poolInfo[0]?.contract_address));
+    if (listPoolSelected && poolAddress === listPoolSelected[0]?.contract_address) {
+      setPoolSelectedInfo(
+        listPoolSelected?.find((pool: any) => pool.contract_address === listPoolSelected[0]?.contract_address),
+      );
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool91Info);
     } else {
-      setPoolSelectedInfo(poolInfo?.find((pool: any) => pool.contract_address === selectedPool?.contract_address));
-      setPoolSelected(poolInfo?.find((pool: any) => pool.contract_address === selectedPool?.contract_address));
+      setPoolSelectedInfo(
+        listPoolSelected?.find((pool: any) => pool.contract_address === selectedPool?.contract_address),
+      );
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool182Info);
     }
-  }, [poolInfo, poolAddress]);
+  }, [listPoolSelected, poolAddress]);
 
   useEffect(() => {
     if (
@@ -132,15 +135,6 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       closable={false}
     >
       <Row gutter={[40, 0]}>
-        {/*<Col xs={24} sm={11}>*/}
-        {/*  <StakingDetails*/}
-        {/*    loading={loading}*/}
-        {/*    vipLevel={currentVipTier}*/}
-        {/*    balanceStaked={balanceStaked}*/}
-        {/*    stakeInfo={stakeInfo as StakeInfo}*/}
-        {/*    poolInfo={poolInfo as PollInfo}*/}
-        {/*  />*/}
-        {/*</Col>*/}
         <Col xs={24} className={'w-full'}>
           <div className={'flex justify-between items-center mb-6'}>
             <div className={'text-3xl font-semibold'}>Staking pools</div>
@@ -167,9 +161,8 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               loading={loading}
               stakeInfo={stakeInfoOfPoolSelected!}
               amount={amountStake}
-              listPool={poolInfo}
+              listPool={poolInfo?.items}
               poolInfo={poolSelectedInfo!}
-              // setPoolSelected={setPoolSelected}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}
               validate={validate}
@@ -184,7 +177,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
             <UnStakingTab
               loading={loading}
               stakeInfo={stakeInfoOfPoolSelected!}
-              listPool={poolInfo}
+              listPool={poolInfo?.items}
               poolInfo={poolSelectedInfo!}
               userPoolInfo={userPoolSelectedInfo}
               poolAddress={poolAddress}

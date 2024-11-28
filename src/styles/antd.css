@@ -147,7 +147,7 @@ body[data-theme='dark'] {
     align-items: center;
     height: 18px !important;
     border-radius: 12px;
-    background:  #1AC774;
+    background: #1AC774;
 }
 
 .camp-progress > .ant-progress-outer > .ant-progress-inner {
@@ -271,8 +271,27 @@ body[data-theme='dark'] {
     background-color: transparent !important;
 }
 
-.ant-popover .ant-popover-content {
-    box-shadow: 0 0 32px 0 rgba(82, 193, 64, 0.50);
+.ant-popover .ant-popover-content .ant-popover-inner {
+    display: flex;
+    width: 260px;
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: 16px;
+    background: #2D2F39;
+
+    .ant-popover-title {
+        border-bottom: none;
+        color: #999AA1;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .ant-popover-inner-content {
+        width: 100%;
+        padding: 0;
+    }
 }
 
 .ant-table {
@@ -347,6 +366,7 @@ td.ant-table-column-sort {
             border-top-left-radius: 16px;
             border-bottom-left-radius: 16px;
         }
+
         tr > td:last-child {
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
@@ -550,14 +570,14 @@ td.ant-table-column-sort {
         display: flex !important;
     }
 
-   .ant-steps-item-icon  {
+    .ant-steps-item-icon {
 
-       .ant-steps-icon-dot {
-           border-radius: 27px;
-           border: 3px solid #1AC774;
-           background: #FFF;
-       }
-   }
+        .ant-steps-icon-dot {
+            border-radius: 27px;
+            border: 3px solid #1AC774;
+            background: #FFF;
+        }
+    }
 
     @media (max-width: 768px) {
         .ant-steps-vertical {
@@ -602,12 +622,11 @@ td.ant-table-column-sort {
             color: #ffffff !important;
         }
 
-       .ant-steps-item-icon {
+        .ant-steps-item-icon {
             margin: 0 !important;
         }
     }
 }
-
 
 
 @media (max-width: 768px) {
@@ -699,6 +718,7 @@ td.ant-table-column-sort {
     .ant-picker-datetime-panel {
         /*width: 100%;*/
         display: flex;
+
         .ant-picker-date-panel {
             width: 365px;
             height: 350px;
@@ -712,6 +732,7 @@ td.ant-table-column-sort {
                 height: 100%;
             }
         }
+
         .ant-picker-time-panel {
             width: 155px;
             /*border-left: none !important;*/
@@ -758,6 +779,7 @@ td.ant-table-column-sort {
     .ant-picker-dropdown {
         width: auto;
     }
+
     .ant-picker-datetime-panel {
         display: flex;
         flex-direction: column;
@@ -784,19 +806,19 @@ td.ant-table-column-sort {
             }
         }
 
-       .ant-picker-time-panel-column {
-          display: flex;
-          flex-direction: column;
+        .ant-picker-time-panel-column {
+            display: flex;
+            flex-direction: column;
         }
 
         .ant-picker-time-panel-column:nth-child(1) {
-          max-height: 112px;
-          overflow-y: auto;
+            max-height: 112px;
+            overflow-y: auto;
         }
 
         .ant-picker-time-panel-column:nth-child(2) {
-          max-height: 112px;
-          overflow-y: auto;
+            max-height: 112px;
+            overflow-y: auto;
         }
     }
 
@@ -814,19 +836,19 @@ td.ant-table-column-sort {
             display: none !important;
         }
 
-       .ant-picker-time-panel-column {
-          display: flex;
-          flex-direction: column;
+        .ant-picker-time-panel-column {
+            display: flex;
+            flex-direction: column;
         }
 
         .ant-picker-time-panel-column:nth-child(1) {
-          max-height: 112px;
-          overflow-y: auto;
+            max-height: 112px;
+            overflow-y: auto;
         }
 
         .ant-picker-time-panel-column:nth-child(2) {
-          max-height: 112px;
-          overflow-y: auto;
+            max-height: 112px;
+            overflow-y: auto;
         }
     }
 }
@@ -962,5 +984,5 @@ td.ant-table-column-sort {
 }
 
 .ant-picker-ok .ant-btn-primary:hover {
-    background:  #40DA90;
+    background: #40DA90;
 }

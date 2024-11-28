@@ -70,7 +70,7 @@ const InputCurrency: React.FunctionComponent<InputProps> = ({
   };
 
   return (
-    <div className={`${className} bg-[#101119] p-4 `}>
+    <div className={`${className} bg-[#101119] p-4 pb-6 rounded-[8px]`}>
       {label && (
         <div className={'flex justify-between text-default mb-6'}>
           <div className={'text-base text-[#8E929B]'}>{label}</div>
@@ -84,6 +84,12 @@ const InputCurrency: React.FunctionComponent<InputProps> = ({
               <div onClick={useMaxBalance} className={'text-base text-[#8E929B] cursor-pointer'}>
                 {subTitle ? subTitle : 'Balance'}: {''}
                 <span className={''}>{`${formatNumber(balance, 2)}`}</span>
+                <span
+                  className="text-[#4A7DFF] rounded-full cursor-pointer px-2 py-1 bg-[#4A7DFF33] text-right ml-2 text-sm"
+                  onClick={useMaxBalance}
+                >
+                  Max
+                </span>
               </div>
             </div>
           )}
@@ -111,41 +117,31 @@ const InputCurrency: React.FunctionComponent<InputProps> = ({
             showCommas
           />
         </span>
-        {/*<span*/}
-        {/*  onClick={() => isOnSelected && setShowModalTokens(true)}*/}
-        {/*  className={*/}
-        {/*    'rounded-full border border-[#434548] bg-[#14161A] flex items-center justify-center py-1 px-4 sm:px-3 gap-2 cursor-pointer h-auto'*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  {token && token.symbol === 'MGPT' ? (*/}
-        {/*    // <CoinIcon*/}
-        {/*    //   className={'w-[20px] h-[20px] mr-1'}*/}
-        {/*    //   logoSrc={``}*/}
-        {/*    //   isFetching={false}*/}
-        {/*    // />*/}
-        {/*    // <MoveGPTIcon />*/}
-        {/*    <Image*/}
-        {/*      className={'w-[24px] h-[24px]'}*/}
-        {/*      src={require('@/common/assets/images/moveGPTTokenNoBG.png')}*/}
-        {/*      alt={''}*/}
-        {/*    />*/}
-        {/*  ) : (*/}
-        {/*    <APTIcon />*/}
-        {/*  )}*/}
-        {/*  <div className={'text-start text-[#000] font-semibold h-full items-center flex gap-1'}>*/}
-        {/*    {!token?.symbol && <Skeleton className="w-[60px] h-[20px] mb-1" />}*/}
-        {/*    {!!token?.symbol && (*/}
-        {/*      <div>*/}
-        {/*        <div className={'leading-none text-[#FFFFFF] text-base'}>{token?.symbol}</div>*/}
-        {/*      </div>*/}
-        {/*    )}*/}
-        {/*  </div>*/}
-        {/*</span>*/}
-        <div className="text-right pr-2 text-sm">
-          <span className="text-[#fff] rounded-[8px] cursor-pointer px-2 py-1 bg-[#272830]" onClick={useMaxBalance}>
-            Max
-          </span>
-        </div>
+        <span
+          onClick={() => isOnSelected && setShowModalTokens(true)}
+          className={
+            'w-fit rounded-full bg-[#272830] flex items-center justify-center py-2 px-4 sm:px-5 gap-2 cursor-pointer h-auto'
+          }
+        >
+          {token && token.symbol === 'UNICE' ? (
+            // <CoinIcon
+            //   className={'w-[20px] h-[20px] mr-1'}
+            //   logoSrc={``}
+            //   isFetching={false}
+            // />
+            <Image src={require('@/common/assets/images/unice-logo-icon.png')} alt={''} className={'w-[24px]'} />
+          ) : (
+            <APTIcon />
+          )}
+          <div className={'text-start text-[#000] font-medium h-full items-center flex gap-1'}>
+            {!token?.symbol && <Skeleton className="w-[60px] h-[20px] mb-1" />}
+            {!!token?.symbol && (
+              <div>
+                <div className={'leading-none text-[#FFFFFF] text-base'}>{token?.symbol}</div>
+              </div>
+            )}
+          </div>
+        </span>
       </div>
 
       {enableBalance == 'bottom' && (

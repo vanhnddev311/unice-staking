@@ -121,11 +121,6 @@ const DisableInput: React.FunctionComponent<InputProps> = ({
           {/*) : (*/}
           {/*  <APTIcon />*/}
           {/*)}*/}
-          <Image
-            className={'w-[24px] h-[24px]'}
-            src={require('@/common/assets/images/moveGPTTokenNoBG.png')}
-            alt={''}
-          />
           <div className={'text-start text-[#000] font-semibold h-full items-center flex gap-1'}>
             {!token?.symbol && <Skeleton className="w-[60px] h-[20px] mb-1" />}
             {!!token?.symbol && (

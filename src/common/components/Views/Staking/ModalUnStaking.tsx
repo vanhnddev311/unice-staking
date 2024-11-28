@@ -14,7 +14,6 @@ interface Props {
   error?: string;
   toggle: () => void;
   setShow: (show: boolean) => void;
-  setIsConfirmUnstake: (val: boolean) => void;
   confirmUnstake: (pool: any) => void;
 }
 
@@ -35,7 +34,6 @@ const ModalUnStaking: React.FunctionComponent<Props> = ({
   error,
   toggle,
   setShow,
-  setIsConfirmUnstake,
   confirmUnstake,
 }) => {
   if (status === STATUS.FAIL) {
@@ -93,7 +91,6 @@ const ModalUnStaking: React.FunctionComponent<Props> = ({
         handleClose={() => {
           toggle();
         }}
-        setIsConfirmUnstake={setIsConfirmUnstake}
         confirmCallback={() => confirmUnstake({})}
       />
     );

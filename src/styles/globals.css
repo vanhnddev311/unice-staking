@@ -8,7 +8,7 @@ body[data-theme='dark'] {
     --bg-header: rgba(19, 19, 22, 0.80);
     --bg-launchpad: #14161A;
     --bg-claim-nft: #222428;
-    --bg-modal: #222428;
+    --bg-modal: #1C1D25;
     --bg-sub-menu: #1AC77433;
     --bg-button1: #ffffff;
     --bg-blur: rgba(34, 36, 40, 0.50);
@@ -308,10 +308,6 @@ body::-webkit-scrollbar {
     /*border-bottom: 1px solid rgba(229, 228, 250, 0.1019607843);*/
 }
 
-.linear-bg {
-    background: linear-gradient(270deg, #f7cc6a 0%, #c2e23d 50.97%, #285b42 100%);
-}
-
 .blur-bg {
     background: rgba(16, 16, 16, 0.1);
     backdrop-filter: blur(8px);
@@ -356,20 +352,6 @@ body::-webkit-scrollbar {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.gradient-text {
-    background: linear-gradient(90deg, #F7CC6A 0%, #C2E23D 50.97%, #285B42 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.linear-text {
-    background: linear-gradient(90deg, #285B42 0%, #A0C408 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 .text-title {
     color: var(--text-title);
 }
@@ -383,49 +365,6 @@ body::-webkit-scrollbar {
     text-overflow: ellipsis;
     /*height: 4.5em;*/
     line-height: 1.5em;
-}
-
-.test-text {
-    word-wrap: break-word; /* Cho phép xuống dòng tại vị trí bất kỳ */
-    overflow-wrap: break-word; /* Hỗ trợ các trình duyệt hiện đại */
-    white-space: normal; /* Cho phép xuống dòng tự nhiên */
-    max-width: 100%;
-}
-
-.camp-item-title {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.refundable-tag {
-    display: flex;
-    padding: 4px 16px;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    border-radius: 999px;
-    background: rgba(255, 171, 9, 0.20);
-}
-
-.menu-dropdown {
-    position: relative;
-    /*background: #FFFFFF !important;*/
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 12px;
-    z-index: 20;
-    border-radius: 12px;
-    background: #FFF;
-
-    box-shadow: 0px 3px 12px 0px rgba(0, 3, 28, 0.08);
-}
-
-.menu-dropdown .ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover, .ant-dropdown-menu-item.ant-dropdown-menu-item-active, .ant-dropdown-menu-item.ant-dropdown-menu-submenu-title-active, .ant-dropdown-menu-submenu-title.ant-dropdown-menu-item-active, .ant-dropdown-menu-submenu-title.ant-dropdown-menu-submenu-title-active {
-    border-radius: 8px;
-    background: var(--bg-sub-menu) !important;
 }
 
 .wallet-item {
@@ -565,10 +504,6 @@ figcaption {
 .input-format:focus-visible {
     box-shadow: none !important;
     outline: none !important;
-}
-
-.banner-vesting {
-    background: url('../common/assets/images/banner-vesting.png') center / cover;
 }
 
 .vesting-input {
