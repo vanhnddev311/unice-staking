@@ -10,8 +10,10 @@ import React, { useEffect } from 'react';
 const StakingPoolItem: React.FunctionComponent<{
   index: number;
   pools: any;
+  pool: any;
   token: any;
   infoPool: any;
+  infoPool2: any;
   selectedPool: any;
   selectedDurations: any;
   setSelectedPool: (val: any) => void;
@@ -20,50 +22,78 @@ const StakingPoolItem: React.FunctionComponent<{
 }> = ({
   index,
   pools,
+  pool,
   token,
   selectedPool,
   selectedDurations,
   infoPool,
+  infoPool2,
   setShowModalStaking,
   setSelectedPool,
   handleSelectDuration,
 }) => {
   useEffect(() => {
-    handleSelectDuration(index, pools?.items[0]?.est_apr[0]?.time);
+    handleSelectDuration(index, pool?.items[0]?.est_apr[0]?.time);
   }, [pools]);
 
   const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
 
-  console.log('infoPool', infoPool);
+  console.log('selectedPool', selectedPool);
 
   return (
     <section>
       <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>
         <div className={'flex justify-between items-center mb-2'}>
           <div>
-            <div className={'text-[#fff] text-base font-bold'}>{pools?.name}</div>
+            <div className={'text-[#fff] text-base font-bold'}>{pool?.name}</div>
           </div>
-          <div className={'apr-text text-base font-bold'}>{selectedPool?.est_apr[0].value}% APR</div>
+          <div className={'apr-text text-base font-bold'}>
+            {pool?.items.flatMap((item: any) => item.est_apr).find((apr: any) => apr.time === selectedDurations[index])
+              ?.value || 0}
+            %
+          </div>
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Staked amount</div>
           <div className={'text-[#fff] font-medium'}>
-            {ENV == envNane.TESTNET
-              ? formatNumber(
-                  selectedPool?.id == '6'
-                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-                    : selectedPool?.id == '7'
-                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
-                )
-              : formatNumber(
-                  selectedPool?.id == '2'
-                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-                    : selectedPool?.id == '3'
-                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
-                )}{' '}
-            UNICE
+            {(() => {
+              if (!infoPool || infoPool.some((pool: any) => !pool || !pool.result)) {
+                return '0 UNICE';
+              }
+
+              const poolIndex =
+                ENV === envNane.TESTNET
+                  ? selectedPool?.id === '6'
+                    ? 0
+                    : selectedPool?.id === '7'
+                      ? 1
+                      : 2
+                  : selectedPool?.id === '2'
+                    ? 0
+                    : selectedPool?.id === '3'
+                      ? 1
+                      : 2;
+
+              const poolIndex2 =
+                ENV === envNane.TESTNET
+                  ? selectedPool?.id === '3'
+                    ? 0
+                    : selectedPool?.id === '4'
+                      ? 1
+                      : 2
+                  : selectedPool?.id === '2'
+                    ? 0
+                    : selectedPool?.id === '3'
+                      ? 1
+                      : 2;
+
+              const poolResult =
+                index == 0 ? (infoPool[poolIndex]?.result as number[]) : (infoPool2[poolIndex2]?.result as number[]);
+
+              const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
+
+              return `${formattedValue} UNICE`;
+            })()}
           </div>
         </div>
         <div className={'flex justify-between'}>
@@ -75,6 +105,7 @@ const StakingPoolItem: React.FunctionComponent<{
           <StakingPoolDuration
             poolIndex={index}
             pools={pools}
+            pool={pool}
             setPoolSelected={setSelectedPool}
             handleSelectDuration={handleSelectDuration}
           />
@@ -97,14 +128,14 @@ const StakingPoolItem: React.FunctionComponent<{
           <div className={'flex items-center gap-3'}>
             <Image src={require('@/common/assets/images/unice-logo-icon.png')} alt={''} className={'w-[40px]'} />
             <div>
-              <div className={'font-bold'}>{pools?.name}</div>
+              <div className={'font-bold'}>{pool?.name}</div>
               <div className={'text-sm text-[#FFFFFF80]'}>UNICE</div>
             </div>
           </div>
         </Col>
         <Col sm={2} className={'flex items-center text-center text-xl font-medium p-6'}>
           <div className={'apr-text'}>
-            {pools?.items.flatMap((item: any) => item.est_apr).find((apr: any) => apr.time === selectedDurations[index])
+            {pool?.items.flatMap((item: any) => item.est_apr).find((apr: any) => apr.time === selectedDurations[index])
               ?.value || 0}
             %
           </div>
@@ -114,6 +145,7 @@ const StakingPoolItem: React.FunctionComponent<{
             <StakingPoolDuration
               poolIndex={index}
               pools={pools}
+              pool={pool}
               setPoolSelected={setSelectedPool}
               handleSelectDuration={handleSelectDuration}
             />
@@ -123,23 +155,45 @@ const StakingPoolItem: React.FunctionComponent<{
           Unlimited
         </Col>
         <Col sm={5} className={'flex items-center font-medium p-6'}>
-          <div>
-            {ENV == envNane.TESTNET
-              ? formatNumber(
-                  selectedPool?.id == '6'
-                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-                    : selectedPool?.id == '7'
-                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
-                )
-              : formatNumber(
-                  selectedPool?.id == '2'
-                    ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-                    : selectedPool?.id == '3'
-                      ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                      : Number((infoPool[2]?.result as number[])[0] ?? 0),
-                )}{' '}
-            UNICE
+          <div className={'text-[#fff]'}>
+            {(() => {
+              if (!infoPool || infoPool.some((pool: any) => !pool || !pool.result)) {
+                return '0 UNICE';
+              }
+
+              const poolIndex =
+                ENV === envNane.TESTNET
+                  ? selectedPool?.id === '6'
+                    ? 0
+                    : selectedPool?.id === '7'
+                      ? 1
+                      : 2
+                  : selectedPool?.id === '2'
+                    ? 0
+                    : selectedPool?.id === '3'
+                      ? 1
+                      : 2;
+
+              const poolIndex2 =
+                ENV === envNane.TESTNET
+                  ? selectedPool?.id === '3'
+                    ? 0
+                    : selectedPool?.id === '4'
+                      ? 1
+                      : 2
+                  : selectedPool?.id === '2'
+                    ? 0
+                    : selectedPool?.id === '3'
+                      ? 1
+                      : 2;
+
+              const poolResult =
+                index == 0 ? (infoPool[poolIndex]?.result as number[]) : (infoPool2[poolIndex2]?.result as number[]);
+
+              const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
+
+              return `${formattedValue} UNICE`;
+            })()}
           </div>
         </Col>
         <Col sm={4} className={'flex items-center p-6'}>

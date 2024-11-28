@@ -10,10 +10,12 @@ interface Props {
   selectedPool: any;
   selectedDurations: any;
   setShowModalStaking: (val: boolean) => void;
+  setPoolIndex: (val: any) => void;
   setSelectedPool: (val: any) => void;
   setSelectedParentPool: (val: any) => void;
   handleSelectDuration: (poolId: number, duration: any) => void;
   infoPool: any;
+  infoPool2: any;
 }
 
 const StakingPoolTabContent: React.FunctionComponent<Props> = ({
@@ -22,10 +24,12 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
   selectedPool,
   selectedDurations,
   setShowModalStaking,
+  setPoolIndex,
   setSelectedPool,
   setSelectedParentPool,
   handleSelectDuration,
   infoPool,
+  infoPool2,
 }) => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -53,14 +57,17 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
                     }
                     return;
                   }
+                  setPoolIndex(index);
                   setSelectedParentPool(item);
                   setShowModalStaking(true);
                 }}
               >
                 <StakingPoolItem
                   index={index}
-                  pools={item}
+                  pools={dataSource}
+                  pool={item}
                   infoPool={infoPool}
+                  infoPool2={infoPool2}
                   selectedPool={selectedPool}
                   setSelectedPool={setSelectedPool}
                   selectedDurations={selectedDurations}

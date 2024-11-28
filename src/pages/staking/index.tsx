@@ -4,8 +4,8 @@ import ModalUnStaking from '@/common/components/Views/Staking/ModalUnStaking';
 import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolTabContent';
 import StakingReward from '@/common/components/Views/Staking/StakingReward';
 import { config } from '@/common/configs/config';
-import { contractAddress, ENV, envNane, MAX_INT, tokenAddress } from '@/common/consts';
-import abi from '@/common/contracts/abis/contract.json';
+import { contractAddress, contractFrensAddress, ENV, envNane, MAX_INT, tokenAddress } from '@/common/consts';
+import { default as abi, default as frensAbi } from '@/common/contracts/abis/contract.json';
 import tokenABI from '@/common/contracts/abis/token.json';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
@@ -38,6 +38,7 @@ const Staking: React.FunctionComponent = () => {
   const [unstakeInfo, setUnstakeInfo] = useState<any>({});
   const [errorStake, setErrorStake] = useState('');
   const [errorUnStake, setErrorUnStake] = useState('');
+  const [poolIndex, setPoolIndex] = useState<any>();
   const [parentPool, setParentPool] = useState<any>();
   const [parentAmount, setParentAmount] = useState('' as string);
   const [selectedPool, setSelectedPool] = useState<any>(null);
@@ -54,7 +55,7 @@ const Staking: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!showModalStaking) {
-      setSelectedPool(null);
+      // setSelectedPool(null);
       setAmountStake('');
       setAmountUnStake('');
     }
@@ -81,6 +82,14 @@ const Staking: React.FunctionComponent = () => {
     chainId: client?.chain?.id ?? 1,
   });
 
+  const { data: allowanceFrensAmt, refetch: refetchAllowanceFrens } = useReadContract({
+    abi: tokenABI,
+    address: tokenAddress,
+    functionName: 'allowance',
+    args: [address, contractFrensAddress],
+    chainId: client?.chain?.id ?? 1,
+  });
+
   const { data: infoPool } = useReadContracts({
     contracts: [
       {
@@ -102,6 +111,32 @@ const Staking: React.FunctionComponent = () => {
         address: contractAddress,
         functionName: 'userInfo',
         args: [ENV == envNane.TESTNET ? 8 : 4, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+    ],
+  });
+
+  const { data: infoPool2 } = useReadContracts({
+    contracts: [
+      {
+        abi,
+        address: contractFrensAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 3 : 2, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi,
+        address: contractFrensAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 4 : 3, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi,
+        address: contractFrensAddress,
+        functionName: 'userInfo',
+        args: [ENV == envNane.TESTNET ? 5 : 4, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
@@ -141,40 +176,97 @@ const Staking: React.FunctionComponent = () => {
     ],
   });
 
+  const { data: rewardFrens } = useReadContracts({
+    contracts: [
+      {
+        abi: frensAbi,
+        address: contractFrensAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 3 : 2, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi: frensAbi,
+        address: contractFrensAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 4 : 3, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+      {
+        abi: frensAbi,
+        address: contractFrensAddress,
+        functionName: 'pendingReward',
+        args: [ENV == envNane.TESTNET ? 5 : 4, address],
+        chainId: client?.chain?.id ?? 1,
+      },
+    ],
+  });
+
   const [reward1, reward2, reward3] = data || [];
+  const [rewardFrens1, rewardFrens2, rewardFrens3] = rewardFrens || [];
 
   const totalReward = useMemo(() => {
-    return Number(reward1?.result ?? 0) + Number(reward2?.result ?? 0) + Number(reward3?.result ?? 0);
-  }, [reward1, reward2, reward3]);
+    return (
+      Number(reward1?.result ?? 0) +
+      Number(reward2?.result ?? 0) +
+      Number(reward3?.result ?? 0) +
+      Number(rewardFrens1?.result ?? 0) +
+      Number(rewardFrens2?.result ?? 0) +
+      Number(rewardFrens3?.result ?? 0)
+    );
+  }, [reward1, reward2, reward3, rewardFrens1, rewardFrens2, rewardFrens3]);
 
   useEffect(() => {
-    if (infoPool) {
-      setStakedAmount(
-        Number((infoPool[0]?.result as number[])[0]) +
-          Number((infoPool[1]?.result as number[])[0]) +
-          Number((infoPool[2]?.result as number[])[0]),
-      );
+    if (!infoPool) {
+      console.error('infoPool is undefined');
+      return;
+    }
+
+    if (infoPool.some((pool) => !pool || !pool.result)) {
+      console.error('Some pools are undefined or missing result:', infoPool);
+      return;
     }
   }, [infoPool]);
 
   useEffect(() => {
-    if (!address) setStakedAmount(0);
-    if (infoPool) {
-      ENV == envNane.TESTNET
-        ? setCurrentStakedAmount(
-            selectedPool?.id == '6'
-              ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-              : selectedPool?.id == '7'
-                ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                : Number((infoPool[2]?.result as number[])[0] ?? 0),
-          )
-        : setCurrentStakedAmount(
-            selectedPool?.id == '2'
-              ? Number((infoPool[0]?.result as number[])[0] ?? 0)
-              : selectedPool?.id == '3'
-                ? Number((infoPool[1]?.result as number[])[0] ?? 0)
-                : Number((infoPool[2]?.result as number[])[0] ?? 0),
-          );
+    if (infoPool && infoPool2) {
+      const stakedAmounts = infoPool.map((pool) => (pool?.result ? Number((pool.result as number[])[0]) : 0));
+      const stakedFrensAmounts = infoPool2.map((pool) => (pool?.result ? Number((pool.result as number[])[0]) : 0));
+      setStakedAmount(
+        stakedAmounts.reduce((total, amount) => total + amount, 0) +
+          stakedFrensAmounts.reduce((total, amount) => total + amount, 0),
+      );
+    }
+  }, [infoPool, infoPool2]);
+
+  useEffect(() => {
+    if (!address) {
+      setStakedAmount(0);
+      return;
+    }
+
+    if (infoPool && selectedPool?.id) {
+      const poolIndex =
+        ENV === envNane.TESTNET
+          ? selectedPool.id === '6'
+            ? 0
+            : selectedPool.id === '7'
+              ? 1
+              : 2
+          : selectedPool.id === '2'
+            ? 0
+            : selectedPool.id === '3'
+              ? 1
+              : 2;
+
+      const poolResult = infoPool[poolIndex]?.result as number[];
+
+      if (poolResult) {
+        setCurrentStakedAmount(Number(poolResult[0] ?? 0));
+      } else {
+        console.warn(`infoPool[${poolIndex}] is undefined or has no result`);
+        setCurrentStakedAmount(0);
+      }
     }
   }, [infoPool, selectedPool, address]);
 
@@ -227,12 +319,15 @@ const Staking: React.FunctionComponent = () => {
   };
 
   const stakeAction = async (pool: any) => {
-    if (Number(amountStake) > Number(allowanceAmt)) {
+    if (
+      (poolIndex == 0 && Number(amountStake) > Number(allowanceAmt)) ||
+      (poolIndex == 1 && Number(amountStake) > Number(allowanceFrensAmt))
+    ) {
       const hash = await writeContractAsync({
         address: tokenAddress,
         abi: tokenABI,
         functionName: 'approve',
-        args: [contractAddress, MAX_INT],
+        args: [poolIndex == 0 ? contractAddress : contractFrensAddress, MAX_INT],
         chainId: client?.chain?.id ?? 1,
       });
 
@@ -244,8 +339,8 @@ const Staking: React.FunctionComponent = () => {
     }
 
     const res = await writeContractAsync({
-      address: contractAddress,
-      abi,
+      address: poolIndex == 0 ? contractAddress : contractFrensAddress,
+      abi: poolIndex == 0 ? abi : frensAbi,
       functionName: 'stake',
       args: [pool?.id ?? 2, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
       chainId: client?.chain?.id ?? 1,
@@ -449,7 +544,7 @@ const Staking: React.FunctionComponent = () => {
                   <div>Staking Rewards</div>
                   <Popover content={<StakingReward />} title="Staking reward">
                     <div className={'relative w-fit apr-text text-2xl font-medium leading-[125%] cursor-pointer'}>
-                      {formatNumber(stakedAmount / Math.pow(10, 18), 4)} USDT
+                      {formatNumber(totalReward / Math.pow(10, 18), 4)} USDT
                       <Image
                         src={require('@/common/assets/images/staking/Line 32.png')}
                         alt={''}
@@ -467,10 +562,12 @@ const Staking: React.FunctionComponent = () => {
             selectedPool={selectedPool}
             selectedDurations={selectedDurations}
             setSelectedParentPool={setSelectedParentPool}
+            setPoolIndex={setPoolIndex}
             setShowModalStaking={setShowModalStaking}
             handleSelectDuration={handleSelectDuration}
             setSelectedPool={setSelectedPool}
             infoPool={infoPool}
+            infoPool2={infoPool2}
           />
         </div>
 

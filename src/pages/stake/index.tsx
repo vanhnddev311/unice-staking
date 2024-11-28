@@ -69,10 +69,11 @@ const poolsData: Pool[] = [
 ];
 
 const App: React.FC = () => {
-  // State để lưu duration được chọn
   const [selectedDurations, setSelectedDurations] = useState<{
     [key: number]: number | null;
   }>({});
+
+  console.log('selectedDurations', selectedDurations);
 
   const handleSelectDuration = (poolIndex: number, duration: number) => {
     setSelectedDurations((prev) => ({ ...prev, [poolIndex]: duration }));
@@ -112,7 +113,6 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* Hiển thị APR tương ứng */}
           {selectedDurations[poolIndex] && (
             <div>
               <p>

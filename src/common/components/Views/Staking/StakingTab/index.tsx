@@ -69,6 +69,8 @@ const StakingTab: React.FunctionComponent<Props> = ({
           <div>Duration (months)</div>
           <div className={'flex text-[#fff] gap-2'}>
             {listPool?.map((pool: any) => {
+              console.log(`pool ${pool?.id}`, poolAddress === pool?.contract_address);
+
               return (
                 <div
                   key={pool?.id}
