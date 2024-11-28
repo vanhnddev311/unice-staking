@@ -11,9 +11,19 @@ type Token = {
   type: string;
 };
 
+type UserInfo = {
+  referralCode: string;
+  wallet: string;
+  deletedAt: string;
+  nonce: string;
+  referredBy: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 type AppContextState = {
-  // userQuota: UserQuota | null;
-  feEnv: any;
+  userInfo: UserInfo;
 };
 
 type Round = {

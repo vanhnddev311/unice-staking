@@ -1,6 +1,7 @@
 import ModalStaking from '@/common/components/Views/Staking/ModalStaking';
 import ModalStakingPools from '@/common/components/Views/Staking/ModalStakingPools';
 import ModalUnStaking from '@/common/components/Views/Staking/ModalUnStaking';
+import Referral from '@/common/components/Views/Staking/Referral';
 import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolTabContent';
 import StakingReward from '@/common/components/Views/Staking/StakingReward';
 import { config } from '@/common/configs/config';
@@ -438,10 +439,16 @@ const Staking: React.FunctionComponent = () => {
     },
   );
 
-  const { data: tokenPrice } = useQuery(['tokenPrice'], async () => {
-    const res = await getPriceOfToken();
-    return res.data[0];
-  });
+  const { data: { priceInfo, tokenPrice = 0 } = {} } = useQuery(
+    ['tokenPrice'],
+    async () => {
+      const res = await getPriceOfToken();
+      return { priceInfo: res.data[0], tokenPrice: Number(res.data[0].lastPr) };
+    },
+    {
+      refetchInterval: 10000,
+    },
+  );
 
   const title = 'UNICE Staking';
   const description = 'UNICE Staking';
@@ -518,7 +525,18 @@ const Staking: React.FunctionComponent = () => {
               }
             >
               <div className={'w-full flex justify-center'}>
-                <div className={'flex flex-col text-[#717681] gap-4'}>
+                <div className={'flex flex-col items-center text-[#717681] gap-4'}>
+                  <div>Your rank</div>
+                  <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
+                    {formatNumber(stakedAmount / Math.pow(10, 18), 4)}
+                  </div>
+                </div>
+              </div>
+              <div className={'px-4'}>
+                <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
+              </div>
+              <div className={'w-full flex justify-center'}>
+                <div className={'flex flex-col items-center text-[#717681] gap-4'}>
                   <div>UNICE Staked</div>
                   <div className={'flex items-center gap-2'}>
                     <Image
@@ -536,7 +554,7 @@ const Staking: React.FunctionComponent = () => {
                   </div>
                 </div>
               </div>
-              <div className={'px-4 sm:px-8'}>
+              <div className={'px-4'}>
                 <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
               </div>
               <div className={'w-full flex justify-center'}>
@@ -544,7 +562,7 @@ const Staking: React.FunctionComponent = () => {
                   <div>Staking Rewards</div>
                   <Popover content={<StakingReward />} title="Staking reward">
                     <div className={'relative w-fit apr-text text-2xl font-medium leading-[125%] cursor-pointer'}>
-                      {formatNumber(totalReward / Math.pow(10, 18), 4)} USDT
+                      {formatNumber((totalReward * tokenPrice) / Math.pow(10, 18), 4)} USDT
                       <Image
                         src={require('@/common/assets/images/staking/Line 32.png')}
                         alt={''}
@@ -556,6 +574,7 @@ const Staking: React.FunctionComponent = () => {
               </div>
             </div>
           </div>
+          <Referral />
           <StakingPoolTabContent
             token={stakeToken1}
             dataSource={poolInfo}

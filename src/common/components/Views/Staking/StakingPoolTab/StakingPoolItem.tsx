@@ -38,6 +38,8 @@ const StakingPoolItem: React.FunctionComponent<{
 
   const isClosed = moment(selectedPool?.close_at).diff(Date.now()) / (1000 * 60 * 60 * 24) < 0;
 
+  console.log('infoPool', infoPool, infoPool2);
+
   return (
     <section>
       <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>
@@ -86,7 +88,9 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2;
 
               const poolResult =
-                index == 0 ? (infoPool[poolIndex]?.result as number[]) : (infoPool2[poolIndex2]?.result as number[]);
+                index == 0
+                  ? ((infoPool[poolIndex]?.result as number[]) ?? 0)
+                  : ((infoPool2[poolIndex2]?.result as number[]) ?? 0);
 
               const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
 
@@ -186,7 +190,9 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2;
 
               const poolResult =
-                index == 0 ? (infoPool[poolIndex]?.result as number[]) : (infoPool2[poolIndex2]?.result as number[]);
+                index == 0
+                  ? ((infoPool[poolIndex]?.result as number[]) ?? 0)
+                  : ((infoPool2[poolIndex2]?.result as number[]) ?? 0);
 
               const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
 

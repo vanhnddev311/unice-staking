@@ -1,9 +1,7 @@
-import { getUserInfo } from '@/common/services/auth';
-import { getFEEnvConfig } from '@/common/services/login';
+import { getUserInfo } from '@/common/services/login';
 import { useQuery } from '@tanstack/react-query';
-import React, { ReactNode, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getData, removeData } from '../hooks/useLocalStoragre';
+import React, { ReactNode } from 'react';
+import { useAccount } from 'wagmi';
 import { AppContext } from './contexts';
 
 export interface WalletProviderProps {
@@ -11,22 +9,17 @@ export interface WalletProviderProps {
 }
 
 export const AppProvider: React.FunctionComponent<WalletProviderProps> = ({ children }) => {
-  const app = useSelector((state: any) => state.app);
+  const { address } = useAccount();
 
-  // const { data: userQuota = 0 } = useQuery(['UserQuota', connected, app.is_login], async () => {
-  //   return await getUserQuota();
-  // });
-  const { data: feEnv } = useQuery(['feEnv'], async () => {
-    // const { data } = await getFEEnvConfig();
-    return [];
+  const { data: userInfo } = useQuery(['userQuota'], async () => {
+    const { data } = await getUserInfo(address as string);
+    return data.Data;
   });
 
   return (
     <AppContext.Provider
       value={{
-        // userQuota,
-        feEnv,
-        // accessToken: accessToken,
+        userInfo,
       }}
     >
       {children}

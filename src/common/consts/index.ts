@@ -9,7 +9,7 @@ export const enum envNane {
 export const ENV: envNane = envNane.TESTNET;
 
 export const config = {
-  API_ENDPOINT_URL: 'http://34.70.221.4:3011',
+  API_ENDPOINT_URL: 'https://staking-api.unicelab.io/',
   API_IDO_ENDPOINT_URL: process.env.API_IDO_ENDPOINT_URL,
   APTOS_SCAN_URL: process.env.APTOS_SCAN_URL,
 };
