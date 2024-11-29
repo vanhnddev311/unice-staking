@@ -213,7 +213,8 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
         <p className={'text-red-500 my-2'}>{validate}</p>
         {!isExpired ? (
           <div className={'text-base text-[#FF612F]'}>
-            You can’t unstake until <span className={'text-[#FF612F]'}>{unstakeTime.format(lockCooldownFormat)}</span>
+            You can’t unstake now
+            {/*until <span className={'text-[#FF612F]'}>{unstakeTime.format(lockCooldownFormat)}</span>*/}
           </div>
         ) : (
           <div className={'text-base text-[#4A7DFF] opacity-0'}>Get $UNICE</div>
