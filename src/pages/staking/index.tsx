@@ -575,21 +575,21 @@ const Staking: React.FunctionComponent = () => {
                 'w-full sm:h-[140px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] p-4 sm:p-8 gap-6 sm:gap-0'
               }
             >
-              <div className={'w-full flex sm:justify-center'}>
-                <div
-                  className={
-                    'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'
-                  }
-                >
-                  <div>Your rank</div>
-                  <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
-                    {userInfo?.rank ? `#${userInfo.rank}` : '--'}
-                  </div>
-                </div>
-              </div>
-              <div className={'hidden sm:block px-4'}>
-                <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
-              </div>
+              {/*<div className={'w-full flex sm:justify-center'}>*/}
+              {/*  <div*/}
+              {/*    className={*/}
+              {/*      'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'*/}
+              {/*    }*/}
+              {/*  >*/}
+              {/*    <div>Your rank</div>*/}
+              {/*    <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>*/}
+              {/*      {userInfo?.rank ? `#${userInfo.rank}` : '--'}*/}
+              {/*    </div>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
+              {/*<div className={'hidden sm:block px-4'}>*/}
+              {/*  <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>*/}
+              {/*</div>*/}
               <div className={'w-full flex sm:justify-center'}>
                 <div
                   className={
