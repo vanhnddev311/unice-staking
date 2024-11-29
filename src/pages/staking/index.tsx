@@ -84,7 +84,7 @@ const Staking: React.FunctionComponent = () => {
 
   useEffect(() => {
     setSelectedItems(
-      poolInfo1?.map((pool) => ({
+      poolInfo1?.map((pool: any) => ({
         pool_name: pool.pool_name,
         item: pool.est_apr[0],
       })),
