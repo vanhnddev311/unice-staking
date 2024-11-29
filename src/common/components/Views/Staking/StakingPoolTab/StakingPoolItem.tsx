@@ -172,6 +172,7 @@ const StakingPoolItem: React.FunctionComponent<{
               if (!infoPool || infoPool.some((pool: any) => !pool || !pool.result)) {
                 return '0 UNICE';
               }
+              // console.log('selectedItem', selectedItem);
 
               const poolIndex =
                 ENV === envNane.TESTNET
