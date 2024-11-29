@@ -5,8 +5,8 @@ export const enum envNane {
 }
 
 // export const ENV = process.env.CURRENT_NETWORK;
-// export const ENV: any = envNane.MAINNET;
-export const ENV: envNane = envNane.TESTNET;
+export const ENV: any = envNane.MAINNET;
+// export const ENV: envNane = envNane.TESTNET;
 
 export const config = {
   API_ENDPOINT_URL: 'https://staking-api.unicelab.io/',
@@ -25,7 +25,7 @@ export const tokenAddress =
 export const contractAddress =
   ENV === envNane.TESTNET ? '0xDe86488e46ACBe88D9e352296419d6EC7E800C1F' : '0x0a06EF3CB550eea678C2b1D329e685a902324Fe5';
 export const contractFrensAddress =
-  ENV === envNane.TESTNET ? '0x56B6eE96a96F597D3BB633695d2A0F1e9c0F1ECf' : '0x0a06EF3CB550eea678C2b1D329e685a902324Fe5';
+  ENV === envNane.TESTNET ? '0x56B6eE96a96F597D3BB633695d2A0F1e9c0F1ECf' : '0x417756Bf8D03e8190c7D73B31A0EF4F2210bd87D';
 
 //Mainnet
 // export const tokenAddress = '0xA0CF89eE581313D84d28409Eb6BB1D1F9B55d410';
