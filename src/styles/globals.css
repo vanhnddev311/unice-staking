@@ -460,7 +460,7 @@ body::-webkit-scrollbar {
 }
 
 .ant-tooltip > .ant-tooltip-content > .ant-tooltip-inner {
-    width: 208px;
+    width: 80px;
     font-size: 14px;
     text-align: center;
     padding: 8px !important;

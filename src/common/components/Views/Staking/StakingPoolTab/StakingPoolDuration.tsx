@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface Props {
   poolIndex: number;
@@ -8,6 +8,7 @@ interface Props {
   pools: any;
   pool: any;
   setPoolSelected: (value: any) => void;
+  selectedItem: any;
   handleSelectItems: (poolName: any, selectedId: any) => void;
   handleSelectDuration: (poolId: number, duration: any) => void;
 }
@@ -19,16 +20,11 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
   pools,
   pool,
   setPoolSelected,
+  selectedItem,
   handleSelectItems,
   handleSelectDuration,
 }) => {
   // const childPools: any[] = pool?.items;
-  const [poolAddress, setPoolAddress] = useState<string>();
-
-  useEffect(() => {
-    if (!poolAddress) setPoolAddress(pools[0]?.contract_address);
-    setPoolSelected(pools?.find((pool: any) => pool.contract_address == poolAddress));
-  }, [poolAddress, pools]);
 
   const handleSelect = (poolIndex: number, itemIndex: number, duration: number) => {
     const selectedPool = totalPool[poolIndex].est_apr[itemIndex];
@@ -46,7 +42,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
       },
     ];
 
-    setPoolSelected(result);
+    // setPoolSelected(result);
   };
 
   return (
@@ -59,13 +55,12 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
               handleSelectItems(poolName, pool?.id);
               handleSelectDuration(poolIndex, pool?.time);
               handleSelect(poolIndex, index, pool?.time);
-              setPoolAddress(pool?.contract_address);
               e.stopPropagation();
             }}
             className={classNames(
               'relative flex justify-center items-center w-[32px] h-[32px] bg-[#393C46] border-[2px] border-[#393C46] rounded-[4px] text-[#fff] text-sm font-semibold cursor-pointer',
               {
-                'border-[2px] border-[#4A7DFF]': poolAddress === pool?.contract_address,
+                'border-[2px] border-[#4A7DFF]': selectedItem?.contract_address == pool?.contract_address,
               },
             )}
           >

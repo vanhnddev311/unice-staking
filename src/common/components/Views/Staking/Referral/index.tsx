@@ -6,7 +6,7 @@ import { AppContext } from '@/common/providers/contexts';
 import { postReferral } from '@/common/services/login';
 import { copyToClipboard, ellipseAddress, formatNumber } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Button, Col, Input, notification, Row, Select } from 'antd';
+import { Button, Col, Input, notification, Row, Select, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -134,12 +134,14 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
                 <div className={'text-[#717681]'}>My Referral Code</div>
                 <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
                   {userInfo?.referralCode ?? '--'}{' '}
-                  <span
-                    onClick={() => handleCopy(userInfo?.referralCode as string)}
-                    className={`${!isConnected && 'hidden'} cursor-pointer`}
-                  >
-                    <CopyIcon />
-                  </span>
+                  <Tooltip className={''} title={copyText}>
+                    <span
+                      onClick={() => handleCopy(userInfo?.referralCode as string)}
+                      className={`${!isConnected && 'hidden'} cursor-pointer`}
+                    >
+                      <CopyIcon />
+                    </span>
+                  </Tooltip>
                 </div>
               </div>
               <div className={'w-full'}>
@@ -150,18 +152,20 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
                     : ENV == envNane.TESTNET
                       ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
                       : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`}
-                  <span
-                    onClick={() =>
-                      handleCopy(
-                        ENV == envNane.TESTNET
-                          ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
-                          : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`,
-                      )
-                    }
-                    className={`${!isConnected && 'hidden'} cursor-pointer`}
-                  >
-                    <CopyIcon />
-                  </span>
+                  <Tooltip className={''} title={copyText}>
+                    <span
+                      onClick={() =>
+                        handleCopy(
+                          ENV == envNane.TESTNET
+                            ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
+                            : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`,
+                        )
+                      }
+                      className={`${!isConnected && 'hidden'} cursor-pointer`}
+                    >
+                      <CopyIcon />
+                    </span>
+                  </Tooltip>
                 </div>
               </div>
             </div>

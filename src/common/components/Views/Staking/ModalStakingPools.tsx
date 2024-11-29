@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 interface Props {
   isModalOpen: boolean;
   loading: boolean;
+  poolIndex: any;
   totalPool: any;
   stakeInfo: any;
   poolInfo: any;
@@ -31,13 +32,17 @@ interface Props {
   handleUnStake: (amount: number, pool: any) => void;
   handleClose: () => void;
   selectedItem: any;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
   selectedPool: any;
   setSelectedPool: (val: any) => void;
+  infoPool: any;
+  infoPool2: any;
 }
 
 const ModalStakingPools: React.FunctionComponent<Props> = ({
   isModalOpen,
   loading,
+  poolIndex,
   totalPool,
   stakeInfo,
   poolInfo,
@@ -61,7 +66,10 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   handleClose,
   selectedItem,
   selectedPool,
+  handleSelectItems,
   setSelectedPool,
+  infoPool,
+  infoPool2,
 }) => {
   const [tabStaking, setTabStaking] = useState<string>('1');
   const [poolAddress, setPoolAdress] = useState<string>('');
@@ -150,8 +158,8 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               Stake
             </div>
             <div
-              // onClick={() => setTabStaking('2')}
-              className={`pointer-events-none w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
+              onClick={() => setTabStaking('2')}
+              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
             >
               Unstake
             </div>
@@ -159,6 +167,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
           {tabStaking == '1' ? (
             <StakingTab
               loading={loading}
+              poolName={totalPool?.pool_name}
               totalPool={totalPool}
               stakeInfo={stakeInfoOfPoolSelected!}
               amount={amountStake}
@@ -174,11 +183,14 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               stakeToken={stakeToken}
               onChangeAmount={onChangeAmountStake}
               handleStake={handleStake}
+              handleSelectItems={handleSelectItems}
               setSelectedPool={setSelectedPool}
             />
           ) : (
             <UnStakingTab
               loading={loading}
+              poolIndex={poolIndex}
+              poolName={totalPool?.pool_name}
               totalPool={totalPool}
               stakeInfo={stakeInfoOfPoolSelected!}
               listPool={poolInfo}
@@ -200,6 +212,10 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               onChangeAmount={onChangeAmountUnStake}
               handleUnStake={handleUnStake}
               setSelectedPool={setSelectedPool}
+              handleSelectItems={handleSelectItems}
+              selectedItem={selectedItem}
+              infoPool={infoPool}
+              infoPool2={infoPool2}
             />
           )}
         </Col>

@@ -42,14 +42,16 @@ const StakingPoolItem: React.FunctionComponent<{
     handleSelectDuration(index, pool?.est_apr[0]?.time);
   }, [pools]);
 
-  console.log('infoinfo', infoPool, infoPool2);
-
   return (
     <section>
       <div className={'flex flex-col sm:hidden gap-3 font-medium rounded-[16px] bg-[#23252E] p-4'}>
         <div className={'flex justify-between items-center mb-2'}>
-          <div>
-            <div className={'text-[#fff] text-base font-bold'}>{pool?.name}</div>
+          <div className={'flex items-center gap-3'}>
+            <Image src={require('@/common/assets/images/unice-logo-icon.png')} alt={''} className={'w-[40px]'} />
+            <div>
+              <div className={'font-bold'}>{pool?.pool_name}</div>
+              <div className={'text-sm text-[#FFFFFF80]'}>UNICE</div>
+            </div>
           </div>
           <div className={'apr-text text-base font-bold'}>
             {pools?.find((apr: any) => apr.time === selectedDurations[index])?.value || 0}%
@@ -105,13 +107,14 @@ const StakingPoolItem: React.FunctionComponent<{
           <div className={'text-[#fff] font-medium'}>Unlimited</div>
         </div>
         <div className={'flex justify-between'}>
-          <div className={'text-[#717681]'}>Duration</div>
+          <div className={'text-[#717681]'}>Duration (months)</div>
           <StakingPoolDuration
             poolIndex={index}
             poolName={pool?.name}
             totalPool={totalPool}
             pools={pools}
             pool={pool}
+            selectedItem={selectedItem}
             setPoolSelected={setSelectedPool}
             handleSelectItems={handleSelectItems}
             handleSelectDuration={handleSelectDuration}
@@ -153,6 +156,7 @@ const StakingPoolItem: React.FunctionComponent<{
               totalPool={totalPool}
               pools={pools}
               pool={pool}
+              selectedItem={selectedItem}
               setPoolSelected={setSelectedPool}
               handleSelectItems={handleSelectItems}
               handleSelectDuration={handleSelectDuration}

@@ -1,15 +1,17 @@
 import InputCurrency from '@/common/components/common-components/InputCureency';
-import { DEFAULT_DECIMALS, lockCooldownFormat, pool182Address, pool91Address } from '@/common/consts';
+import { ENV, envNane, lockCooldownFormat } from '@/common/consts';
 import { formatNumber } from '@/utils';
-import { Button, Steps } from 'antd';
+import { Button } from 'antd';
 import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
 import moment from 'moment/moment';
 import Image from 'next/image';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 interface Props {
   loading: boolean;
+  poolIndex: any;
+  poolName: string;
   totalPool: any;
   stakeInfo: StakeInfo;
   listPool: any[];
@@ -22,6 +24,7 @@ interface Props {
   validate: string;
   balance: number | string;
   setBalanceStaked: (value: any) => void;
+  selectedItem: any;
   stakeToken: Token;
   stakedAmount: number;
   timeExpired: any;
@@ -31,11 +34,15 @@ interface Props {
   onChangeAmount: (value: string) => void;
   handleUnStake: (amount: number, pool: any) => void;
   setSelectedPool: (val: any) => void;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
+  infoPool: any;
+  infoPool2: any;
 }
 
 const UnStakingTab: React.FunctionComponent<Props> = ({
   stakeInfo,
   totalPool,
+  poolIndex,
   listPool,
   poolInfo,
   userPoolInfo,
@@ -53,13 +60,18 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
   onChangeAmount,
   handleUnStake,
   setSelectedPool,
+  selectedItem,
+  handleSelectItems,
+  poolName,
+  infoPool2,
+  infoPool,
 }) => {
   useEffect(() => {
     setBalanceStaked(stakedAmount);
   }, [stakeInfo]);
 
   const unstakeTime = useMemo(() => {
-    return moment.unix(BigNumber(userPoolInfo[3]).toNumber());
+    return moment.unix(BigNumber(userPoolInfo?.[3]).toNumber());
   }, [userPoolInfo]);
 
   const lockTimeFormat = useMemo(() => {
@@ -94,6 +106,55 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
     setTimeExpired(lockTimeFormat);
   }, [lockTimeFormat]);
 
+  const currentPool = useMemo(() => {
+    return selectedItem?.find((item: any) => item?.pool_name == totalPool?.pool_name)?.item;
+  }, [selectedItem, totalPool]);
+
+  const selectedItem1 = useMemo(() => {
+    return poolIndex == 0 ? selectedItem[0]?.item : selectedItem[1]?.item;
+  }, [poolIndex, selectedItem]);
+
+  const balanceStaked = useMemo(() => {
+    if (!infoPool || infoPool.some((pool: any) => !pool || !pool.result)) {
+      return '0 UNICE';
+    }
+
+    const poolsIndex =
+      ENV === envNane.TESTNET
+        ? selectedItem1?.id == '6'
+          ? 0
+          : selectedItem1?.id == '7'
+            ? 1
+            : 2
+        : selectedItem1?.id == '2'
+          ? 0
+          : selectedItem1?.id == '3'
+            ? 1
+            : 2;
+
+    const poolsIndex2 =
+      ENV === envNane.TESTNET
+        ? selectedItem1?.id == '3'
+          ? 0
+          : selectedItem1?.id == '4'
+            ? 1
+            : 2
+        : selectedItem1?.id == '2'
+          ? 0
+          : selectedItem1?.id == '3'
+            ? 1
+            : 2;
+
+    const poolResult =
+      poolIndex == 0
+        ? ((infoPool2?.[poolsIndex2]?.result as number[]) ?? 0)
+        : ((infoPool?.[poolsIndex]?.result as number[]) ?? 0);
+
+    const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
+
+    return Number(formattedValue);
+  }, [infoPool, infoPool2, poolIndex, selectedItem1]);
+
   return (
     <div className={'flex flex-col gap-6'}>
       <div className={'flex flex-col text-base text-[#8E929B] gap-4'}>
@@ -105,22 +166,23 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
                 <div
                   key={pool?.id}
                   onClick={() => {
+                    handleSelectItems(poolName, pool?.id);
                     setPoolAddress(pool?.contract_address);
                     setSelectedPool(pool);
                     // setPoolSelected();
                   }}
                   className={classNames(
-                    'relative bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
+                    'w-[41px] text-center relative bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
                     {
-                      'border border-[#4A7DFF]': poolAddress === pool?.contract_address,
+                      'border border-[#4A7DFF]': currentPool?.contract_address === pool?.contract_address,
                     },
                   )}
                 >
-                  {pool?.est_apr[0]?.time}
+                  {pool?.time}
                   <Image
                     src={require('@/common/assets/images/staking/selected-pool-icon.png')}
                     alt={''}
-                    className={`${poolAddress == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
+                    className={`${currentPool?.contract_address === pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
                   />
                 </div>
               );
@@ -129,7 +191,7 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
         </div>
         <div className={'flex justify-between text-base'}>
           <div className={'text-[#8E929B] font-normal'}>APR</div>
-          <div className={'apr-text font-bold'}>{formatNumber(Number(poolInfo?.est_apr[0]?.value))}%</div>
+          <div className={'apr-text font-bold'}>{formatNumber(Number(currentPool?.value))}%</div>
         </div>
       </div>
       <div>
@@ -137,7 +199,7 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
           label={'Unstake amount'}
           subTitle={'Staked'}
           enableUseMax={true}
-          balance={Number(balance ?? 0) / Math.pow(10, 18)}
+          balance={Number(balanceStaked ?? 0)}
           token={stakeToken}
           amount={amount}
           isAllowDecimal={true}

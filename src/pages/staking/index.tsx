@@ -676,6 +676,7 @@ const Staking: React.FunctionComponent = () => {
         <ModalStakingPools
           isModalOpen={!!showModalStaking}
           loading={loadingStaking}
+          poolIndex={poolIndex}
           totalPool={poolIndex == 0 ? poolInfo1[0] : poolInfo1[1]}
           stakeInfo={stakeInfo as any}
           poolInfo={selectedParentPool?.est_apr}
@@ -699,8 +700,11 @@ const Staking: React.FunctionComponent = () => {
           onChangeAmountStake={onChangeAmountStake}
           onChangeAmountUnStake={onChangeAmountUnStake}
           selectedItem={selectedItems}
+          handleSelectItems={handleSelectItems}
           selectedPool={selectedPool}
           setSelectedPool={setSelectedPool}
+          infoPool={infoPool}
+          infoPool2={infoPool2}
         />
         <ModalStaking
           amount={Number(amountStake)}

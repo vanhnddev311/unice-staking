@@ -396,7 +396,7 @@ td.ant-table-column-sort {
 
 .copy-tooltip {
     .ant-tooltip-inner {
-        width: 100px !important;
+        width: 80px !important;
         border-radius: 8px;
         background: #FFF;
         color: #89898B;
@@ -408,7 +408,7 @@ td.ant-table-column-sort {
 }
 
 .ant-tooltip-inner {
-    width: 312px !important;
+    /*width: 312px !important;*/
     border-radius: 8px;
     color: #89898B;
 }

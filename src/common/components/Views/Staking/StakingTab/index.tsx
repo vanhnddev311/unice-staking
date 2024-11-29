@@ -1,24 +1,17 @@
 import InputCurrency from '@/common/components/common-components/InputCureency';
-import {
-  contractAddress,
-  DEFAULT_DECIMALS,
-  lockCooldownFormat,
-  MAX_INT,
-  pool182Address,
-  pool91Address,
-  tokenAddress,
-} from '@/common/consts';
+import { tokenAddress } from '@/common/consts';
 import tokenABI from '@/common/contracts/abis/token.json';
 import { formatNumber } from '@/utils';
-import { Button, Steps } from 'antd';
+import { Button } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
-import { useAccount, useClient, useReadContract, useWriteContract } from 'wagmi';
+import React, { useMemo } from 'react';
+import { useAccount, useClient, useReadContract } from 'wagmi';
 
 interface Props {
   loading: boolean;
+  poolName: string;
   totalPool: any;
   stakeInfo: StakeInfo;
   amount: string;
@@ -35,10 +28,12 @@ interface Props {
   onChangeAmount: (value: string) => void;
   handleStake: (pool: any, poolId: string) => void;
   setSelectedPool: (val: any) => void;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
 }
 
 const StakingTab: React.FunctionComponent<Props> = ({
   totalPool,
+  poolName,
   amount,
   listPool,
   poolInfo,
@@ -52,6 +47,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
   onChangeAmount,
   handleStake,
   setSelectedPool,
+  handleSelectItems,
 }) => {
   const { address } = useAccount();
   const client = useClient();
@@ -79,6 +75,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                 <div
                   key={pool?.id}
                   onClick={() => {
+                    handleSelectItems(poolName, pool?.id);
                     setPoolAddress(pool?.contract_address);
                     setSelectedPool(pool);
                     // setPoolSelected();
