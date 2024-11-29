@@ -2,8 +2,8 @@ import StakingTab from '@/common/components/Views/Staking/StakingTab';
 import UnStakingTab from '@/common/components/Views/Staking/UnStakingTab';
 import { CloseIcon } from '@/common/components/icon/common';
 import { ENV, envNane } from '@/common/consts';
-import { Col, Modal, Row, Tabs } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Col, Modal, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   isModalOpen: boolean;
@@ -30,6 +30,7 @@ interface Props {
   handleStake: (pool: any, poolId: string) => void;
   handleUnStake: (amount: number, pool: any) => void;
   handleClose: () => void;
+  selectedItem: any;
   selectedPool: any;
   setSelectedPool: (val: any) => void;
 }
@@ -58,6 +59,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   handleStake,
   handleUnStake,
   handleClose,
+  selectedItem,
   selectedPool,
   setSelectedPool,
 }) => {
@@ -162,6 +164,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               amount={amountStake}
               listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
+              selectedItem={selectedItem}
               selectedPool={selectedPool}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}

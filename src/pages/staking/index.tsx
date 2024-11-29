@@ -697,6 +697,7 @@ const Staking: React.FunctionComponent = () => {
           setValidate={setValidate}
           onChangeAmountStake={onChangeAmountStake}
           onChangeAmountUnStake={onChangeAmountUnStake}
+          selectedItem={selectedItems}
           selectedPool={selectedPool}
           setSelectedPool={setSelectedPool}
         />

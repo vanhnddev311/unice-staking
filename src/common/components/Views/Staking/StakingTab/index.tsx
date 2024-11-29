@@ -23,6 +23,7 @@ interface Props {
   stakeInfo: StakeInfo;
   amount: string;
   listPool: any[];
+  selectedItem: any;
   selectedPool: any;
   poolInfo: any;
   poolAddress: string;
@@ -41,8 +42,8 @@ const StakingTab: React.FunctionComponent<Props> = ({
   amount,
   listPool,
   poolInfo,
+  selectedItem,
   selectedPool,
-  poolAddress,
   setPoolAddress,
   validate,
   setValidate,
@@ -62,7 +63,10 @@ const StakingTab: React.FunctionComponent<Props> = ({
     args: [address],
     chainId: client?.chain?.id ?? 1,
   });
-  console.log('totalPool', totalPool);
+
+  const currentPool = useMemo(() => {
+    return selectedItem?.find((item: any) => item?.pool_name == totalPool?.pool_name)?.item;
+  }, [selectedItem, totalPool]);
 
   return (
     <div className={'flex flex-col gap-6'}>
@@ -82,7 +86,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                   className={classNames(
                     'w-[41px] relative text-center bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
                     {
-                      'border border-[#4A7DFF]': selectedPool?.contract_address === pool?.contract_address,
+                      'border border-[#4A7DFF]': currentPool?.contract_address === pool?.contract_address,
                     },
                   )}
                 >
@@ -90,7 +94,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                   <Image
                     src={require('@/common/assets/images/staking/selected-pool-icon.png')}
                     alt={''}
-                    className={`${selectedPool?.contract_address == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
+                    className={`${currentPool?.contract_address == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
                   />
                 </div>
               );
@@ -99,7 +103,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
         </div>
         <div className={'flex justify-between text-base'}>
           <div className={'text-[#8E929B] font-normal'}>APR</div>
-          <div className={'apr-text font-bold'}>{formatNumber(Number(selectedPool?.value))}%</div>
+          <div className={'apr-text font-bold'}>{formatNumber(Number(currentPool?.value))}%</div>
         </div>
       </div>
       <div>

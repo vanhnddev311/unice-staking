@@ -96,7 +96,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               >
                 <div className={'text-[#717681]'}>Total Referrals</div>
                 <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
-                  {userInfo?.friendRefer ?? 0} friends
+                  {userInfo?.friendRefer ?? 0} {Number(userInfo?.friendRefer) >= 2 ? 'friends' : 'friend'}
                 </div>
               </Col>
               <Col
@@ -144,7 +144,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               </div>
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Link</div>
-                <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
+                <div className={'sm:h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
                   {!isConnected
                     ? '--'
                     : ENV == envNane.TESTNET
