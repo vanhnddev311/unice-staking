@@ -23,7 +23,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (!poolAddress) setPoolAddress(pools[0]?.contract_address);
-    setPoolSelected(pools?.find((pool) => pool.contract_address == poolAddress));
+    setPoolSelected(pools?.find((pool: any) => pool.contract_address == poolAddress));
   }, [poolAddress, pools]);
 
   const handleSelect = (poolIndex: number, itemIndex: number, duration: number) => {
@@ -47,7 +47,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
 
   return (
     <div className={'flex items-center gap-2'}>
-      {pools?.map((pool: any, index) => {
+      {pools?.map((pool: any, index: number) => {
         return (
           <div
             key={pool?.id}
