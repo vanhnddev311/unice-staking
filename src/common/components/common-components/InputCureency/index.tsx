@@ -51,7 +51,12 @@ const InputCurrency: React.FunctionComponent<InputProps> = ({
   const { setShow: setShowModalTokens } = useModal();
 
   const useMaxBalance = () => {
-    enableUseMax && !!handleChange && handleChange?.(String(MaxBalance));
+    if (enableUseMax && !!handleChange) {
+      const balanceString = String(MaxBalance);
+      const [integerPart, decimalPart] = balanceString.split('.');
+      const truncatedBalance = decimalPart ? `${integerPart}.${decimalPart[0]}` : integerPart;
+      handleChange(truncatedBalance);
+    }
   };
 
   const MaxBalance = useMemo(() => {

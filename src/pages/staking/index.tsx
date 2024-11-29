@@ -314,15 +314,11 @@ const Staking: React.FunctionComponent = () => {
 
   const validateAmountStake = () => {
     let isSuccess = false;
-    console.log('balance', balance);
     if (!amountStake || Number(amountStake) === 0) {
       setValidate('Amount is required!');
       isSuccess = false;
     } else if (Number(amountStake) > Number(balance)) {
       setValidate('Insufficient balance!');
-      isSuccess = false;
-    } else if (Number(amountStake) < 1) {
-      setValidate('You can only stake a minimum of 1 UNICE');
       isSuccess = false;
     } else {
       setValidate('');
@@ -347,7 +343,6 @@ const Staking: React.FunctionComponent = () => {
   };
 
   const stakeAction = async (pool: any) => {
-    console.log('pppppp', pool);
     if (
       (poolIndex == 1 && Number(amountStake) > Number(allowanceAmt)) ||
       (poolIndex == 0 && Number(amountStake) > Number(allowanceFrensAmt))
