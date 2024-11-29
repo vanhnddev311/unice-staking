@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 interface Props {
   poolIndex: number;
+  totalPool: any;
   pools: any;
   pool: any;
   setPoolSelected: (value: any) => void;
@@ -11,36 +12,33 @@ interface Props {
 
 const StakingPoolDuration: React.FunctionComponent<Props> = ({
   poolIndex,
+  totalPool,
   pools,
   pool,
   setPoolSelected,
   handleSelectDuration,
 }) => {
-  const childPools: any[] = pool?.items;
+  // const childPools: any[] = pool?.items;
   const [poolAddress, setPoolAddress] = useState<string>();
 
   useEffect(() => {
-    if (!poolAddress) setPoolAddress(childPools[0]?.contract_address);
-    setPoolSelected(childPools?.find((pool) => pool.contract_address == poolAddress));
-  }, [poolAddress, childPools]);
+    if (!poolAddress) setPoolAddress(pools[0]?.contract_address);
+    setPoolSelected(pools?.find((pool) => pool.contract_address == poolAddress));
+  }, [poolAddress, pools]);
 
   const handleSelect = (poolIndex: number, itemIndex: number, duration: number) => {
-    // Lấy thông tin của pool đã chọn
-    const selectedPool = pools[poolIndex].items[itemIndex];
-    const selectedPoolInfo = selectedPool.est_apr.find((apr: any) => apr.time === duration);
+    const selectedPool = totalPool[poolIndex].est_apr[itemIndex];
 
-    const defaultPool = poolIndex === 0 ? pools[1].items[0] : pools[0].items[0]; // Lấy pool con đầu tiên của pool khác
-    const defaultPoolInfo = defaultPool.est_apr[0]; // Chọn APR mặc định của pool từ pool khác
+    const defaultPool = poolIndex === 0 ? totalPool[1].est_apr[0] : totalPool[0].est_apr[0];
 
-    // Tạo kết quả đầu ra
     const result = [
       {
-        pool_name: selectedPool.pool_name,
-        apr: selectedPoolInfo?.value || 0,
+        pool: poolIndex,
+        apr: selectedPool?.value || 0,
       },
       {
-        pool_name: defaultPool.pool_name,
-        apr: defaultPoolInfo.value,
+        pool: poolIndex == 0 ? 1 : 0,
+        apr: defaultPool.value,
       },
     ];
 
@@ -49,13 +47,13 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
 
   return (
     <div className={'flex items-center gap-2'}>
-      {childPools?.map((pool: any, index) => {
+      {pools?.map((pool: any, index) => {
         return (
           <div
             key={pool?.id}
             onClick={(e) => {
-              handleSelectDuration(poolIndex, pool?.est_apr[0]?.time);
-              handleSelect(poolIndex, index, pool?.est_apr[0]?.time);
+              handleSelectDuration(poolIndex, pool?.time);
+              handleSelect(poolIndex, index, pool?.time);
               setPoolAddress(pool?.contract_address);
               e.stopPropagation();
             }}
@@ -66,7 +64,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
               },
             )}
           >
-            {pool?.est_apr[0]?.time}
+            {pool?.time}
             {/*<Image*/}
             {/*  src={require('@/common/assets/images/staking/selected-pool-icon.png')}*/}
             {/*  alt={''}*/}

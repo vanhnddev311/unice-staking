@@ -10,7 +10,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice }) => {
-  const { userInfo } = useContext(AppContext);
+  const { userInfo, refetchUserInfo } = useContext(AppContext);
   const [refCode, setRefCode] = useState();
   const [validate, setValidate] = useState({
     refCode: true,
@@ -57,6 +57,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
         placement: 'bottomRight',
         icon: <SuccessIconNoti />,
       });
+      refetchUserInfo();
     } catch (e: any) {
       console.log('e', e);
     }
@@ -92,7 +93,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               >
                 <div className={'text-[#717681]'}>Total Referrals</div>
                 <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
-                  {userInfo?.totalAmountReferrer ?? 0} friends
+                  {userInfo?.friendRefer ?? 0} friends
                 </div>
               </Col>
               <Col
@@ -104,7 +105,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               >
                 <div className={'text-[#717681]'}>Friends Staked</div>
                 <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
-                  {formatNumber(userInfo?.totalStaked ?? 0)} UNICE
+                  {formatNumber(userInfo?.totalFriendStaked ?? 0)} UNICE
                 </div>
               </Col>
               <Col
@@ -116,7 +117,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               >
                 <div className={'text-[#717681]'}>Total Commission</div>
                 <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
-                  {formatNumber(userInfo?.totalStaked * tokenPrice ?? 0)} USDT
+                  {formatNumber(userInfo?.totalFriendStaked * tokenPrice ?? 0)} USDT
                 </div>
               </Col>
             </Row>

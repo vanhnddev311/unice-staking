@@ -11,9 +11,9 @@ import tokenABI from '@/common/contracts/abis/token.json';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
 import { AppContext } from '@/common/providers/contexts';
-import { getPriceOfToken } from '@/common/services/staking';
+import { getPoolInfo, getPriceOfToken, postStakingData } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
-import { formatNumber } from '@/utils';
+import { formatNumber, formatRewardBalance } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Config, waitForTransactionReceipt } from '@wagmi/core';
 import { Popover } from 'antd';
@@ -75,7 +75,11 @@ const Staking: React.FunctionComponent = () => {
     type: 'COIN',
   };
 
-  const poolIds = ENV === envNane.TESTNET ? [6, 7, 8] : [2, 3, 4];
+  const { data: poolInfo1 = [] } = useQuery(['poolInfo1'], async () => {
+    const res = await getPoolInfo();
+    return res?.Data;
+  });
+  console.log('poolInfo1', poolInfo1);
 
   const { data: allowanceAmt, refetch: refetchAllowance } = useReadContract({
     abi: tokenABI,
@@ -333,14 +337,14 @@ const Staking: React.FunctionComponent = () => {
 
   const stakeAction = async (pool: any) => {
     if (
-      (poolIndex == 0 && Number(amountStake) > Number(allowanceAmt)) ||
-      (poolIndex == 1 && Number(amountStake) > Number(allowanceFrensAmt))
+      (poolIndex == 1 && Number(amountStake) > Number(allowanceAmt)) ||
+      (poolIndex == 0 && Number(amountStake) > Number(allowanceFrensAmt))
     ) {
       const hash = await writeContractAsync({
         address: tokenAddress,
         abi: tokenABI,
         functionName: 'approve',
-        args: [poolIndex == 0 ? contractAddress : contractFrensAddress, MAX_INT],
+        args: [poolIndex == 1 ? contractAddress : contractFrensAddress, MAX_INT],
         chainId: client?.chain?.id ?? 1,
       });
 
@@ -353,8 +357,8 @@ const Staking: React.FunctionComponent = () => {
     }
 
     const res = await writeContractAsync({
-      address: poolIndex == 0 ? contractAddress : contractFrensAddress,
-      abi: poolIndex == 0 ? abi : frensAbi,
+      address: poolIndex == 1 ? contractAddress : contractFrensAddress,
+      abi: poolIndex == 1 ? abi : frensAbi,
       functionName: 'stake',
       args: [pool?.id ?? 2, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
       chainId: client?.chain?.id ?? 1,
@@ -363,16 +367,23 @@ const Staking: React.FunctionComponent = () => {
     const transactionReceipt = await waitForTransactionReceipt(config as Config, {
       hash: res,
     });
+    return res;
   };
 
-  const handleStake = async (pool: any) => {
+  const handleStake = async (pool: any, poolId: string) => {
     if (!validateAmountStake()) return;
     setLoadingStaking(true);
     setStakeStatus(STATUS.PENDING);
     setShowStake(true);
 
     try {
-      await stakeAction(pool);
+      const hash = await stakeAction(pool);
+      await postStakingData({
+        pool_id: poolId?.toString(),
+        wallet: address,
+        amount: amountStake,
+        tx_hash: hash,
+      });
       setStakeStatus(STATUS.SUCCESS);
     } catch (e: any) {
       setStakeStatus(STATUS.FAIL);
@@ -581,13 +592,30 @@ const Staking: React.FunctionComponent = () => {
               <div className={'w-full flex sm:justify-center'}>
                 <div className={'w-full flex sm:flex-col justify-between sm:justify-start items-center gap-4'}>
                   <div>Staking Rewards</div>
-                  <Popover content={<StakingReward />} title="Staking reward">
+                  <Popover
+                    content={
+                      <StakingReward
+                        rewardPool1={
+                          (Number(reward1?.result ?? 0) + Number(reward2?.result ?? 0) + Number(reward3?.result ?? 0)) /
+                          Math.pow(10, 18)
+                        }
+                        rewardPool2={
+                          (Number(rewardFrens1?.result ?? 0) +
+                            Number(rewardFrens2?.result ?? 0) +
+                            Number(rewardFrens3?.result ?? 0)) /
+                          Math.pow(10, 18)
+                        }
+                        tokenPrice={tokenPrice}
+                      />
+                    }
+                    title="Staking reward"
+                  >
                     <div
                       className={
                         'relative w-fit apr-text text-base sm:text-2xl font-medium leading-[125%] cursor-pointer'
                       }
                     >
-                      {formatNumber((totalReward * tokenPrice) / Math.pow(10, 18), 4)} USDT
+                      {formatRewardBalance((totalReward * tokenPrice) / Math.pow(10, 18), 4)} USDT
                       <Image
                         src={require('@/common/assets/images/staking/Line 32.png')}
                         alt={''}
@@ -602,7 +630,7 @@ const Staking: React.FunctionComponent = () => {
           <Referral tokenPrice={tokenPrice} />
           <StakingPoolTabContent
             token={stakeToken1}
-            dataSource={poolInfo}
+            dataSource={poolInfo1}
             selectedPool={selectedPool}
             selectedDurations={selectedDurations}
             setSelectedParentPool={setSelectedParentPool}
@@ -618,9 +646,10 @@ const Staking: React.FunctionComponent = () => {
         <ModalStakingPools
           isModalOpen={!!showModalStaking}
           loading={loadingStaking}
+          totalPool={poolIndex == 0 ? poolInfo1[0] : poolInfo1[1]}
           stakeInfo={stakeInfo as any}
-          poolInfo={selectedParentPool}
-          userPoolInfo={infoPool ?? []}
+          poolInfo={selectedParentPool?.est_apr}
+          userPoolInfo={poolIndex == 0 ? infoPool2 : poolIndex == 1 ? infoPool : []}
           validate={validate}
           amountStake={amountStake}
           amountUnStake={amountUnStake}

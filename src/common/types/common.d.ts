@@ -21,12 +21,13 @@ type UserInfo = {
   updatedAt: string;
   id: string;
   rank: string;
-  totalAmountReferrer: number;
-  totalStaked: number;
+  friendRefer: string;
+  totalFriendStaked: number;
 };
 
 type AppContextState = {
   userInfo: UserInfo;
+  refetchUserInfo: () => void;
 };
 
 type Round = {

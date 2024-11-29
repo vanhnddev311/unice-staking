@@ -11,7 +11,7 @@ export interface WalletProviderProps {
 export const AppProvider: React.FunctionComponent<WalletProviderProps> = ({ children }) => {
   const { address } = useAccount();
 
-  const { data: userInfo } = useQuery(
+  const { data: userInfo, refetch: refetchUserInfo } = useQuery(
     ['userQuota', address],
     async () => {
       const { data } = await getUserInfo(address as string);
@@ -26,6 +26,7 @@ export const AppProvider: React.FunctionComponent<WalletProviderProps> = ({ chil
     <AppContext.Provider
       value={{
         userInfo,
+        refetchUserInfo,
       }}
     >
       {children}

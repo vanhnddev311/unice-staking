@@ -64,7 +64,8 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
               >
                 <StakingPoolItem
                   index={index}
-                  pools={dataSource}
+                  totalPool={dataSource}
+                  pools={item?.est_apr}
                   pool={item}
                   infoPool={infoPool}
                   infoPool2={infoPool2}

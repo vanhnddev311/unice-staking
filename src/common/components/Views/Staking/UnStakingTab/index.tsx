@@ -10,6 +10,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 interface Props {
   loading: boolean;
+  totalPool: any;
   stakeInfo: StakeInfo;
   listPool: any[];
   poolInfo: PollInfo;
@@ -34,6 +35,7 @@ interface Props {
 
 const UnStakingTab: React.FunctionComponent<Props> = ({
   stakeInfo,
+  totalPool,
   listPool,
   poolInfo,
   userPoolInfo,

@@ -8,6 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 interface Props {
   isModalOpen: boolean;
   loading: boolean;
+  totalPool: any;
   stakeInfo: any;
   poolInfo: any;
   userPoolInfo: any;
@@ -26,7 +27,7 @@ interface Props {
   setValidate: (value: string) => void;
   onChangeAmountStake: (value: string) => void;
   onChangeAmountUnStake: (value: string) => void;
-  handleStake: (pool: any) => void;
+  handleStake: (pool: any, poolId: string) => void;
   handleUnStake: (amount: number, pool: any) => void;
   handleClose: () => void;
   selectedPool: any;
@@ -36,6 +37,7 @@ interface Props {
 const ModalStakingPools: React.FunctionComponent<Props> = ({
   isModalOpen,
   loading,
+  totalPool,
   stakeInfo,
   poolInfo,
   userPoolInfo,
@@ -65,19 +67,19 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   const [userPoolSelectedInfo, setUserPoolSelectedInfo] = useState<any>();
   const [stakeInfoOfPoolSelected, setStakeInfoOfPoolSelected] = useState<StakeInfo>();
 
-  const listPoolSelected = useMemo(() => {
-    return poolInfo?.items;
-  }, [poolInfo]);
+  // const listPoolSelected = useMemo(() => {
+  //   return poolInfo?.items;
+  // }, [poolInfo]);
 
   useEffect(() => {
-    if (listPoolSelected) {
+    if (poolInfo) {
       if (!selectedPool) {
-        setPoolAdress(listPoolSelected[0]?.contract_address);
+        setPoolAdress(poolInfo[0]?.contract_address);
       } else {
         setPoolAdress(selectedPool.contract_address);
       }
     }
-  }, [listPoolSelected, selectedPool]);
+  }, [poolInfo, selectedPool]);
 
   // useEffect(() => {
   //   if (!isModalOpen) {
@@ -86,18 +88,14 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
   // }, [isModalOpen, listPoolSelected]);
 
   useEffect(() => {
-    if (listPoolSelected && poolAddress === listPoolSelected[0]?.contract_address) {
-      setPoolSelectedInfo(
-        listPoolSelected?.find((pool: any) => pool.contract_address === listPoolSelected[0]?.contract_address),
-      );
+    if (poolInfo && poolAddress === poolInfo[0]?.contract_address) {
+      setPoolSelectedInfo(poolInfo?.find((pool: any) => pool.contract_address === poolInfo[0]?.contract_address));
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool91Info);
     } else {
-      setPoolSelectedInfo(
-        listPoolSelected?.find((pool: any) => pool.contract_address === selectedPool?.contract_address),
-      );
+      setPoolSelectedInfo(poolInfo?.find((pool: any) => pool.contract_address === selectedPool?.contract_address));
       setStakeInfoOfPoolSelected(stakeInfo?.stakePool182Info);
     }
-  }, [listPoolSelected, poolAddress]);
+  }, [poolInfo, poolAddress, selectedPool]);
 
   useEffect(() => {
     if (
@@ -150,8 +148,8 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               Stake
             </div>
             <div
-              onClick={() => setTabStaking('2')}
-              className={`w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
+              // onClick={() => setTabStaking('2')}
+              className={`pointer-events-none w-full h-[36px] flex justify-center items-center rounded-[8px] cursor-pointer ${tabStaking == '2' ? 'bg-[#DCE1FE1A]' : 'bg-transparent'}`}
             >
               Unstake
             </div>
@@ -159,9 +157,10 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
           {tabStaking == '1' ? (
             <StakingTab
               loading={loading}
+              totalPool={totalPool}
               stakeInfo={stakeInfoOfPoolSelected!}
               amount={amountStake}
-              listPool={poolInfo?.items}
+              listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}
@@ -176,8 +175,9 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
           ) : (
             <UnStakingTab
               loading={loading}
+              totalPool={totalPool}
               stakeInfo={stakeInfoOfPoolSelected!}
-              listPool={poolInfo?.items}
+              listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
               userPoolInfo={userPoolSelectedInfo}
               poolAddress={poolAddress}
