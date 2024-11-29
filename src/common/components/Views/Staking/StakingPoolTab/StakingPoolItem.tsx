@@ -110,7 +110,7 @@ const StakingPoolItem: React.FunctionComponent<{
           <div className={'text-[#717681]'}>Duration (months)</div>
           <StakingPoolDuration
             poolIndex={index}
-            poolName={pool?.name}
+            poolName={pool?.pool_name}
             totalPool={totalPool}
             pools={pools}
             pool={pool}

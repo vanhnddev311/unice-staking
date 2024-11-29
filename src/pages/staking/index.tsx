@@ -347,6 +347,7 @@ const Staking: React.FunctionComponent = () => {
   };
 
   const stakeAction = async (pool: any) => {
+    console.log('pppppp', pool);
     if (
       (poolIndex == 1 && Number(amountStake) > Number(allowanceAmt)) ||
       (poolIndex == 0 && Number(amountStake) > Number(allowanceFrensAmt))

@@ -151,14 +151,14 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
                     ? '--'
                     : ENV == envNane.TESTNET
                       ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
-                      : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`}
+                      : `https://stake.unicelab.io/staking?r=${userInfo?.referralCode}`}
                   <Tooltip className={''} title={copyText}>
                     <span
                       onClick={() =>
                         handleCopy(
                           ENV == envNane.TESTNET
                             ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
-                            : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`,
+                            : `https://stake.unicelab.io/staking?r=${userInfo?.referralCode}`,
                         )
                       }
                       className={`${!isConnected && 'hidden'} cursor-pointer`}
