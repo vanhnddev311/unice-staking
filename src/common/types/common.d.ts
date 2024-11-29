@@ -20,6 +20,9 @@ type UserInfo = {
   createdAt: string;
   updatedAt: string;
   id: string;
+  rank: string;
+  totalAmountReferrer: number;
+  totalStaked: number;
 };
 
 type AppContextState = {

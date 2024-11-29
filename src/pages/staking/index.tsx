@@ -10,6 +10,7 @@ import { default as abi, default as frensAbi } from '@/common/contracts/abis/con
 import tokenABI from '@/common/contracts/abis/token.json';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
+import { AppContext } from '@/common/providers/contexts';
 import { getPriceOfToken } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
 import { formatNumber } from '@/utils';
@@ -19,7 +20,7 @@ import { Popover } from 'antd';
 import BigNumber from 'bignumber.js';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useAccount, useClient, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
 const Staking: React.FunctionComponent = () => {
@@ -46,6 +47,7 @@ const Staking: React.FunctionComponent = () => {
   const [selectedParentPool, setSelectedParentPool] = useState<any>(null);
   const [selectedDurations, setSelectedDurations] = useState({});
 
+  const { userInfo } = useContext(AppContext);
   const { show: showModalStaking, setShow: setShowModalStaking, toggle: toggleShowModalStaking } = useModal();
   const { show: showStake, setShow: setShowStake, toggle: toggleShowStake } = useModal();
   const { show: showUnStake, setShow: setShowUnStake, toggle: toggleShowUnStake } = useModal();
@@ -91,7 +93,7 @@ const Staking: React.FunctionComponent = () => {
     chainId: client?.chain?.id ?? 1,
   });
 
-  const { data: infoPool } = useReadContracts({
+  const { data: infoPool, refetch: refetchDataPool1 } = useReadContracts({
     contracts: [
       {
         abi,
@@ -117,7 +119,7 @@ const Staking: React.FunctionComponent = () => {
     ],
   });
 
-  const { data: infoPool2 } = useReadContracts({
+  const { data: infoPool2, refetch: refetchDataPool2 } = useReadContracts({
     contracts: [
       {
         abi,
@@ -142,6 +144,13 @@ const Staking: React.FunctionComponent = () => {
       },
     ],
   });
+
+  useEffect(() => {
+    if (address) {
+      refetchDataPool1();
+      refetchDataPool2();
+    }
+  }, [address]);
 
   const { data: pendingReward } = useReadContract({
     abi,
@@ -221,13 +230,16 @@ const Staking: React.FunctionComponent = () => {
     if (!infoPool) {
       console.error('infoPool is undefined');
       return;
+    } else if (!infoPool2) {
+      console.error('infoPool2 is undefined');
+      return;
     }
 
-    if (infoPool.some((pool) => !pool || !pool.result)) {
+    if (infoPool.some((pool) => !pool || !pool.result) || infoPool2.some((pool) => !pool || !pool.result)) {
       console.error('Some pools are undefined or missing result:', infoPool);
       return;
     }
-  }, [infoPool]);
+  }, [infoPool, infoPool2]);
 
   useEffect(() => {
     if (infoPool && infoPool2) {
@@ -337,6 +349,7 @@ const Staking: React.FunctionComponent = () => {
         confirmations: 3,
       });
       await refetchAllowance();
+      await refetchAllowanceFrens();
     }
 
     const res = await writeContractAsync({
@@ -521,22 +534,30 @@ const Staking: React.FunctionComponent = () => {
             </div>
             <div
               className={
-                'w-full sm:h-[140px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] p-4 sm:p-8'
+                'w-full sm:h-[140px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] p-4 sm:p-8 gap-6 sm:gap-0'
               }
             >
-              <div className={'w-full flex justify-center'}>
-                <div className={'flex flex-col items-center text-[#717681] gap-4'}>
+              <div className={'w-full flex sm:justify-center'}>
+                <div
+                  className={
+                    'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'
+                  }
+                >
                   <div>Your rank</div>
-                  <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
-                    {formatNumber(stakedAmount / Math.pow(10, 18), 4)}
+                  <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
+                    {userInfo?.rank ? `#${userInfo.rank}` : '--'}
                   </div>
                 </div>
               </div>
-              <div className={'px-4'}>
+              <div className={'hidden sm:block px-4'}>
                 <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
               </div>
-              <div className={'w-full flex justify-center'}>
-                <div className={'flex flex-col items-center text-[#717681] gap-4'}>
+              <div className={'w-full flex sm:justify-center'}>
+                <div
+                  className={
+                    'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'
+                  }
+                >
                   <div>UNICE Staked</div>
                   <div className={'flex items-center gap-2'}>
                     <Image
@@ -544,7 +565,7 @@ const Staking: React.FunctionComponent = () => {
                       alt={''}
                       className={'w-[24px]'}
                     />
-                    <div className={'text-[#fff] text-2xl font-medium leading-[125%]'}>
+                    <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
                       {formatNumber(stakedAmount / Math.pow(10, 18), 4)} UNICE
                     </div>
                     {/*<div className={'mt-2'}>*/}
@@ -554,14 +575,18 @@ const Staking: React.FunctionComponent = () => {
                   </div>
                 </div>
               </div>
-              <div className={'px-4'}>
+              <div className={'hidden sm:block px-4'}>
                 <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
               </div>
-              <div className={'w-full flex justify-center'}>
-                <div className={'flex flex-col text-[#717681] gap-4'}>
+              <div className={'w-full flex sm:justify-center'}>
+                <div className={'w-full flex sm:flex-col justify-between sm:justify-start items-center gap-4'}>
                   <div>Staking Rewards</div>
                   <Popover content={<StakingReward />} title="Staking reward">
-                    <div className={'relative w-fit apr-text text-2xl font-medium leading-[125%] cursor-pointer'}>
+                    <div
+                      className={
+                        'relative w-fit apr-text text-base sm:text-2xl font-medium leading-[125%] cursor-pointer'
+                      }
+                    >
                       {formatNumber((totalReward * tokenPrice) / Math.pow(10, 18), 4)} USDT
                       <Image
                         src={require('@/common/assets/images/staking/Line 32.png')}
@@ -574,7 +599,7 @@ const Staking: React.FunctionComponent = () => {
               </div>
             </div>
           </div>
-          <Referral />
+          <Referral tokenPrice={tokenPrice} />
           <StakingPoolTabContent
             token={stakeToken1}
             dataSource={poolInfo}

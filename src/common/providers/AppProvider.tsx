@@ -11,10 +11,16 @@ export interface WalletProviderProps {
 export const AppProvider: React.FunctionComponent<WalletProviderProps> = ({ children }) => {
   const { address } = useAccount();
 
-  const { data: userInfo } = useQuery(['userQuota'], async () => {
-    const { data } = await getUserInfo(address as string);
-    return data.Data;
-  });
+  const { data: userInfo } = useQuery(
+    ['userQuota', address],
+    async () => {
+      const { data } = await getUserInfo(address as string);
+      return data.Data;
+    },
+    {
+      enabled: !!address,
+    },
+  );
 
   return (
     <AppContext.Provider

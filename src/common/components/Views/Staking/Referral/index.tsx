@@ -3,13 +3,13 @@ import ModalTopReferrers from '@/common/components/Views/Staking/Referral/ModalT
 import { useModal } from '@/common/hooks/useModal';
 import { AppContext } from '@/common/providers/contexts';
 import { postReferral } from '@/common/services/login';
-import { copyToClipboard, ellipseAddress } from '@/utils';
+import { copyToClipboard, ellipseAddress, formatNumber } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Button, Col, Input, notification, Row, Select } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
-const Referral: React.FunctionComponent = () => {
+const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice }) => {
   const { userInfo } = useContext(AppContext);
   const [refCode, setRefCode] = useState();
   const [validate, setValidate] = useState({
@@ -84,36 +84,48 @@ const Referral: React.FunctionComponent = () => {
           <div className={'w-full h-full'}>
             <Row className={'h-full rounded-[16px] bg-[#1C1D25]'}>
               <Col
-                xs={12}
+                xs={24}
                 md={8}
                 className={
-                  'flex flex-col items-center border-r border-[#393C46] sm:border-none py-6 sm:py-8 px-6 gap-2'
+                  'w-full flex sm:flex-col justify-between sm:justify-start items-center py-4 sm:py-8 px-6 gap-2'
                 }
               >
                 <div className={'text-[#717681]'}>Total Referrals</div>
-                <div className={'text-xl text-[#fff] font-medium'}>10 friends</div>
-              </Col>
-              <Col xs={12} md={8} className={'flex flex-col items-center py-6 sm:py-8 px-6 gap-2'}>
-                <div className={'text-[#717681]'}>Friends Staked</div>
-                <div className={'text-xl text-[#fff] font-medium'}>0.00 UNICE</div>
+                <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
+                  {userInfo?.totalAmountReferrer ?? 0} friends
+                </div>
               </Col>
               <Col
                 xs={24}
                 md={8}
                 className={
-                  'flex flex-col items-center border-t border-[#393C46] sm:border-none py-6 sm:py-8 px-6 gap-2'
+                  'w-full flex sm:flex-col justify-between sm:justify-start items-center py-4 sm:py-8 px-6 gap-2'
+                }
+              >
+                <div className={'text-[#717681]'}>Friends Staked</div>
+                <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
+                  {formatNumber(userInfo?.totalStaked ?? 0)} UNICE
+                </div>
+              </Col>
+              <Col
+                xs={24}
+                md={8}
+                className={
+                  'w-full flex sm:flex-col justify-between sm:justify-start items-center py-4 sm:py-8 px-6 gap-2'
                 }
               >
                 <div className={'text-[#717681]'}>Total Commission</div>
-                <div className={'text-xl text-[#fff] font-medium'}>0.00 USDT</div>
+                <div className={'text-base sm:text-xl text-[#fff] font-medium'}>
+                  {formatNumber(userInfo?.totalStaked * tokenPrice ?? 0)} USDT
+                </div>
               </Col>
             </Row>
           </div>
           <div></div>
         </div>
         <Row className={'mt-4'} gutter={[16, 0]}>
-          <Col xs={16} className={''}>
-            <div className={'w-full flex items-center rounded-[16px] bg-[#1C1D25] gap-6 p-6'}>
+          <Col xs={24} md={16} className={''}>
+            <div className={'w-full flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] gap-6 p-6'}>
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Code</div>
                 <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
@@ -128,7 +140,7 @@ const Referral: React.FunctionComponent = () => {
               </div>
             </div>
           </Col>
-          <Col xs={8} className={''}>
+          <Col xs={24} md={8} className={'mt-4 sm:mt-0'}>
             {userInfo?.referredBy ? (
               <div className={'w-full rounded-[16px] bg-[#1C1D25] p-6'}>
                 <div className={'text-[#717681]'}>Invited by</div>
