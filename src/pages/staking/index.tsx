@@ -11,7 +11,7 @@ import tokenABI from '@/common/contracts/abis/token.json';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
 import { AppContext } from '@/common/providers/contexts';
-import { getPoolInfo, getPriceOfToken, postStakingData } from '@/common/services/staking';
+import { getPoolInfo, getPriceOfFrensToken, getPriceOfToken, postStakingData } from '@/common/services/staking';
 import { STATUS } from '@/common/types/comon';
 import { formatNumber, formatRewardBalance } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -463,11 +463,12 @@ const Staking: React.FunctionComponent = () => {
     },
   );
 
-  const { data: { priceInfo, tokenPrice = 0 } = {} } = useQuery(
+  const { data: { priceInfo, tokenPrice = 0, frensPrice = 0.012 } = {} } = useQuery(
     ['tokenPrice'],
     async () => {
-      const res = await getPriceOfToken();
-      return { priceInfo: res.data[0], tokenPrice: Number(res.data[0].lastPr) };
+      const unicePrice = await getPriceOfToken();
+      console.log('frensPrice', frensPrice);
+      return { priceInfo: unicePrice.data[0], tokenPrice: Number(unicePrice.data[0].lastPr), frensPrice: 0.012 };
     },
     {
       refetchInterval: 10000,
@@ -606,6 +607,7 @@ const Staking: React.FunctionComponent = () => {
                           Math.pow(10, 18)
                         }
                         tokenPrice={tokenPrice}
+                        frensPrice={frensPrice}
                       />
                     }
                     title="Staking reward"

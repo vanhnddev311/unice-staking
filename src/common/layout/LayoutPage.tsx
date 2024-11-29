@@ -1,7 +1,7 @@
 import Footer from '@/common/components/Footer';
 import PageHeader from '@/common/components/Header';
 import { AppContext } from '@/common/providers/contexts';
-import { addReferral, getNonce, loginUser } from '@/common/services/login';
+import { addReferral, getNonce, loginUser, postReferral } from '@/common/services/login';
 import { setIsLogin, setTheme } from '@/common/stores/actions/appAction';
 import { ellipseAddressNFT, getDiff } from '@/utils';
 import { Layout, notification } from 'antd';
@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { useAccount } from 'wagmi';
 import { getData, removeData, setData } from '../hooks/useLocalStoragre';
 
 const WARNING_TIMEOUT = 5;
@@ -17,8 +18,10 @@ const WARNING_TIMEOUT = 5;
 const { Content } = Layout;
 
 const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { userInfo, refetchUserInfo } = useContext(AppContext);
   const router = useRouter();
   const dispatch = useDispatch();
+  const { address } = useAccount();
 
   useEffect(() => {
     const currentTheme = getData('theme');
@@ -27,6 +30,17 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       dispatch(setTheme('dark'));
     }
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (router.query.r && userInfo && router.query.r != userInfo?.referralCode) {
+        await postReferral({ addr: address, referralCode: router.query.r as string });
+        refetchUserInfo();
+      }
+    })();
+  }, [router, userInfo]);
+
+  console.log('router', router.query);
 
   const openNotification = (placement: NotificationPlacement) => {
     notification.error({

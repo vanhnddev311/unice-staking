@@ -1,5 +1,6 @@
 import { CopyIcon, LinkIcon, SuccessIconNoti } from '@/common/components/icon/common';
 import ModalTopReferrers from '@/common/components/Views/Staking/Referral/ModalTopReferrers';
+import { ENV, envNane } from '@/common/consts';
 import { useModal } from '@/common/hooks/useModal';
 import { AppContext } from '@/common/providers/contexts';
 import { postReferral } from '@/common/services/login';
@@ -15,6 +16,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
   const [validate, setValidate] = useState({
     refCode: true,
   });
+  const [errorMsg, setErrorMsg] = useState('');
   const [copyText, setCopyText] = useState('Copy');
   const { show: showReferral, setShow: setShowReferral, toggle: toggleShowReferral } = useModal();
   const { address, isConnected } = useAccount();
@@ -41,8 +43,9 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
         addr: address,
         referralCode: refCode,
       });
-      if (res?.AdditionalData == 'Invalid referral code') {
+      if (res?.ErrorCode != 'SUCCESSFUL') {
         setValidate({ ...validate, refCode: false });
+        setErrorMsg(res?.AdditionalData as string);
         return;
       }
       setValidate({ ...validate, refCode: true });
@@ -130,13 +133,35 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Code</div>
                 <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
-                  {userInfo?.referralCode} <CopyIcon />
+                  {userInfo?.referralCode ?? '--'}{' '}
+                  <span
+                    onClick={() => handleCopy(userInfo?.referralCode as string)}
+                    className={`${!isConnected && 'hidden'} cursor-pointer`}
+                  >
+                    <CopyIcon />
+                  </span>
                 </div>
               </div>
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Link</div>
                 <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
-                  https://staking.unicelab.io/{userInfo?.referralCode} <CopyIcon />
+                  {!isConnected
+                    ? '--'
+                    : ENV == envNane.TESTNET
+                      ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
+                      : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`}
+                  <span
+                    onClick={() =>
+                      handleCopy(
+                        ENV == envNane.TESTNET
+                          ? `https://unice-staking.vercel.app/staking?r=${userInfo?.referralCode}`
+                          : `https://staking.unicelab.io/staking?r=${userInfo?.referralCode}`,
+                      )
+                    }
+                    className={`${!isConnected && 'hidden'} cursor-pointer`}
+                  >
+                    <CopyIcon />
+                  </span>
                 </div>
               </div>
             </div>
@@ -151,14 +176,25 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
                   }
                 >
                   {ellipseAddress(userInfo?.referredBy, 5)}
-                  <LinkIcon />
+                  <span
+                    onClick={() =>
+                      window.open(
+                        ENV == envNane.TESTNET
+                          ? `https://testnet.bscscan.com/address/${userInfo?.referredBy}`
+                          : `https://bscscan.com/address/${userInfo?.referredBy}`,
+                      )
+                    }
+                    className={`${!isConnected && 'hidden'} cursor-pointer`}
+                  >
+                    <LinkIcon />
+                  </span>
                 </div>
               </div>
             ) : (
               <div className={'w-full rounded-[16px] bg-[#1C1D25] p-6'}>
                 <div className={'flex justify-between items-center'}>
                   <div className={'text-[#717681]'}>Enter Referral Code</div>
-                  <div className={`${validate.refCode && 'hidden'} text-[#FC5858]`}>Invalid code</div>
+                  <div className={`${validate.refCode && 'hidden'} text-[#FC5858]`}>{errorMsg}</div>
                 </div>
                 <Input
                   value={refCode}

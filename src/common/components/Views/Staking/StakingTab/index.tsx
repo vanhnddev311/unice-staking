@@ -9,6 +9,7 @@ import {
   tokenAddress,
 } from '@/common/consts';
 import tokenABI from '@/common/contracts/abis/token.json';
+import { formatNumber } from '@/utils';
 import { Button, Steps } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -22,6 +23,7 @@ interface Props {
   stakeInfo: StakeInfo;
   amount: string;
   listPool: any[];
+  selectedPool: any;
   poolInfo: any;
   poolAddress: string;
   setPoolAddress: (address: string) => void;
@@ -39,6 +41,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
   amount,
   listPool,
   poolInfo,
+  selectedPool,
   poolAddress,
   setPoolAddress,
   validate,
@@ -77,7 +80,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                     // setPoolSelected();
                   }}
                   className={classNames(
-                    'relative bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
+                    'w-[41px] relative text-center bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
                     {
                       'border border-[#4A7DFF]': poolAddress === pool?.contract_address,
                     },
@@ -96,7 +99,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
         </div>
         <div className={'flex justify-between text-base'}>
           <div className={'text-[#8E929B] font-normal'}>APR</div>
-          {/*<div className={'apr-text font-bold'}>{formatNumber(Number(poolInfo[0]?.value))}%</div>*/}
+          <div className={'apr-text font-bold'}>{formatNumber(Number(selectedPool?.value))}%</div>
         </div>
       </div>
       <div>

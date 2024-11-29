@@ -162,6 +162,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
               amount={amountStake}
               listPool={poolInfo}
               poolInfo={poolSelectedInfo!}
+              selectedPool={selectedPool}
               poolAddress={poolAddress}
               setPoolAddress={setPoolAdress}
               validate={validate}
