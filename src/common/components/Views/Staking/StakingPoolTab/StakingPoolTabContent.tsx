@@ -7,6 +7,8 @@ import { useAccount } from 'wagmi';
 interface Props {
   token: any;
   dataSource: any;
+  selectedItem: any;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
   selectedPool: any;
   selectedDurations: any;
   setShowModalStaking: (val: boolean) => void;
@@ -21,6 +23,8 @@ interface Props {
 const StakingPoolTabContent: React.FunctionComponent<Props> = ({
   token,
   dataSource,
+  selectedItem,
+  handleSelectItems,
   selectedPool,
   selectedDurations,
   setShowModalStaking,
@@ -69,9 +73,11 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
                   pool={item}
                   infoPool={infoPool}
                   infoPool2={infoPool2}
+                  selectedItem={index == 0 ? selectedItem[0]?.item : selectedItem[1]?.item}
                   selectedPool={selectedPool}
                   setSelectedPool={setSelectedPool}
                   selectedDurations={selectedDurations}
+                  handleSelectItems={handleSelectItems}
                   handleSelectDuration={handleSelectDuration}
                   setShowModalStaking={setShowModalStaking}
                   token={token}

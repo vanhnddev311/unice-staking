@@ -56,6 +56,8 @@ const Staking: React.FunctionComponent = () => {
   const { stakeInfo, poolInfo, balance } = useStaking();
   const client = useClient();
 
+  const [selectedItems, setSelectedItems] = useState<any>();
+
   useEffect(() => {
     if (!showModalStaking) {
       // setSelectedPool(null);
@@ -79,7 +81,15 @@ const Staking: React.FunctionComponent = () => {
     const res = await getPoolInfo();
     return res?.Data;
   });
-  console.log('poolInfo1', poolInfo1);
+
+  useEffect(() => {
+    setSelectedItems(
+      poolInfo1?.map((pool) => ({
+        pool_name: pool.pool_name,
+        item: pool.est_apr[0],
+      })),
+    );
+  }, [poolInfo1]);
 
   const { data: allowanceAmt, refetch: refetchAllowance } = useReadContract({
     abi: tokenABI,
@@ -438,6 +448,21 @@ const Staking: React.FunctionComponent = () => {
     }
   };
 
+  const handleSelectItems = (poolName: any, selectedId: any) => {
+    setSelectedItems((prevSelected: any) =>
+      prevSelected.map((selected: any) =>
+        selected.pool_name == poolName
+          ? {
+              ...selected,
+              item: poolInfo1
+                .find((pool: any) => pool.pool_name == poolName)
+                ?.est_apr.find((apr: any) => apr.id == selectedId),
+            }
+          : selected,
+      ),
+    );
+  };
+
   const { data: filterPoolInfo = [] } = useQuery(
     ['filterPoolInfo', poolInfo],
     async () => {
@@ -633,7 +658,9 @@ const Staking: React.FunctionComponent = () => {
           <StakingPoolTabContent
             token={stakeToken1}
             dataSource={poolInfo1}
+            selectedItem={selectedItems}
             selectedPool={selectedPool}
+            handleSelectItems={handleSelectItems}
             selectedDurations={selectedDurations}
             setSelectedParentPool={setSelectedParentPool}
             setPoolIndex={setPoolIndex}

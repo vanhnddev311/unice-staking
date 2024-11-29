@@ -4,18 +4,22 @@ import React, { useEffect, useState } from 'react';
 interface Props {
   poolIndex: number;
   totalPool: any;
+  poolName: string;
   pools: any;
   pool: any;
   setPoolSelected: (value: any) => void;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
   handleSelectDuration: (poolId: number, duration: any) => void;
 }
 
 const StakingPoolDuration: React.FunctionComponent<Props> = ({
   poolIndex,
   totalPool,
+  poolName,
   pools,
   pool,
   setPoolSelected,
+  handleSelectItems,
   handleSelectDuration,
 }) => {
   // const childPools: any[] = pool?.items;
@@ -52,6 +56,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
           <div
             key={pool?.id}
             onClick={(e) => {
+              handleSelectItems(poolName, pool?.id);
               handleSelectDuration(poolIndex, pool?.time);
               handleSelect(poolIndex, index, pool?.time);
               setPoolAddress(pool?.contract_address);

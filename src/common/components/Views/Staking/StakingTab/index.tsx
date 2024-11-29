@@ -82,7 +82,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                   className={classNames(
                     'w-[41px] relative text-center bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
                     {
-                      'border border-[#4A7DFF]': poolAddress === pool?.contract_address,
+                      'border border-[#4A7DFF]': selectedPool?.contract_address === pool?.contract_address,
                     },
                   )}
                 >
@@ -90,7 +90,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                   <Image
                     src={require('@/common/assets/images/staking/selected-pool-icon.png')}
                     alt={''}
-                    className={`${poolAddress == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
+                    className={`${selectedPool?.contract_address == pool?.contract_address ? 'block' : 'hidden'} absolute w-[16px] h-[16px] top-[-1px] right-0 rounded-tr-[4px]`}
                   />
                 </div>
               );

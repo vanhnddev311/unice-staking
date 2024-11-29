@@ -15,6 +15,8 @@ const StakingPoolItem: React.FunctionComponent<{
   token: any;
   infoPool: any;
   infoPool2: any;
+  selectedItem: any;
+  handleSelectItems: (poolName: any, selectedId: any) => void;
   selectedPool: any;
   selectedDurations: any;
   setSelectedPool: (val: any) => void;
@@ -26,6 +28,8 @@ const StakingPoolItem: React.FunctionComponent<{
   pools,
   pool,
   token,
+  selectedItem,
+  handleSelectItems,
   selectedPool,
   selectedDurations,
   infoPool,
@@ -59,27 +63,27 @@ const StakingPoolItem: React.FunctionComponent<{
 
               const poolIndex =
                 ENV === envNane.TESTNET
-                  ? selectedPool?.id === '6'
+                  ? selectedItem?.id == '6'
                     ? 0
-                    : selectedPool?.id === '7'
+                    : selectedItem?.id == '7'
                       ? 1
                       : 2
-                  : selectedPool?.id === '2'
+                  : selectedItem?.id == '2'
                     ? 0
-                    : selectedPool?.id === '3'
+                    : selectedItem?.id == '3'
                       ? 1
                       : 2;
 
               const poolIndex2 =
                 ENV === envNane.TESTNET
-                  ? selectedPool?.id === '3'
+                  ? selectedItem?.id == '3'
                     ? 0
-                    : selectedPool?.id === '4'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2
-                  : selectedPool?.id === '2'
+                  : selectedItem?.id == '2'
                     ? 0
-                    : selectedPool?.id === '3'
+                    : selectedItem?.id == '3'
                       ? 1
                       : 2;
 
@@ -102,10 +106,12 @@ const StakingPoolItem: React.FunctionComponent<{
           <div className={'text-[#717681]'}>Duration</div>
           <StakingPoolDuration
             poolIndex={index}
+            poolName={pool?.name}
             totalPool={totalPool}
             pools={pools}
             pool={pool}
             setPoolSelected={setSelectedPool}
+            handleSelectItems={handleSelectItems}
             handleSelectDuration={handleSelectDuration}
           />
         </div>
@@ -141,10 +147,12 @@ const StakingPoolItem: React.FunctionComponent<{
           <div>
             <StakingPoolDuration
               poolIndex={index}
+              poolName={pool?.pool_name}
               totalPool={totalPool}
               pools={pools}
               pool={pool}
               setPoolSelected={setSelectedPool}
+              handleSelectItems={handleSelectItems}
               handleSelectDuration={handleSelectDuration}
             />
           </div>
@@ -161,27 +169,27 @@ const StakingPoolItem: React.FunctionComponent<{
 
               const poolIndex =
                 ENV === envNane.TESTNET
-                  ? selectedPool?.id == '6'
+                  ? selectedItem?.id == '6'
                     ? 0
-                    : selectedPool?.id == '7'
+                    : selectedItem?.id == '7'
                       ? 1
                       : 2
-                  : selectedPool?.id == '2'
+                  : selectedItem?.id == '2'
                     ? 0
-                    : selectedPool?.id == '3'
+                    : selectedItem?.id == '3'
                       ? 1
                       : 2;
 
               const poolIndex2 =
                 ENV === envNane.TESTNET
-                  ? selectedPool?.id == '3'
+                  ? selectedItem?.id == '3'
                     ? 0
-                    : selectedPool?.id == '4'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2
-                  : selectedPool?.id == '2'
+                  : selectedItem?.id == '2'
                     ? 0
-                    : selectedPool?.id == '3'
+                    : selectedItem?.id == '3'
                       ? 1
                       : 2;
 
