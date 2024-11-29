@@ -163,6 +163,7 @@ const Staking: React.FunctionComponent = () => {
     if (address) {
       refetchDataPool1();
       refetchDataPool2();
+      console.log('refetched');
     }
   }, [address]);
 
@@ -602,7 +603,7 @@ const Staking: React.FunctionComponent = () => {
                       alt={''}
                       className={'w-[24px]'}
                     />
-                    <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
+                    <div className={'text-center text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
                       {formatNumber(stakedAmount / Math.pow(10, 18), 4)} UNICE
                     </div>
                     {/*<div className={'mt-2'}>*/}
@@ -639,7 +640,7 @@ const Staking: React.FunctionComponent = () => {
                   >
                     <div
                       className={
-                        'relative w-fit apr-text text-base sm:text-2xl font-medium leading-[125%] cursor-pointer'
+                        'text-center relative w-fit apr-text text-base sm:text-2xl font-medium leading-[125%] cursor-pointer'
                       }
                     >
                       {formatRewardBalance((totalReward * tokenPrice) / Math.pow(10, 18), 4)} USDT

@@ -24,6 +24,10 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { address } = useAccount();
 
   useEffect(() => {
+    refetchUserInfo();
+  }, [address]);
+
+  useEffect(() => {
     const currentTheme = getData('theme');
     if (!currentTheme) {
       setData('theme', 'dark');
@@ -39,8 +43,6 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }
     })();
   }, [router, userInfo]);
-
-  console.log('router', router.query);
 
   const openNotification = (placement: NotificationPlacement) => {
     notification.error({
