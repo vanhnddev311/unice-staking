@@ -133,7 +133,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Code</div>
                 <div className={'h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
-                  {userInfo?.referralCode ?? '--'}{' '}
+                  {!isConnected ? '--' : (userInfo?.referralCode ?? '--')}{' '}
                   <Tooltip className={''} title={copyText}>
                     <span
                       onClick={() => handleCopy(userInfo?.referralCode as string)}
@@ -146,7 +146,11 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
               </div>
               <div className={'w-full'}>
                 <div className={'text-[#717681]'}>My Referral Link</div>
-                <div className={'sm:h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4'}>
+                <div
+                  className={
+                    'sm:h-[60px] flex justify-between items-center bg-[#050A11] rounded-[8px] mt-3 p-4 wrap-text'
+                  }
+                >
                   {!isConnected
                     ? '--'
                     : ENV == envNane.TESTNET

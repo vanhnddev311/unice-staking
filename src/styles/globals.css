@@ -515,6 +515,14 @@ figcaption {
     display: none;
 }
 
+.wrap-text {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+}
+
 .timeline-collapse {
     border: none;
 
@@ -764,7 +772,7 @@ tfoot th:first-child {
         align-items: center;
     }
 
-   .table-item:hover .staking-pools-status {
+    .table-item:hover .staking-pools-status {
         display: none !important;
     }
 

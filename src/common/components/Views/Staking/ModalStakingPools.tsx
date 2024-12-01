@@ -145,7 +145,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       <Row gutter={[40, 0]}>
         <Col xs={24} className={'w-full'}>
           <div className={'flex justify-between items-center mb-6'}>
-            <div className={'text-3xl font-semibold'}>Staking pools</div>
+            <div className={'text-[26px] sm:text-3xl font-semibold'}>Staking pools</div>
             <div onClick={handleExit} className={'bg-[#14141A] rounded-full p-2 cursor-pointer'}>
               <CloseIcon />
             </div>

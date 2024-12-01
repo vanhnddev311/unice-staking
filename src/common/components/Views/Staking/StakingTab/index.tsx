@@ -81,7 +81,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
                     // setPoolSelected();
                   }}
                   className={classNames(
-                    'w-[41px] relative text-center bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] px-[12px] cursor-pointer',
+                    'w-[38px] sm:w-[41px] relative text-center bg-[#393C46] border border-[#393C46] rounded-[4px] text-base font-semibold py-[6px] sm:px-[12px] cursor-pointer',
                     {
                       'border border-[#4A7DFF]': currentPool?.contract_address === pool?.contract_address,
                     },
