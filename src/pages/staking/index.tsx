@@ -489,8 +489,12 @@ const Staking: React.FunctionComponent = () => {
     ['tokenPrice'],
     async () => {
       const unicePrice = await getPriceOfToken();
-      console.log('frensPrice', frensPrice);
-      return { priceInfo: unicePrice.data[0], tokenPrice: Number(unicePrice.data[0].lastPr), frensPrice: 0.012 };
+      const frensPrice = await getPriceOfFrensToken();
+      return {
+        priceInfo: unicePrice.data[0],
+        tokenPrice: Number(unicePrice.data[0].lastPr),
+        frensPrice: Number(frensPrice?.Data?.close),
+      };
     },
     {
       refetchInterval: 10000,
@@ -504,14 +508,15 @@ const Staking: React.FunctionComponent = () => {
     <>
       <NextSeo
         title={title}
-        description={description}
-        additionalMetaTags={[{ name: 'og:image:alt', content: 'UNICE Staking' }]}
+        // description={description}
+        additionalMetaTags={[{ name: 'og:image:alt', content: title }]}
         openGraph={{
           title,
-          description,
+          description:
+            'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
           siteName: ' UNICE Staking',
-          url: '',
-          images: [{ url: '' }],
+          url: 'https://staking.unicelab.io',
+          images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
           type: 'website',
         }}
       />

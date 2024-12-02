@@ -24,7 +24,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { address } = useAccount();
 
   useEffect(() => {
-    refetchUserInfo();
+    if (address) refetchUserInfo();
   }, [address]);
 
   useEffect(() => {

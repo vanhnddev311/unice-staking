@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>UNICE</title>
+        <title>UNICE Staking</title>
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon.png" />
         <meta
