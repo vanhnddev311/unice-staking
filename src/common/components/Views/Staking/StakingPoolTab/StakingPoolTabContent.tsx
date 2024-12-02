@@ -1,12 +1,12 @@
 import StakingPoolItem from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolItem';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
 
 interface Props {
   token: any;
-  dataSource: any;
+  dataSource: any[];
   selectedItem: any;
   handleSelectItems: (poolName: any, selectedId: any) => void;
   selectedPool: any;
@@ -38,6 +38,10 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const tableData = useMemo(() => {
+    return dataSource?.filter((item: any) => item?.pool_name != 'Simple Earn');
+  }, [dataSource]);
+
   return (
     <div className={'staking-tabs mt-4'}>
       <div className={''}>
@@ -50,7 +54,7 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
           <Col sm={4}></Col>
         </Row>
         <div className={'flex flex-col gap-2'}>
-          {dataSource?.map((item: any, index: number) => {
+          {tableData?.map((item: any, index: number) => {
             return (
               <div
                 key={index}

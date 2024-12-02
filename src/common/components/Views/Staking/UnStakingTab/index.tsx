@@ -119,36 +119,9 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
       return '0 UNICE';
     }
 
-    const poolsIndex =
-      ENV === envNane.TESTNET
-        ? selectedItem1?.id == '6'
-          ? 0
-          : selectedItem1?.id == '7'
-            ? 1
-            : 2
-        : selectedItem1?.id == '2'
-          ? 0
-          : selectedItem1?.id == '3'
-            ? 1
-            : 2;
+    const poolsIndex2 = ENV === envNane.TESTNET ? (selectedItem1?.id == '3' ? 0 : 1) : selectedItem1?.id == '0' ? 0 : 1;
 
-    const poolsIndex2 =
-      ENV === envNane.TESTNET
-        ? selectedItem1?.id == '3'
-          ? 0
-          : selectedItem1?.id == '4'
-            ? 1
-            : 2
-        : selectedItem1?.id == '2'
-          ? 0
-          : selectedItem1?.id == '3'
-            ? 1
-            : 2;
-
-    const poolResult =
-      poolIndex == 0
-        ? ((infoPool2?.[poolsIndex2]?.result as number[]) ?? 0)
-        : ((infoPool?.[poolsIndex]?.result as number[]) ?? 0);
+    const poolResult = (infoPool2?.[poolsIndex2]?.result as number[]) ?? 0;
 
     const formattedValue = formatNumber(Number(poolResult?.[0]) / Math.pow(10, 18) ?? 0);
 

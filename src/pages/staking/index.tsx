@@ -6,7 +6,8 @@ import StakingPoolTabContent from '@/common/components/Views/Staking/StakingPool
 import StakingReward from '@/common/components/Views/Staking/StakingReward';
 import { config } from '@/common/configs/config';
 import { contractAddress, contractFrensAddress, ENV, envNane, MAX_INT, tokenAddress } from '@/common/consts';
-import { default as abi, default as frensAbi } from '@/common/contracts/abis/contract.json';
+import { default as abi } from '@/common/contracts/abis/contract.json';
+import { default as frensAbi } from '@/common/contracts/abis/contractFrens.json';
 import tokenABI from '@/common/contracts/abis/token.json';
 import { useModal } from '@/common/hooks/useModal';
 import useStaking from '@/common/hooks/useStaking';
@@ -136,44 +137,28 @@ const Staking: React.FunctionComponent = () => {
   const { data: infoPool2, refetch: refetchDataPool2 } = useReadContracts({
     contracts: [
       {
-        abi,
+        abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'userInfo',
         args: [ENV == envNane.TESTNET ? 3 : 0, address],
         chainId: client?.chain?.id ?? 1,
       },
       {
-        abi,
+        abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'userInfo',
         args: [ENV == envNane.TESTNET ? 4 : 1, address],
         chainId: client?.chain?.id ?? 1,
       },
-      // {
-      //   abi,
-      //   address: contractFrensAddress,
-      //   functionName: 'userInfo',
-      //   args: [ENV == envNane.TESTNET ? 5 : 4, address],
-      //   chainId: client?.chain?.id ?? 1,
-      // },
     ],
   });
 
   useEffect(() => {
     if (address) {
-      refetchDataPool1();
+      // refetchDataPool1();
       refetchDataPool2();
-      console.log('refetched');
     }
   }, [address]);
-
-  const { data: pendingReward } = useReadContract({
-    abi,
-    address: contractAddress,
-    functionName: 'pendingReward',
-    args: [selectedPool?.id, address],
-    chainId: client?.chain?.id ?? 1,
-  });
 
   const { data } = useReadContracts({
     contracts: [
@@ -207,65 +192,53 @@ const Staking: React.FunctionComponent = () => {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 3 : 2, address],
+        args: [ENV == envNane.TESTNET ? 3 : 0, address],
         chainId: client?.chain?.id ?? 1,
       },
       {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 4 : 3, address],
-        chainId: client?.chain?.id ?? 1,
-      },
-      {
-        abi: frensAbi,
-        address: contractFrensAddress,
-        functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 5 : 4, address],
+        args: [ENV == envNane.TESTNET ? 4 : 1, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
   });
 
   const [reward1, reward2, reward3] = data || [];
-  const [rewardFrens1, rewardFrens2, rewardFrens3] = rewardFrens || [];
+  const [rewardFrens1, rewardFrens2]: any[] = rewardFrens || [];
 
   const totalReward = useMemo(() => {
     return (
-      Number(reward1?.result ?? 0) +
-      Number(reward2?.result ?? 0) +
-      Number(reward3?.result ?? 0) +
-      Number(rewardFrens1?.result ?? 0) +
-      Number(rewardFrens2?.result ?? 0) +
-      Number(rewardFrens3?.result ?? 0)
+      // Number(reward1?.result ?? 0) +
+      // Number(reward2?.result ?? 0) +
+      // Number(reward3?.result ?? 0) +
+      Number(rewardFrens1?.result ?? 0) + Number(rewardFrens2?.result ?? 0)
     );
-  }, [reward1, reward2, reward3, rewardFrens1, rewardFrens2, rewardFrens3]);
+  }, [rewardFrens1, rewardFrens2]);
 
   useEffect(() => {
-    if (!infoPool) {
-      console.error('infoPool is undefined');
-      return;
-    } else if (!infoPool2) {
+    if (!infoPool2) {
       console.error('infoPool2 is undefined');
       return;
     }
 
-    if (infoPool.some((pool) => !pool || !pool.result) || infoPool2.some((pool) => !pool || !pool.result)) {
-      console.error('Some pools are undefined or missing result:', infoPool);
+    if (infoPool2.some((pool) => !pool || !pool.result)) {
+      console.error('Some pools are undefined or missing result:', infoPool2);
       return;
     }
-  }, [infoPool, infoPool2]);
+  }, [infoPool2]);
 
   useEffect(() => {
-    if (infoPool && infoPool2) {
-      const stakedAmounts = infoPool.map((pool) => (pool?.result ? Number((pool.result as number[])[0]) : 0));
+    if (infoPool2) {
+      // const stakedAmounts = infoPool.map((pool) => (pool?.result ? Number((pool.result as number[])[0]) : 0));
       const stakedFrensAmounts = infoPool2.map((pool) => (pool?.result ? Number((pool.result as number[])[0]) : 0));
       setStakedAmount(
-        stakedAmounts.reduce((total, amount) => total + amount, 0) +
-          stakedFrensAmounts.reduce((total, amount) => total + amount, 0),
+        // stakedAmounts.reduce((total, amount) => total + amount, 0) +
+        stakedFrensAmounts.reduce((total, amount) => total + amount, 0),
       );
     }
-  }, [infoPool, infoPool2]);
+  }, [infoPool2]);
 
   useEffect(() => {
     if (!address) {
@@ -273,21 +246,10 @@ const Staking: React.FunctionComponent = () => {
       return;
     }
 
-    if (infoPool && selectedPool?.id) {
-      const poolIndex =
-        ENV === envNane.TESTNET
-          ? selectedPool.id === '6'
-            ? 0
-            : selectedPool.id === '7'
-              ? 1
-              : 2
-          : selectedPool.id === '2'
-            ? 0
-            : selectedPool.id === '3'
-              ? 1
-              : 2;
+    if (infoPool2 && selectedPool?.id) {
+      const poolIndex = ENV === envNane.TESTNET ? (selectedPool.id === '6' ? 0 : 1) : selectedPool.id === '0' ? 0 : 1;
 
-      const poolResult = infoPool[poolIndex]?.result as number[];
+      const poolResult = infoPool2[poolIndex]?.result as number[];
 
       if (poolResult) {
         setCurrentStakedAmount(Number(poolResult[0] ?? 0));
@@ -296,7 +258,7 @@ const Staking: React.FunctionComponent = () => {
         setCurrentStakedAmount(0);
       }
     }
-  }, [infoPool, selectedPool, address]);
+  }, [infoPool2, selectedPool, address]);
 
   const handleSelectDuration = (poolIndex: number, duration: any) => {
     setSelectedDurations((prev) => ({ ...prev, [poolIndex]: duration }));
@@ -563,12 +525,6 @@ const Staking: React.FunctionComponent = () => {
                     <div className={'text-base sm:text-lg text-[#99BCDD] mt-1'}>The first step of UNICE 2.0</div>
                   </div>
                 </div>
-                {/*<div*/}
-                {/*  onClick={() => setShowModalStaking(true)}*/}
-                {/*  className={'stake-btn h-[36px] text-[#fff] border-none cursor-pointer'}*/}
-                {/*>*/}
-                {/*  STAKE NOW*/}
-                {/*</div>*/}
               </div>
             </div>
             <div
@@ -576,21 +532,6 @@ const Staking: React.FunctionComponent = () => {
                 'w-full sm:h-[140px] flex flex-col sm:flex-row sm:items-center rounded-[16px] bg-[#1C1D25] p-4 sm:p-8 gap-6 sm:gap-0'
               }
             >
-              {/*<div className={'w-full flex sm:justify-center'}>*/}
-              {/*  <div*/}
-              {/*    className={*/}
-              {/*      'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'*/}
-              {/*    }*/}
-              {/*  >*/}
-              {/*    <div>Your rank</div>*/}
-              {/*    <div className={'text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>*/}
-              {/*      {userInfo?.rank ? `#${userInfo.rank}` : '--'}*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
-              {/*<div className={'hidden sm:block px-4'}>*/}
-              {/*  <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>*/}
-              {/*</div>*/}
               <div className={'w-full flex sm:justify-center'}>
                 <div
                   className={
@@ -607,10 +548,6 @@ const Staking: React.FunctionComponent = () => {
                     <div className={'text-center text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
                       {formatNumber(stakedAmount / Math.pow(10, 18), 4)} UNICE
                     </div>
-                    {/*<div className={'mt-2'}>*/}
-                    {/*  Interest:{' '}*/}
-                    {/*  <span className={'text-[#10DE4A]'}>+{formatNumber(totalReward / Math.pow(10, 18), 4)} UNICE</span>*/}
-                    {/*</div>*/}
                   </div>
                 </div>
               </div>
@@ -623,14 +560,11 @@ const Staking: React.FunctionComponent = () => {
                   <Popover
                     content={
                       <StakingReward
-                        rewardPool1={
-                          (Number(reward1?.result ?? 0) + Number(reward2?.result ?? 0) + Number(reward3?.result ?? 0)) /
-                          Math.pow(10, 18)
+                        rewardUnice={
+                          (Number(rewardFrens1?.result[0]) + Number(rewardFrens2?.result[0] ?? 0)) / Math.pow(10, 18)
                         }
-                        rewardPool2={
-                          (Number(rewardFrens1?.result ?? 0) +
-                            Number(rewardFrens2?.result ?? 0) +
-                            Number(rewardFrens3?.result ?? 0)) /
+                        rewardFrens={
+                          (Number(rewardFrens1?.result[1] ?? 0) + Number(rewardFrens2?.result[1] ?? 0)) /
                           Math.pow(10, 18)
                         }
                         tokenPrice={tokenPrice}

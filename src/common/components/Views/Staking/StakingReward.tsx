@@ -3,13 +3,13 @@ import Image from 'next/image';
 import React from 'react';
 
 interface Props {
-  rewardPool1: any;
-  rewardPool2: any;
+  rewardUnice: any;
+  rewardFrens: any;
   tokenPrice: number;
   frensPrice: number;
 }
 
-const StakingReward: React.FunctionComponent<Props> = ({ rewardPool1, rewardPool2, tokenPrice, frensPrice }) => {
+const StakingReward: React.FunctionComponent<Props> = ({ rewardUnice, rewardFrens, tokenPrice, frensPrice }) => {
   return (
     <div className={'w-full text-[#fff]'}>
       <div className={'w-full flex justify-between'}>
@@ -18,9 +18,9 @@ const StakingReward: React.FunctionComponent<Props> = ({ rewardPool1, rewardPool
           <div>UNICE</div>
         </div>
         <div className={'text-end'}>
-          <div>+{formatRewardBalance(rewardPool1, 4)}</div>
+          <div>+{formatRewardBalance(rewardUnice, 4)}</div>
           <div className={'text-[#717681] text-xs'}>
-            ~${formatRewardBalance(Number(rewardPool1) * tokenPrice, 4)} USDT
+            ~${formatRewardBalance(Number(rewardUnice) * tokenPrice, 4)} USDT
           </div>
         </div>
       </div>
@@ -30,9 +30,9 @@ const StakingReward: React.FunctionComponent<Props> = ({ rewardPool1, rewardPool
           <div>FRENS</div>
         </div>
         <div className={'text-end'}>
-          <div>+{formatRewardBalance(rewardPool2, 4)}</div>
+          <div>+{formatRewardBalance(rewardFrens, 4)}</div>
           <div className={'text-[#717681] text-xs'}>
-            ~${formatRewardBalance(Number(rewardPool2) * frensPrice, 4)} USDT
+            ~${formatRewardBalance(Number(rewardFrens) * frensPrice, 4)} USDT
           </div>
         </div>
       </div>
