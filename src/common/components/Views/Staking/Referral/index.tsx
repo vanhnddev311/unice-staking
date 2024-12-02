@@ -207,7 +207,7 @@ const Referral: React.FunctionComponent<{ tokenPrice: number }> = ({ tokenPrice 
                 <Input
                   value={refCode}
                   onChange={(e) => setRefCode(e.target.value as any)}
-                  className={`flex justify-between items-center border ${validate.refCode ? 'border-transparent' : 'border-[#FC5858]'} bg-[#050A11] rounded-[8px] mt-3 px-4 py-3`}
+                  className={`flex justify-between items-center hidden-placeholder border ${validate.refCode ? 'border-transparent' : 'border-[#FC5858]'} bg-[#050A11] rounded-[8px] mt-3 px-4 py-3`}
                   placeholder={
                     typeof window !== 'undefined' && window.innerWidth < 800 ? '' : 'Enter your referral code'
                   }
