@@ -468,20 +468,20 @@ const Staking: React.FunctionComponent = () => {
 
   return (
     <>
-      <NextSeo
-        title={title}
-        // description={description}
-        additionalMetaTags={[{ name: 'og:image:alt', content: title }]}
-        openGraph={{
-          title,
-          description:
-            'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
-          siteName: ' UNICE Staking',
-          url: 'https://staking.unicelab.io',
-          images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
-          type: 'website',
-        }}
-      />
+      {/*<NextSeo*/}
+      {/*  title={title}*/}
+      {/*  // description={description}*/}
+      {/*  additionalMetaTags={[{ name: 'og:image:alt', content: title }]}*/}
+      {/*  openGraph={{*/}
+      {/*    title,*/}
+      {/*    description:*/}
+      {/*      'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',*/}
+      {/*    siteName: ' UNICE Staking',*/}
+      {/*    url: 'https://staking.unicelab.io',*/}
+      {/*    images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],*/}
+      {/*    type: 'website',*/}
+      {/*  }}*/}
+      {/*/>*/}
       <section className={'text-white relative pt-8 mt-20 pb-[200px] sm:pb-[240px]'}>
         <div className={'container flex flex-col mx-auto max-w-[1440px] md:mt-0 px-3 gap-6 sm:gap-16'}>
           <div className={'flex flex-col items-center gap-4'}>

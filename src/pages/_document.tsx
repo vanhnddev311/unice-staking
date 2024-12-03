@@ -7,20 +7,20 @@ export default function Document() {
         <title>UNICE Staking</title>
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon.png" />
-        {/*<meta*/}
-        {/*  name="description"*/}
-        {/*  content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."*/}
-        {/*/>*/}
-        {/*<meta*/}
-        {/*  name="og:description"*/}
-        {/*  content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."*/}
-        {/*/>*/}
-        {/*<meta property="og:title" content="AI-based Blockchain Messenger" />*/}
+        <meta
+          name="description"
+          content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
+        />
+        <meta
+          name="og:description"
+          content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
+        />
+        <meta property="og:image" content="https://staking.unicelab.io/thumbnail.png" />
 
-        {/*<meta property="og:image" content="https://staking.unicelab.io/thumbnail.png" />*/}
-        {/*<meta property="og:image:width" content="1200" />*/}
-        {/*<meta property="og:image:height" content="630" />*/}
-        {/*<meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />*/}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:title" content="AI-based Blockchain Messenger" />
+        <meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />
         <meta name="og:url" content="" />
 
         <meta name="twitter:image" content="/logo.png" />
