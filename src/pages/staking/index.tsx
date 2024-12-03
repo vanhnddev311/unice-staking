@@ -561,10 +561,13 @@ const Staking: React.FunctionComponent = () => {
                     content={
                       <StakingReward
                         rewardUnice={
-                          (Number(rewardFrens1?.result[0]) + Number(rewardFrens2?.result[0] ?? 0)) / Math.pow(10, 18)
+                          (Number(address ? rewardFrens1?.result[0] : 0) +
+                            Number(address ? rewardFrens2?.result[0] : 0)) /
+                          Math.pow(10, 18)
                         }
                         rewardFrens={
-                          (Number(rewardFrens1?.result[1] ?? 0) + Number(rewardFrens2?.result[1] ?? 0)) /
+                          (Number(address ? rewardFrens1?.result[1] : 0) +
+                            Number(address ? rewardFrens2?.result[1] : 0)) /
                           Math.pow(10, 18)
                         }
                         tokenPrice={tokenPrice}
