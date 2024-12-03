@@ -2,7 +2,11 @@ import { DotIcon } from '@/common/components/icon/common';
 import { Button } from 'antd';
 import React from 'react';
 
-const StatusColumn: React.FunctionComponent<{ record: any; isMobile: boolean }> = ({ record, isMobile }) => {
+const StatusColumn: React.FunctionComponent<{
+  record: any;
+  isMobile: boolean;
+  setShowModalStaking: (value: any) => void;
+}> = ({ record, isMobile, setShowModalStaking }) => {
   return (
     <div className={''}>
       <div className={'staking-pools-status'}>
@@ -16,7 +20,11 @@ const StatusColumn: React.FunctionComponent<{ record: any; isMobile: boolean }> 
         </div>
       </div>
       <div className={'staking-pools-actions'}>
-        <Button className="default-button2 h-[40px] font-semibold flex gap-2" type="primary">
+        <Button
+          onClick={() => setShowModalStaking(true)}
+          className="default-button2 h-[40px] font-semibold flex gap-2"
+          type="primary"
+        >
           Stake now
         </Button>
       </div>

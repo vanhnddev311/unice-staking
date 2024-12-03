@@ -54,8 +54,8 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
             Duration (months)
           </Col>
           <Col sm={4}>Staking cap</Col>
-          <Col sm={5}>Staked amount</Col>
-          <Col sm={3}></Col>
+          <Col sm={4}>Staked amount</Col>
+          <Col sm={4}></Col>
         </Row>
         <div className={'flex flex-col gap-2'}>
           {tableData?.map((item: any, index: number) => {
@@ -71,7 +71,7 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
                   }
                   setPoolIndex(index);
                   setSelectedParentPool(item);
-                  setShowModalStaking(true);
+                  // setShowModalStaking(true);
                 }}
               >
                 <StakingPoolItem
