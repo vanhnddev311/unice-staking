@@ -57,8 +57,23 @@ const StakingPoolItem: React.FunctionComponent<{
               <div className={'text-sm text-[#FFFFFF80]'}>UNICE</div>
             </div>
           </div>
-          <div className={'apr-text text-base font-bold'}>
-            {pools?.find((apr: any) => apr.time === selectedDurations[index])?.value || 0}%
+        </div>
+        <div className={'flex justify-between'}>
+          <div className={'text-[#717681]'}>APR</div>
+          <div className={'flex items-center gap-4 apr-text'}>
+            <div className={'flex items-center gap-2'}>
+              {poolSelected?.value[0] ?? 0}%{' '}
+              <Image
+                src={require('@/common/assets/images/unice-logo-icon.png')}
+                alt={''}
+                className={'w-[16px] h-[16px]'}
+              />
+            </div>
+            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
+            <div className={'flex items-center gap-2'}>
+              {poolSelected?.value[1] ?? 0}%{' '}
+              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
+            </div>
           </div>
         </div>
         <div className={'flex justify-between'}>
