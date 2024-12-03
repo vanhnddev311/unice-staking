@@ -122,6 +122,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
           label={'Amount'}
           enableUseMax={true}
           balance={Number(balanceToken) / Math.pow(10, 18)}
+          // balance={11}
           token={stakeToken}
           amount={amount}
           isAllowDecimal={true}
@@ -138,7 +139,7 @@ const StakingTab: React.FunctionComponent<Props> = ({
         </Link>
       </div>
       <Button
-        disabled={!amount || Number(amount) >= Number(balanceToken) / Math.pow(10, 18)}
+        disabled={!amount || Number(amount) > Number(balanceToken) / Math.pow(10, 18)}
         onClick={() => handleStake(currentPool, totalPool?.id)}
         size="small"
         className="min-w-[156px] h-[52px] hover:bg-[#4A7DFF] disabled:bg-[#242632] disabled:text-[#44465E] text-[#000] dark:text-[#fff] bg-[#4A7DFF] border-none rounded-[4px] font-medium
