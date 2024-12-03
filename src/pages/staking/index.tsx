@@ -305,15 +305,12 @@ const Staking: React.FunctionComponent = () => {
   };
 
   const stakeAction = async (pool: any) => {
-    if (
-      (poolIndex == 1 && Number(amountStake) > Number(allowanceAmt)) ||
-      (poolIndex == 0 && Number(amountStake) > Number(allowanceFrensAmt))
-    ) {
+    if (poolIndex == 0 && Number(amountStake) > Number(allowanceFrensAmt)) {
       const hash = await writeContractAsync({
         address: tokenAddress,
         abi: tokenABI,
         functionName: 'approve',
-        args: [poolIndex == 1 ? contractAddress : contractFrensAddress, MAX_INT],
+        args: [contractFrensAddress, MAX_INT],
         chainId: client?.chain?.id ?? 1,
       });
 
@@ -326,10 +323,10 @@ const Staking: React.FunctionComponent = () => {
     }
 
     const res = await writeContractAsync({
-      address: poolIndex == 1 ? contractAddress : contractFrensAddress,
-      abi: poolIndex == 1 ? abi : frensAbi,
+      address: contractFrensAddress,
+      abi: frensAbi,
       functionName: 'stake',
-      args: [pool?.id ?? 2, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
+      args: [pool?.id ?? 0, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
       chainId: client?.chain?.id ?? 1,
     });
 

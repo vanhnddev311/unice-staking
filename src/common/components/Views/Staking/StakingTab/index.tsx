@@ -100,7 +100,21 @@ const StakingTab: React.FunctionComponent<Props> = ({
         </div>
         <div className={'flex justify-between text-base'}>
           <div className={'text-[#8E929B] font-normal'}>APR</div>
-          <div className={'apr-text font-bold'}>{formatNumber(Number(currentPool?.value))}%</div>
+          <div className={'flex items-center gap-4 apr-text'}>
+            <div className={'flex items-center gap-2'}>
+              {currentPool?.value[0] ?? 0}%{' '}
+              <Image
+                src={require('@/common/assets/images/unice-logo-icon.png')}
+                alt={''}
+                className={'w-[16px] h-[16px]'}
+              />
+            </div>
+            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
+            <div className={'flex items-center gap-2'}>
+              {currentPool?.value[1] ?? 0}%{' '}
+              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
+            </div>
+          </div>
         </div>
       </div>
       <div>
