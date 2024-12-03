@@ -326,8 +326,8 @@ const Staking: React.FunctionComponent = () => {
       address: contractFrensAddress,
       abi: frensAbi,
       functionName: 'stake',
-      args: [pool?.id ?? 0, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
-      chainId: client?.chain?.id ?? 1,
+      args: [pool?.id, BigNumber(Number(Number(amountStake).toFixed(5)) * 10 ** 18).toFixed()],
+      chainId: client?.chain?.id ?? 56,
     });
 
     const transactionReceipt = await waitForTransactionReceipt(config as Config, {

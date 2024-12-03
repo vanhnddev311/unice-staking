@@ -141,7 +141,7 @@ const StakingPoolItem: React.FunctionComponent<{
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Status</div>
-          <StatusColumn record={selectedPool} isMobile={true} />
+          <StatusColumn record={selectedPool} isMobile={true} setShowModalStaking={setShowModalStaking} />
         </div>
         <Button
           className={`h-[36px] hover:bg-[#4A7DFF] disabled:bg-[#ccc] text-[#fff] bg-[#4A7DFF] border-none rounded-[4px] font-semibold text-base mt-2`}
@@ -197,7 +197,7 @@ const StakingPoolItem: React.FunctionComponent<{
         <Col sm={4} className={'flex items-center font-medium p-6'}>
           Unlimited
         </Col>
-        <Col sm={5} className={'flex items-center font-medium p-6'}>
+        <Col sm={4} className={'flex items-center font-medium p-6'}>
           <div className={'text-[#fff]'}>
             {(() => {
               if (!infoPool || infoPool.some((pool: any) => !pool || !pool.result)) {
@@ -242,9 +242,9 @@ const StakingPoolItem: React.FunctionComponent<{
             })()}
           </div>
         </Col>
-        <Col sm={3} className={'flex items-center p-6'}>
+        <Col sm={4} className={'flex items-center p-6'}>
           <div>
-            <StatusColumn record={selectedPool} isMobile={false} />
+            <StatusColumn record={selectedPool} isMobile={false} setShowModalStaking={setShowModalStaking} />
           </div>
         </Col>
       </Row>
