@@ -474,8 +474,8 @@ const Staking: React.FunctionComponent = () => {
           description:
             'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
           siteName: ' UNICE Staking',
-          url: 'https://unice-staking.vercel.app/staking',
-          images: [{ url: 'https://unice-staking.vercel.app/thumbnail.png' }],
+          url: 'https://testnet-unice-staking.vercel.app',
+          images: [{ url: 'https://testnet-unice-staking.vercel.app/thumbnail.png' }],
           type: 'website',
         }}
       />
