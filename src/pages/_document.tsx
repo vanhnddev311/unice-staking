@@ -15,7 +15,7 @@ export default function Document() {
           name="og:description"
           content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
         />
-        <meta property="og:image" content="https://staking.unicelab.io/thumbnail.png" />
+        <meta property="og:image" content="https://unice-staking.vercel.app/thumbnail.png" />
 
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -28,7 +28,7 @@ export default function Document() {
 
         <meta name="og:locale" content="en" />
         <meta name="og:type" content="article" />
-        <meta name="og:site_name" content="" />
+        <meta name="og:site_name" content="UNICE Staking" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
