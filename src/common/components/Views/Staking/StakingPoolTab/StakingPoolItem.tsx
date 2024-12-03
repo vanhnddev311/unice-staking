@@ -5,7 +5,7 @@ import { formatNumber } from '@/utils';
 import { Button, Col, Row } from 'antd';
 import moment from 'moment';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 const StakingPoolItem: React.FunctionComponent<{
   index: number;
@@ -41,6 +41,10 @@ const StakingPoolItem: React.FunctionComponent<{
   useEffect(() => {
     handleSelectDuration(index, pool?.est_apr[0]?.time);
   }, [pools]);
+
+  const poolSelected = useMemo(() => {
+    return pools?.find((apr: any) => apr.time === selectedDurations[index]);
+  }, [pools, selectedDurations]);
 
   return (
     <section>
@@ -143,12 +147,24 @@ const StakingPoolItem: React.FunctionComponent<{
             </div>
           </div>
         </Col>
-        <Col sm={2} className={'flex items-center text-center text-xl font-medium p-6'}>
-          <div className={'apr-text'}>
-            {pools?.find((apr: any) => apr.time === selectedDurations[index])?.value || 0}%
+        <Col sm={4} className={'flex justify-center items-center text-xl font-medium p-6'}>
+          <div className={'flex items-center gap-4 apr-text'}>
+            <div className={'flex items-center gap-2'}>
+              {poolSelected?.value[0] ?? 0}%{' '}
+              <Image
+                src={require('@/common/assets/images/unice-logo-icon.png')}
+                alt={''}
+                className={'w-[16px] h-[16px]'}
+              />
+            </div>
+            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
+            <div className={'flex items-center gap-2'}>
+              {poolSelected?.value[1] ?? 0}%{' '}
+              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
+            </div>
           </div>
         </Col>
-        <Col sm={5} className={'flex items-center p-6'}>
+        <Col sm={4} className={'flex justify-center items-center p-6'}>
           <div>
             <StakingPoolDuration
               poolIndex={index}
@@ -211,7 +227,7 @@ const StakingPoolItem: React.FunctionComponent<{
             })()}
           </div>
         </Col>
-        <Col sm={4} className={'flex items-center p-6'}>
+        <Col sm={3} className={'flex items-center p-6'}>
           <div>
             <StatusColumn record={selectedPool} isMobile={false} />
           </div>

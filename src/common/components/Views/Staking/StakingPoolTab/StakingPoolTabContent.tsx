@@ -47,11 +47,15 @@ const StakingPoolTabContent: React.FunctionComponent<Props> = ({
       <div className={''}>
         <Row className={'hidden sm:flex table-header bg-[#1C1D25]'}>
           <Col sm={4}>Pool</Col>
-          <Col sm={2}>APR</Col>
-          <Col sm={5}>Duration (months)</Col>
+          <Col sm={4} className={'text-center'}>
+            APR
+          </Col>
+          <Col sm={4} className={'text-center'}>
+            Duration (months)
+          </Col>
           <Col sm={4}>Staking cap</Col>
           <Col sm={5}>Staked amount</Col>
-          <Col sm={4}></Col>
+          <Col sm={3}></Col>
         </Row>
         <div className={'flex flex-col gap-2'}>
           {tableData?.map((item: any, index: number) => {
