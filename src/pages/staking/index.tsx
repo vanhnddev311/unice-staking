@@ -538,6 +538,21 @@ const Staking: React.FunctionComponent = () => {
                     'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'
                   }
                 >
+                  <div>Your rank</div>
+                  <div className={'text-center text-[#fff] text-base sm:text-2xl font-medium leading-[125%]'}>
+                    {userInfo?.rank ?? '--'}
+                  </div>
+                </div>
+              </div>
+              <div className={'hidden sm:block px-4'}>
+                <div className={'w-full sm:w-[1px] h-[1px] sm:h-[24px] bg-[#FFFFFF1A]'}></div>
+              </div>
+              <div className={'w-full flex sm:justify-center'}>
+                <div
+                  className={
+                    'w-full flex sm:flex-col justify-between sm:justify-start items-center text-[#717681] gap-4'
+                  }
+                >
                   <div>UNICE Staked</div>
                   <div className={'flex items-center gap-2'}>
                     <Image
