@@ -1,5 +1,5 @@
-import { getLeaderboardData } from '@/common/services/staking';
-import { ellipseAddress } from '@/utils';
+import { getLeaderboardData, getPriceOfToken } from '@/common/services/staking';
+import { ellipseAddress, formatNumber, formatNumberBalance } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Col, Row, Select } from 'antd';
 import { NextSeo } from 'next-seo';
@@ -11,7 +11,16 @@ const Leaderboard = () => {
     return res?.Data;
   });
 
-  console.log('leaderboardData', leaderboardData);
+  const { data: unicePrice = 0 } = useQuery(
+    ['unicePrice'],
+    async () => {
+      const res = await getPriceOfToken();
+      return Number(res?.data[0].lastPr);
+    },
+    {
+      refetchInterval: 10000,
+    },
+  );
 
   const title = 'UNICE Leaderboard';
   return (
@@ -35,7 +44,7 @@ const Leaderboard = () => {
           'max-w-[1096px] flex flex-col items-center text-white text-base relative pt-20 mt-20 pb-[200px] sm:pb-[240px] mx-auto'
         }
       >
-        <div className={'text-center text-[48px] font-medium'}>Leaderboard</div>
+        <div className={'text-center text-[48px] leading-normal font-medium mb-2'}>Leaderboard</div>
         <Select
           defaultValue="1"
           style={{ width: 120 }}
@@ -48,29 +57,34 @@ const Leaderboard = () => {
             },
           ]}
         />
-        <div className={'w-full flex flex-col rounded-[16px] bg-[#1C1D25] p-8'}>
+        <div
+          className={
+            'leaderboard-data w-full flex flex-col text-sm sm:text-base rounded-[16px] bg-[#1C1D25] p-3 sm:p-8 mt-10'
+          }
+        >
           <Row>
-            <Col xs={4} className={'font-medium'}>
+            <Col xs={6} className={'font-medium'}>
               Wallet
             </Col>
-            <Col xs={10} className={'text-center font-medium'}>
+            <Col xs={9} className={'text-center font-medium'}>
               Friends staked
             </Col>
-            <Col xs={10} className={'text-center font-medium'}>
+            <Col xs={9} className={'text-end font-medium'}>
               Total Commission
             </Col>
           </Row>
           {leaderboardData.map((item: any, index: number) => {
             return (
               <Row key={index} className={'w-full flex'}>
-                <Col xs={4} className={'text-[#717681]'}>
-                  {ellipseAddress(item?.self, 8)}
+                <Col xs={6} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
+                  <div className={'hidden sm:block'}>{ellipseAddress(item?.self, 8)}</div>
+                  <div className={'block sm:hidden'}>{ellipseAddress(item?.self, 4)}</div>
                 </Col>
-                <Col xs={10} className={'text-center text-[#fff] font-medium'}>
-                  {item?.friendRefer ?? 0} {Number(item?.friendRefer) >= 2 ? 'friends' : 'friend'}
+                <Col xs={9} className={`text-center text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
+                  {formatNumberBalance(item?.child_staked ?? 0, 2)} UNICE
                 </Col>
-                <Col xs={10} className={'text-center text-[#fff] font-medium'}>
-                  {item?.friendRefer ?? 0} {Number(item?.friendRefer) >= 2 ? 'friends' : 'friend'}
+                <Col xs={9} className={`text-end text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
+                  {formatNumberBalance(item?.child_staked * unicePrice ?? 0, 2)} USDT
                 </Col>
               </Row>
             );
