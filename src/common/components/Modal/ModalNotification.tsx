@@ -1,10 +1,8 @@
-import animationData from '@/common/assets/animations/UNICE-loading.json';
 import { FailedIcon, PendingIcon, StakingWarningIcon, SuccessIcon } from '@/common/components/icon/common';
 import { ellipseAddress, formatNumber } from '@/utils';
 import { Button, Modal } from 'antd';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
-// import Lottie from 'react-lottie';
 
 interface Props {
   type: string;

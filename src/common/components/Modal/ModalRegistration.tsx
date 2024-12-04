@@ -1,12 +1,9 @@
 import { CloseIcon } from '@/common/components/icon/common';
 import { useModal } from '@/common/hooks/useModal';
-import { registerCampaign } from '@/common/services/launchpad';
 import { STATUS } from '@/common/types/comon';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Input, Modal } from 'antd';
-import { Route } from 'next';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ModalNotification from './ModalNotification';
 
 const { TextArea } = Input;
@@ -21,15 +18,7 @@ interface Props {
   refetchRegistration: () => void;
 }
 
-const ModalRegistration: React.FunctionComponent<Props> = ({
-  campaignId,
-  campaign,
-  isModalOpen,
-  handleClose,
-  mode,
-  registrationInfo,
-  refetchRegistration,
-}) => {
+const ModalRegistration: React.FunctionComponent<Props> = ({ isModalOpen, handleClose, mode, registrationInfo }) => {
   const { show, setShow, toggle } = useModal();
   const [email, setEmail] = useState('');
   const [twitter, setTwitter] = useState('');
@@ -62,104 +51,6 @@ const ModalRegistration: React.FunctionComponent<Props> = ({
           <CloseIcon />
         </div>
       </div>
-      {/*<div className={'flex flex-col gap-6'}>*/}
-      {/*  <div className={'text-xl font-bold'}>Social task</div>*/}
-      {/*  <div className={'text-[#FF8031] text-base bg-[#E683451A] p-2'}>*/}
-      {/*    Completing our social tasks to get whitelisted.*/}
-      {/*  </div>*/}
-      {/*  <div className={'flex flex-col gap-4'}>*/}
-      {/*    <div className={'flex flex-col sm:flex-row sm:justify-between sm:items-center text-base gap-2 sm:gap-0'}>*/}
-      {/*      <div className={'text-[#fff]'}>*/}
-      {/*        Follow{' '}*/}
-      {/*        <span className={'text-[#C2E23D] underline underline-offset-2'}>*/}
-      {/*          <Link*/}
-      {/*            className={'hover:text-[#C2E23D] '}*/}
-      {/*            href={*/}
-      {/*              campaign?.section2?.description?.socialLinks.find((link) => link.type === 'twitter')?.url as Route*/}
-      {/*            }*/}
-      {/*            target={'_blank'}*/}
-      {/*          >*/}
-      {/*            @MoveGPT*/}
-      {/*          </Link>*/}
-      {/*        </span>{' '}*/}
-      {/*        on Twitter <span className={'text-red-600 text-xl font-bold'}>*</span>*/}
-      {/*      </div>*/}
-      {/*      <div className={'flex items-center gap-2'}>*/}
-      {/*        <Input*/}
-      {/*          value={twitter}*/}
-      {/*          onChange={(e) => {*/}
-      {/*            setTwitter(e.target.value);*/}
-      {/*            setValidation({ ...validation, twitter: e.target.value !== '' });*/}
-      {/*          }}*/}
-      {/*          placeholder={'Your Twitter account'}*/}
-      {/*          className={*/}
-      {/*            'w-full sm:w-[198px] bg-[#101119] border-none text-[#fff] text-base placeholder:text-[#61646B] focus:border-none focus:bg-[#000] py-2 px-4'*/}
-      {/*          }*/}
-      {/*        />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <div className={'flex flex-col sm:flex-row sm:justify-between sm:items-center text-base gap-2 sm:gap-0'}>*/}
-      {/*      <div className={'text-[#fff]'}>*/}
-      {/*        Join{' '}*/}
-      {/*        <span className={'text-[#C2E23D] underline underline-offset-2'}>*/}
-      {/*          <Link*/}
-      {/*            className={'hover:text-[#C2E23D] '}*/}
-      {/*            href={*/}
-      {/*              campaign?.section2?.description?.socialLinks.find((link) => link.type === 'telegram')?.url as Route*/}
-      {/*            }*/}
-      {/*            target={'_blank'}*/}
-      {/*          >*/}
-      {/*            @movegpt*/}
-      {/*          </Link>*/}
-      {/*        </span>{' '}*/}
-      {/*        on Telegram <span className={'text-red-600 text-xl font-bold'}>*</span>*/}
-      {/*      </div>*/}
-      {/*      <div className={'flex items-center gap-2'}>*/}
-      {/*        <Input*/}
-      {/*          value={telegram}*/}
-      {/*          onChange={(e) => {*/}
-      {/*            setTelegram(e.target.value);*/}
-      {/*            setValidation({ ...validation, telegram: e.target.value !== '' });*/}
-      {/*          }}*/}
-      {/*          placeholder={'Your Telegram account'}*/}
-      {/*          className={*/}
-      {/*            'w-full sm:w-[198px] bg-[#101119] border-none text-[#fff] text-base placeholder:text-[#61646B] focus:border-none focus:bg-[#000] py-2 px-4'*/}
-      {/*          }*/}
-      {/*        />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <div className={'flex flex-col sm:flex-row sm:justify-between sm:items-center text-base gap-2 sm:gap-0'}>*/}
-      {/*      <div className={'text-[#fff]'}>*/}
-      {/*        Join{' '}*/}
-      {/*        <span className={'text-[#C2E23D] underline underline-offset-2'}>*/}
-      {/*          <Link*/}
-      {/*            className={'hover:text-[#C2E23D] '}*/}
-      {/*            href={*/}
-      {/*              campaign?.section2?.description?.socialLinks.find((link) => link.type === 'discord')?.url as Route*/}
-      {/*            }*/}
-      {/*            target={'_blank'}*/}
-      {/*          >*/}
-      {/*            MoveGPT*/}
-      {/*          </Link>*/}
-      {/*        </span>{' '}*/}
-      {/*        on Discord <span className={'text-red-600 text-xl font-bold'}>*</span>*/}
-      {/*      </div>*/}
-      {/*      <div className={'flex items-center gap-2'}>*/}
-      {/*        <Input*/}
-      {/*          value={discord}*/}
-      {/*          onChange={(e) => {*/}
-      {/*            setDiscord(e.target.value);*/}
-      {/*            setValidation({ ...validation, discord: e.target.value !== '' });*/}
-      {/*          }}*/}
-      {/*          placeholder={'Your Discord account'}*/}
-      {/*          className={*/}
-      {/*            'w-full sm:w-[198px] bg-[#101119] border-none text-[#fff] text-base placeholder:text-[#61646B] focus:border-none focus:bg-[#000] py-2 px-4'*/}
-      {/*          }*/}
-      {/*        />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
       <div>
         <div className={'text-[#8E929B] pb-1'}>Receiving Wallet</div>
         <div className={'bg-[#2A2B38] p-2'}>

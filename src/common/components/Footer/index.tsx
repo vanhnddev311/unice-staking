@@ -1,8 +1,6 @@
 import { THEME } from '@/common/components/Header';
-import { DiscordIcon, DocsIcon, DocsIcon1, TelegramIcon, TwitterIcon } from '@/common/components/icon/common';
+import { DiscordIcon, DocsIcon1, TelegramIcon, TwitterIcon } from '@/common/components/icon/common';
 import { copyToClipboard } from '@/utils';
-import { Tooltip } from 'antd';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';

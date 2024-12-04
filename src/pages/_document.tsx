@@ -4,25 +4,30 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>UNICE</title>
+        <title>UNICE Staking</title>
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon.png" />
-        <meta name="description" content="AI-based Blockchain Messenger" />
-        <meta name="og:description" content="AI-based Blockchain Messenger" />
-        <meta property="og:title" content="AI-based Blockchain Messenger" />
-
-        <meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />
+        <meta
+          name="description"
+          content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
+        />
+        <meta
+          name="og:description"
+          content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
+        />
         <meta property="og:image" content="https://staking.unicelab.io/thumbnail.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content="1280" />
+        <meta property="og:image:height" content="720" />
+        {/*<meta property="og:title" content="AI-based Blockchain Messenger" />*/}
+        {/*<meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />*/}
         <meta name="og:url" content="" />
 
-        <meta name="twitter:image" content="/logo.png" />
+        <meta name="twitter:image" content="/thumbnail.png" />
         <meta name="twitter:card" content="summary" />
 
         <meta name="og:locale" content="en" />
-        <meta name="og:type" content="article" />
-        <meta name="og:site_name" content="" />
+        <meta name="og:type" content="website" />
+        <meta name="og:site_name" content="UNICE Staking" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"

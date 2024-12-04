@@ -131,12 +131,6 @@ export const formatRewardBalance = (number: number | string = '0', infractionDig
   return formatPrice;
 };
 
-export const formatBigIntToNumber = (amount: bigint | number, decimal: number = 8) => {
-  let number = '';
-  number = (Number(amount) / Math.pow(10, decimal)).toString();
-  return number;
-};
-
 export const getDiff = (withdrawTime: any) => {
   return moment(parseInt(withdrawTime)).diff(Date.now());
 };
@@ -148,12 +142,4 @@ export const copyToClipboard = (text: string) => {
   textField.select();
   document.execCommand('copy');
   textField.remove();
-};
-
-export const uppercaseWordsFirstString = (s: string) => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
-
-export const formatString = (str: string) => {
-  return str.toLowerCase().trim().replace(/\s+/g, '-');
 };
