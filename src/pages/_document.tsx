@@ -15,16 +15,18 @@ export default function Document() {
           name="og:description"
           content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
         />
-        <meta property="og:image" content="https://unice-staking.vercel.app/logo.png" />
+        <meta property="og:image" content="https://unice-staking.vercel.app/thumbnail.png" />
+        <meta property="og:image:width" content="1280" />
+        <meta property="og:image:height" content="720" />
         {/*<meta property="og:title" content="AI-based Blockchain Messenger" />*/}
         {/*<meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />*/}
         <meta name="og:url" content="" />
 
-        <meta name="twitter:image" content="/logo.png" />
+        <meta name="twitter:image" content="/thumbnail.png" />
         <meta name="twitter:card" content="summary" />
 
         <meta name="og:locale" content="en" />
-        <meta name="og:type" content="article" />
+        <meta name="og:type" content="website" />
         <meta name="og:site_name" content="UNICE Staking" />
         <link
           rel="stylesheet"

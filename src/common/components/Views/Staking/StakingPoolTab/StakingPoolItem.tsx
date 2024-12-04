@@ -1,8 +1,9 @@
 import StatusColumn from '@/common/components/Views/Staking/StakingCommonComponent/StatusColumn';
+import StakingPoolAPR from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolAPR';
 import StakingPoolDuration from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolDuration';
 import { ENV, envNane } from '@/common/consts';
 import { formatNumber } from '@/utils';
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Popover, Row } from 'antd';
 import moment from 'moment';
 import Image from 'next/image';
 import React, { useEffect, useMemo } from 'react';
@@ -60,21 +61,19 @@ const StakingPoolItem: React.FunctionComponent<{
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>APR</div>
-          <div className={'flex items-center gap-4 apr-text'}>
-            <div className={'flex items-center gap-2'}>
-              {poolSelected?.value[0] ?? 0}%{' '}
+          <Popover
+            content={<StakingPoolAPR uniceAPR={poolSelected?.value[0] ?? 0} frensAPR={poolSelected?.value[1] ?? 0} />}
+            title={'Staking APR'}
+          >
+            <div className={'relative apr-text cursor-pointer'}>
+              {Number(poolSelected?.value[0] ?? 0) + Number(poolSelected?.value[1] ?? 0)}%
               <Image
-                src={require('@/common/assets/images/unice-logo-icon.png')}
+                src={require('@/common/assets/images/staking/Line 33.png')}
                 alt={''}
-                className={'w-[16px] h-[16px]'}
+                className={'absolute w-full'}
               />
             </div>
-            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
-            <div className={'flex items-center gap-2'}>
-              {poolSelected?.value[1] ?? 0}%{' '}
-              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
-            </div>
-          </div>
+          </Popover>
         </div>
         <div className={'flex justify-between'}>
           <div className={'text-[#717681]'}>Staked amount</div>
@@ -163,21 +162,19 @@ const StakingPoolItem: React.FunctionComponent<{
           </div>
         </Col>
         <Col sm={4} className={'flex justify-center items-center text-xl font-medium p-6'}>
-          <div className={'flex items-center gap-4 apr-text'}>
-            <div className={'flex items-center gap-2'}>
-              {poolSelected?.value[0] ?? 0}%{' '}
+          <Popover
+            content={<StakingPoolAPR uniceAPR={poolSelected?.value[0] ?? 0} frensAPR={poolSelected?.value[1] ?? 0} />}
+            title={'Staking APR'}
+          >
+            <div className={'relative apr-text cursor-pointer'}>
+              {Number(poolSelected?.value[0] ?? 0) + Number(poolSelected?.value[1] ?? 0)}%
               <Image
-                src={require('@/common/assets/images/unice-logo-icon.png')}
+                src={require('@/common/assets/images/staking/Line 33.png')}
                 alt={''}
-                className={'w-[16px] h-[16px]'}
+                className={'absolute w-full'}
               />
             </div>
-            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
-            <div className={'flex items-center gap-2'}>
-              {poolSelected?.value[1] ?? 0}%{' '}
-              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
-            </div>
-          </div>
+          </Popover>
         </Col>
         <Col sm={4} className={'flex justify-center items-center p-6'}>
           <div>

@@ -1,7 +1,8 @@
 import InputCurrency from '@/common/components/common-components/InputCureency';
+import StakingPoolAPR from '@/common/components/Views/Staking/StakingPoolTab/StakingPoolAPR';
 import { ENV, envNane, lockCooldownFormat } from '@/common/consts';
 import { formatNumber } from '@/utils';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
 import moment from 'moment/moment';
@@ -164,21 +165,19 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
         </div>
         <div className={'flex justify-between text-base'}>
           <div className={'text-[#8E929B] font-normal'}>APR</div>
-          <div className={'flex items-center gap-4 apr-text'}>
-            <div className={'flex items-center gap-2'}>
-              {currentPool?.value[0] ?? 0}%{' '}
+          <Popover
+            content={<StakingPoolAPR uniceAPR={currentPool?.value[0] ?? 0} frensAPR={currentPool?.value[1] ?? 0} />}
+            title={'Staking APR'}
+          >
+            <div className={'relative apr-text cursor-pointer'}>
+              {Number(currentPool?.value[0] ?? 0) + Number(currentPool?.value[1] ?? 0)}%
               <Image
-                src={require('@/common/assets/images/unice-logo-icon.png')}
+                src={require('@/common/assets/images/staking/Line 33.png')}
                 alt={''}
-                className={'w-[16px] h-[16px]'}
+                className={'absolute w-full'}
               />
             </div>
-            <div className={'w-[1px] h-[16px] bg-[#FFFFFF1A]'}></div>
-            <div className={'flex items-center gap-2'}>
-              {currentPool?.value[1] ?? 0}%{' '}
-              <Image src={require('@/common/assets/images/frens.png')} alt={''} className={'w-[16px] h-[16px]'} />
-            </div>
-          </div>
+          </Popover>
         </div>
       </div>
       <div>
