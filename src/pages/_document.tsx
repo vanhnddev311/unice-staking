@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <title>UNICE Staking</title>
-        <link rel="icon" href="/thumbnail.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/thumbnail.png" />
+        <link rel="icon" href="/logo.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/logo.png" />
         <meta
           name="description"
           content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."

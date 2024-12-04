@@ -29,7 +29,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
   const handleSelect = (poolIndex: number, itemIndex: number, duration: number) => {
     const selectedPool = totalPool[poolIndex].est_apr[itemIndex];
 
-    const defaultPool = poolIndex === 0 ? totalPool[1].est_apr[0] : totalPool[0].est_apr[0];
+    const defaultPool = poolIndex === 0 ? totalPool[1]?.est_apr[0] : totalPool[0]?.est_apr[0];
 
     const result = [
       {
@@ -38,7 +38,7 @@ const StakingPoolDuration: React.FunctionComponent<Props> = ({
       },
       {
         pool: poolIndex == 0 ? 1 : 0,
-        apr: defaultPool.value,
+        apr: defaultPool?.value,
       },
     ];
 
