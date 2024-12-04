@@ -16,8 +16,8 @@ export default function Document() {
           content="UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community."
         />
         <meta property="og:image" content="https://testnet-unice-staking.vercel.app/thumbnail.png" />
-        <meta property="og:title" content="AI-based Blockchain Messenger" />
-        <meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />
+        {/*<meta property="og:title" content="AI-based Blockchain Messenger" />*/}
+        {/*<meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />*/}
         <meta name="og:url" content="" />
 
         <meta name="twitter:image" content="/logo.png" />
