@@ -984,6 +984,11 @@ td.ant-table-column-sort {
     background: #40DA90;
 }
 
+.ant-popover-arrow {
+    .ant-popover-arrow-content {
+        --antd-arrow-background-color: #2D2F39 !important;
+    }
+}
 
 .ant-notification-notice-with-icon {
     .ant-notification-notice-message {
