@@ -3,7 +3,7 @@ import '@/styles/antd.css';
 import '@/styles/globals.css';
 import '@/styles/notification.css';
 import '@rainbow-me/rainbowkit/styles.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import { Provider as ReduxProvider } from 'react-redux';
 import 'slick-carousel/slick/slick-theme.css';
@@ -14,34 +14,8 @@ import queryClient from '@/common/services/queryClient';
 import store from '@/common/stores/store';
 
 import { config } from '@/common/configs/config';
-import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { bitgetWallet, metaMaskWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
-import { createConfig, http, WagmiProvider } from 'wagmi';
-import { bsc, bscTestnet, mainnet } from 'wagmi/chains';
-
-// const connectors = connectorsForWallets(
-//   [
-//     {
-//       groupName: 'Recommended',
-//       wallets: [metaMaskWallet, bitgetWallet, walletConnectWallet],
-//     },
-//   ],
-//   {
-//     appName: 'My RainbowKit App',
-//     projectId: 'c9ce17ad7531e60b4eed5232dc01958d',
-//   },
-// );
-//
-// const config = createConfig({
-//   connectors,
-//   // multiInjectedProviderDiscovery: false,
-//   chains: [mainnet, bsc, bscTestnet],
-//   transports: {
-//     [bscTestnet.id]: http(),
-//     [mainnet.id]: http(),
-//     [bsc.id]: http(),
-//   },
-// });
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { WagmiProvider } from 'wagmi';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

@@ -33,9 +33,9 @@ const Leaderboard = () => {
           title,
           description:
             'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
-          siteName: ' UNICE Staking',
+          siteName: ' UNICE Leaderboard',
           url: 'https://staking.unicelab.io',
-          images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
+          // images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
           type: 'website',
         }}
       />
@@ -72,15 +72,12 @@ const Leaderboard = () => {
             <Col xs={9} className={'text-center font-medium'}>
               Friends staked
             </Col>
-            <Col xs={9} className={'text-end font-medium'}>
-              Total Commission
-            </Col>
           </Row>
           {leaderboardData.map((item: any, index: number) => {
             return (
               <Row key={index} className={'w-full flex'}>
                 <Col xs={6} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
-                  {index + 1}
+                  #{index + 1}
                 </Col>
                 <Col xs={9} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
                   <div className={'hidden sm:block'}>{ellipseAddress(item?.self, 8)}</div>
