@@ -5,8 +5,8 @@ export const enum envNane {
 }
 
 // export const ENV = process.env.CURRENT_NETWORK;
-// export const ENV: any = envNane.MAINNET;
-export const ENV: envNane = envNane.TESTNET;
+export const ENV: any = envNane.MAINNET;
+// export const ENV: envNane = envNane.TESTNET;
 
 export const config = {
   API_ENDPOINT_URL: 'http://34.70.221.4:3011',
