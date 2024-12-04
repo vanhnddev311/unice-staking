@@ -63,29 +63,32 @@ const Leaderboard = () => {
           }
         >
           <Row>
-            <Col xs={6} className={'font-medium'}>
+            <Col xs={8} className={'font-medium'}>
               Wallet
             </Col>
-            <Col xs={9} className={'text-center font-medium'}>
+            <Col xs={14} className={'text-center font-medium'}>
               Friends staked
             </Col>
-            <Col xs={9} className={'text-end font-medium'}>
-              Total Commission
-            </Col>
+            {/*<Col xs={9} className={'text-end font-medium'}>*/}
+            {/*  Total Commission*/}
+            {/*</Col>*/}
           </Row>
           {leaderboardData.map((item: any, index: number) => {
             return (
               <Row key={index} className={'w-full flex'}>
-                <Col xs={6} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
+                <Col xs={8} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
                   <div className={'hidden sm:block'}>{ellipseAddress(item?.self, 8)}</div>
                   <div className={'block sm:hidden'}>{ellipseAddress(item?.self, 4)}</div>
                 </Col>
-                <Col xs={9} className={`text-center text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
+                <Col
+                  xs={14}
+                  className={`text-center text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}
+                >
                   {formatNumberBalance(item?.child_staked ?? 0, 2)} UNICE
                 </Col>
-                <Col xs={9} className={`text-end text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
-                  {formatNumberBalance(item?.child_staked * unicePrice ?? 0, 2)} USDT
-                </Col>
+                {/*<Col xs={9} className={`text-end text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>*/}
+                {/*  {formatNumberBalance(item?.child_staked * unicePrice ?? 0, 2)} USDT*/}
+                {/*</Col>*/}
               </Row>
             );
           })}
