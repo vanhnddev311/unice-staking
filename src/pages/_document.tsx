@@ -22,7 +22,7 @@ export default function Document() {
         {/*<meta name="og:image:alt" content={'AI-based Blockchain Messenger'} />*/}
         <meta name="og:url" content="" />
 
-        <meta name="twitter:image" content="/logo.png" />
+        <meta name="twitter:image" content="/thumbnail.png" />
         <meta name="twitter:card" content="summary" />
 
         <meta name="og:locale" content="en" />
