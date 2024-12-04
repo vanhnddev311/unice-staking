@@ -34,8 +34,7 @@ const Leaderboard = () => {
           description:
             'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
           siteName: ' UNICE Leaderboard',
-          url: 'https://staking.unicelab.io',
-          // images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
+          url: 'https://stake.unicelab.io',
           type: 'website',
         }}
       />
