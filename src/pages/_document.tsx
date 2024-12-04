@@ -26,7 +26,7 @@ export default function Document() {
         <meta name="twitter:card" content="summary" />
 
         <meta name="og:locale" content="en" />
-        <meta name="og:type" content="article" />
+        <meta name="og:type" content="website" />
         <meta name="og:site_name" content="UNICE Staking" />
         <link
           rel="stylesheet"
