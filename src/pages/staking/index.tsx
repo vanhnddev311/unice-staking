@@ -147,12 +147,11 @@ const Staking: React.FunctionComponent = () => {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'userInfo',
-        args: [ENV == envNane.TESTNET ? 4 : 3, address],
+        args: [ENV == envNane.TESTNET ? 4 : 4, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
   });
-  console.log('infoPool2', infoPool2);
 
   useEffect(() => {
     if (address) {
@@ -200,7 +199,7 @@ const Staking: React.FunctionComponent = () => {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 4 : 3, address],
+        args: [ENV == envNane.TESTNET ? 4 : 4, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],

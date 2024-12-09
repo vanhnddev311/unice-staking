@@ -92,7 +92,7 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2
                   : selectedItem?.id == '2'
                     ? 0
-                    : selectedItem?.id == '3'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2;
 
@@ -105,7 +105,7 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2
                   : selectedItem?.id == '2'
                     ? 0
-                    : selectedItem?.id == '3'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2;
 
@@ -211,7 +211,7 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2
                   : selectedItem?.id == '2'
                     ? 0
-                    : selectedItem?.id == '3'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2;
 
@@ -224,7 +224,7 @@ const StakingPoolItem: React.FunctionComponent<{
                       : 2
                   : selectedItem?.id == '2'
                     ? 0
-                    : selectedItem?.id == '3'
+                    : selectedItem?.id == '4'
                       ? 1
                       : 2;
 
