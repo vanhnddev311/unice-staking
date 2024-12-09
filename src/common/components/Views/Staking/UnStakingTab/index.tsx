@@ -120,7 +120,7 @@ const UnStakingTab: React.FunctionComponent<Props> = ({
       return '0 UNICE';
     }
 
-    const poolsIndex2 = ENV === envNane.TESTNET ? (selectedItem1?.id == '3' ? 0 : 1) : selectedItem1?.id == '0' ? 0 : 1;
+    const poolsIndex2 = ENV === envNane.TESTNET ? (selectedItem1?.id == '3' ? 0 : 1) : selectedItem1?.id == '2' ? 0 : 1;
 
     const poolResult = (infoPool2?.[poolsIndex2]?.result as number[]) ?? 0;
 

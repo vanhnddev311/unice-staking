@@ -140,18 +140,19 @@ const Staking: React.FunctionComponent = () => {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'userInfo',
-        args: [ENV == envNane.TESTNET ? 3 : 0, address],
+        args: [ENV == envNane.TESTNET ? 3 : 2, address],
         chainId: client?.chain?.id ?? 1,
       },
       {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'userInfo',
-        args: [ENV == envNane.TESTNET ? 4 : 1, address],
+        args: [ENV == envNane.TESTNET ? 4 : 3, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
   });
+  console.log('infoPool2', infoPool2);
 
   useEffect(() => {
     if (address) {
@@ -192,14 +193,14 @@ const Staking: React.FunctionComponent = () => {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 3 : 0, address],
+        args: [ENV == envNane.TESTNET ? 3 : 2, address],
         chainId: client?.chain?.id ?? 1,
       },
       {
         abi: frensAbi,
         address: contractFrensAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 4 : 1, address],
+        args: [ENV == envNane.TESTNET ? 4 : 3, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
@@ -247,7 +248,7 @@ const Staking: React.FunctionComponent = () => {
     }
 
     if (infoPool2 && selectedPool?.id) {
-      const poolIndex = ENV === envNane.TESTNET ? (selectedPool.id === '6' ? 0 : 1) : selectedPool.id === '0' ? 0 : 1;
+      const poolIndex = ENV === envNane.TESTNET ? (selectedPool.id === '6' ? 0 : 1) : selectedPool.id === '2' ? 0 : 1;
 
       const poolResult = infoPool2[poolIndex]?.result as number[];
 
