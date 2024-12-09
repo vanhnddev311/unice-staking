@@ -518,7 +518,7 @@ const Staking: React.FunctionComponent = () => {
                     <div>Staking</div>
                   </div>
                   <div>
-                    <div className={'apr-text text-2xl font-semibold mt-2'}>APR up to 60%</div>
+                    <div className={'apr-text text-2xl font-semibold mt-2'}>APR up to 72%</div>
                     <div className={'text-base sm:text-lg text-[#99BCDD] mt-1'}>The first step of UNICE 2.0</div>
                   </div>
                 </div>
