@@ -6,6 +6,7 @@ import ModalReceiveBnb from '@/common/components/Views/Staking/ModalReceiveBnb';
 import { config } from '@/common/configs/config';
 import { setData } from '@/common/hooks/useLocalStoragre';
 import { useModal } from '@/common/hooks/useModal';
+import useStaking from '@/common/hooks/useStaking';
 import { login } from '@/common/services/login';
 import { setTheme, showConnect } from '@/common/stores/actions/appAction';
 import { STATUS } from '@/common/types/comon';
@@ -45,6 +46,7 @@ const PageHeader: React.FunctionComponent = () => {
   const { disconnect } = useDisconnect();
   const { connector, chainId } = useAccount();
   const client = useClient();
+  const { balance } = useStaking();
 
   const { data: balanceBnb, refetch } = useBalance({
     address,
@@ -97,11 +99,11 @@ const PageHeader: React.FunctionComponent = () => {
     }
   }, [chainId, connector]);
 
-  // useEffect(() => {
-  //   if (balanceBnb && Number(balanceBnb?.value) < 0.01) {
-  //     setShow(true);
-  //   }
-  // }, [balanceBnb]);
+  useEffect(() => {
+    if (Number(balance) >= 1000000 && balanceBnb && Number(balanceBnb?.value) < 0.001) {
+      setShow(true);
+    }
+  }, [balanceBnb]);
 
   useEffect(() => {
     document.body.dataset.theme = app.theme;
@@ -310,7 +312,13 @@ const PageHeader: React.FunctionComponent = () => {
       <ModalReceiveBnb
         status={receiveBnbStatus}
         show={showReceiveBnb}
-        message={'hehe'}
+        message={
+          <div>
+            BNB has been sent successfully.
+            <br />
+            Continue your journey with UNICE!
+          </div>
+        }
         toggle={toggleShowReceiveBnb}
         setShow={setShowReceiveBnb}
       />

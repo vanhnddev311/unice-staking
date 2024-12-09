@@ -7,7 +7,7 @@ interface Props {
   show: boolean | undefined;
   toggle: () => void;
   setShow: (show: boolean) => void;
-  message?: string;
+  message?: any;
 }
 
 const ModalReceiveBnb: React.FunctionComponent<Props> = ({ status, show, message, toggle, setShow }) => {
