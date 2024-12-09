@@ -33,9 +33,8 @@ const Leaderboard = () => {
           title,
           description:
             'UNICE Staking Phase 2: Stake your UNICE tokens to earn additional FRENS tokens. Enhance your healthcare experience and contribute to our growing community.',
-          siteName: ' UNICE Staking',
-          url: 'https://staking.unicelab.io',
-          images: [{ url: 'https://staking.unicelab.io/thumbnail.png' }],
+          siteName: ' UNICE Leaderboard',
+          url: 'https://stake.unicelab.io',
           type: 'website',
         }}
       />
@@ -77,7 +76,7 @@ const Leaderboard = () => {
             return (
               <Row key={index} className={'w-full flex'}>
                 <Col xs={6} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
-                  {index + 1}
+                  #{index + 1}
                 </Col>
                 <Col xs={9} className={`text-[#B7BDD3] ${index & 1 ? 'bg-transparent' : 'bg-[#DDE7FF0F]'}`}>
                   <div className={'hidden sm:block'}>{ellipseAddress(item?.self, 8)}</div>

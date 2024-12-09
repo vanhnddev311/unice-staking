@@ -1,7 +1,7 @@
 export const routes = [
   {
     path: 'staking',
-    target: true,
+    target: false,
     name: 'STAKING',
     hot: false,
     comingSoon: false,
