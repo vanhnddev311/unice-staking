@@ -109,7 +109,7 @@ const ModalStakingPools: React.FunctionComponent<Props> = ({
       setUserPoolSelectedInfo(userPoolInfo[1]);
     } else if (
       (ENV == envNane.TESTNET && poolSelectedInfo?.id == '8') ||
-      (ENV == envNane.MAINNET && poolSelectedInfo?.id == '4')
+      (ENV == envNane.MAINNET && poolSelectedInfo?.id == '5')
     ) {
       setUserPoolSelectedInfo(userPoolInfo[2]);
     }

@@ -113,7 +113,7 @@ const Staking: React.FunctionComponent = () => {
     abi,
     address: contractAddress,
     functionName: 'userInfo',
-    args: [ENV == envNane.TESTNET ? 8 : 4, address],
+    args: [ENV == envNane.TESTNET ? 8 : 5, address],
     chainId: client?.chain?.id ?? 1,
   });
 
@@ -145,7 +145,7 @@ const Staking: React.FunctionComponent = () => {
         abi,
         address: contractAddress,
         functionName: 'pendingReward',
-        args: [ENV == envNane.TESTNET ? 8 : 4, address],
+        args: [ENV == envNane.TESTNET ? 8 : 5, address],
         chainId: client?.chain?.id ?? 1,
       },
     ],
@@ -160,10 +160,12 @@ const Staking: React.FunctionComponent = () => {
   useEffect(() => {
     if (!!infoPool1 && !!infoPool2 && !!infoPool3) {
       setStakedAmount(
-        Number((infoPool1 as number[])[0]) + Number((infoPool2 as number[])[0]) + Number((infoPool3 as number[])[0]),
+        // Number((infoPool1 as number[])[0]) + Number((infoPool2 as number[])[0]) + Number((infoPool3 as number[])[0]),
+        Number((infoPool1 as number[])[0]) + Number((infoPool3 as number[])[0])
       );
       setReward(
-        Number((infoPool1 as number[])[1]) + Number((infoPool2 as number[])[1]) + Number((infoPool3 as number[])[1]),
+        // Number((infoPool1 as number[])[1]) + Number((infoPool2 as number[])[1]) + Number((infoPool3 as number[])[1]),
+        Number((infoPool1 as number[])[1]) + Number((infoPool3 as number[])[1])
       );
     }
   }, [infoPool1, infoPool2, infoPool3]);
@@ -389,11 +391,6 @@ const Staking: React.FunctionComponent = () => {
               }
             >
               <Image
-                src={require('@/common/assets/images/staking/bg-staking-item-1.png')}
-                alt={''}
-                className={'w-[92px] sm:w-[154px] absolute bottom-[-12px] sm:bottom-0 right-[24%]'}
-              />
-              <Image
                 src={require('@/common/assets/images/staking/bg-staking-item-2.png')}
                 alt={''}
                 className={'absolute top-0 right-[12%]'}
@@ -415,8 +412,8 @@ const Staking: React.FunctionComponent = () => {
                     <div>Staking</div>
                   </div>
                   <div>
-                    <div className={'apr-text text-2xl font-semibold mt-2'}>APR up to 60%</div>
-                    <div className={'text-base sm:text-lg text-[#99BCDD] mt-1'}>The first step of UNICE 2.0</div>
+                    <div className={'apr-text text-2xl font-semibold mt-2'}>UNICE x Sandbox Event</div>
+                    <div className={'text-base sm:text-lg text-[#99BCDD] mt-1'}>In celebration of our partnership: We offer an extra 10%.</div>
                   </div>
                 </div>
                 {/*<div*/}
